@@ -1,0 +1,46 @@
+{
+  "action": {
+    "get_started": "Get Started",
+    "learn_more": "Learn more",
+    "send_message": "Send message"
+  },
+  "contact": {
+    "head": "Contact us",
+    "description": "Got questions? We're here to help you make the most of ReBetter.",
+    "your_name": "Your name",
+    "email": "Email",
+    "message": "Message"
+  },
+  "navbar": {
+    "home": "Home",
+    "login": "Login",
+    "register": "Register",
+    "dashboard": "Dashboard"
+  },
+  "landing": {
+    "headline": "Boost your client reviews effortlessly",
+    "subtext": "Automate the process of collecting and managing reviews for your business.",
+    "cta": "Get Started",
+    "smart_feedback_filter": "Smart Feedback Filter",
+    "smart_feedback_filter_description": "Only promote positive reviews publicly — and keep internal feedback for improvement.",
+    "why_rebetter": "Why Rebetter?",
+    "automated_review_requests": "Automated Review Requests",
+    "automated_review_requests_description": "Send personalized review invitations to your clients automatically after each service.",
+    "real_time_analytics": "Analizy w czasie rzeczywistym",
+    "real_time_analytics_description": "Track open rates, feedback trends, and overall satisfaction in one simple dashboard.",
+    "cta_section": {
+      "head": "Ready to grow your reputation?",
+      "description": "Start collecting more 5-star reviews today."
+    }
+  },
+  "auth": {
+    "login_title": "Sign in to your account",
+    "register_title": "Create a new account",
+    "email": "Email address",
+    "password": "Password",
+    "submit": "Submit"
+  },
+  "utils": {
+    "all_rights_reserved": "All rights reserved"
+  }
+}

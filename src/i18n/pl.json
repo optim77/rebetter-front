@@ -1,0 +1,46 @@
+{
+  "action": {
+    "get_started": "Wypróbuj",
+    "learn_more": "Dowiedz się więcej",
+    "send_message": "Wyślij wiadomość"
+  },
+  "contact": {
+    "head": "Skontaktuj się z nami",
+    "description": "Masz pytania? Jesteśmy tu, żeby pomóc Ci jak najlepiej wykorzystać ReBetter.",
+    "your_name": "Imię",
+    "email": "Email",
+    "message": "Wiadomość"
+  },
+  "navbar": {
+    "home": "Strona główna",
+    "login": "Zaloguj się",
+    "register": "Zarejestruj się",
+    "dashboard": "Panel"
+  },
+  "landing": {
+    "headline": "Zwiększ liczbę opinii klientów bez wysiłku",
+    "subtext": "Zautomatyzuj proces zbierania i zarządzania opiniami dla swojej firmy.",
+    "cta": "Rozpocznij teraz",
+    "smart_feedback_filter": "Inteligentny filtr opinii",
+    "smart_feedback_filter_description": "Promuj publicznie tylko pozytywne recenzje — a wewnętrzne opinie zachowaj dla siebie, aby wprowadzić ulepszenia.",
+    "why_rebetter": "Dlaczego ReBetter?",
+    "automated_review_requests": "Zautomatyzowane prośby o recenzję",
+    "automated_review_requests_description": "Po każdej usłudze automatycznie wysyłaj spersonalizowane zaproszenia do wystawienia opinii do swoich klientów.",
+    "real_time_analytics": "Analizy w czasie rzeczywistym",
+    "real_time_analytics_description": "Śledź wskaźniki skuteczności, trendy dotyczące opinii i ogólną satysfakcję w jednym prostym panelu.",
+    "cta_section": {
+      "head": "Gotowy, aby wzmocnić swoją reputację?",
+      "description": "Zacznij zbierać więcej 5-gwiazdkowych recenzji już dziś."
+    }
+  },
+  "auth": {
+    "login_title": "Zaloguj się na swoje konto",
+    "register_title": "Utwórz nowe konto",
+    "email": "Adres e-mail",
+    "password": "Hasło",
+    "submit": "Zatwierdź"
+  },
+  "utils": {
+    "all_rights_reserved": "Wszystkie prawa zastrzeżone"
+  }
+}
