@@ -1,8 +1,24 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Lock, Mail } from "lucide-react";
+import { t } from "i18next";
+import { useLogin } from "@/hooks/useLogin.ts";
+import React, { useState } from "react";
 
 export default function Login() {
+
+    const { loginUser, isLoading } = useLogin();
+    const [form, setForm] = useState({ email: "", password: "" });
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        loginUser(form);
+    }
+
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 px-6">
             <motion.div
@@ -12,31 +28,37 @@ export default function Login() {
                 transition={{ duration: 0.4 }}
             >
                 <h1 className="text-3xl font-bold text-center text-indigo-600 mb-8">
-                    ReBetter Login
+                    ReBetter
                 </h1>
 
-                <form className="flex flex-col gap-4">
+                <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
                     <div>
-                        <label className="block text-gray-600 mb-1">Email</label>
+                        <label className="block text-gray-600 mb-1">{t("auth.email")}</label>
                         <div className="flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-indigo-400">
                             <Mail className="text-gray-400 w-5 h-5 mr-2" />
                             <input
+                                name="email"
                                 type="email"
                                 placeholder="you@company.com"
                                 className="flex-1 outline-none"
+                                value={form.email}
+                                onChange={handleChange}
                                 required
                             />
                         </div>
                     </div>
 
                     <div>
-                        <label className="block text-gray-600 mb-1">Password</label>
+                        <label className="block text-gray-600 mb-1">{t("auth.password")}</label>
                         <div className="flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-indigo-400">
                             <Lock className="text-gray-400 w-5 h-5 mr-2" />
                             <input
+                                name="password"
                                 type="password"
                                 placeholder="********"
                                 className="flex-1 outline-none"
+                                value={form.password}
+                                onChange={handleChange}
                                 required
                             />
                         </div>
@@ -46,16 +68,16 @@ export default function Login() {
                         type="submit"
                         className="mt-4 bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition"
                     >
-                        Sign in
+                        {isLoading ? t("auth.signing_in") : t("auth.sign_in")}
                     </button>
 
                     <p className="text-center text-sm text-gray-600 mt-4">
-                        Don’t have an account?{" "}
+                        {t("auth.sing_up_question")}{" "}
                         <Link
                             to="/register"
                             className="text-indigo-600 font-medium hover:underline"
                         >
-                            Register
+                            {t("auth.register")}
                         </Link>
                     </p>
                 </form>

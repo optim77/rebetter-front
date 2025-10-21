@@ -25,6 +25,7 @@
     "mobx-react": "^9.2.1",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "react-hot-toast": "^2.6.0",
     "react-i18next": "^16.1.0",
     "react-router-dom": "^7.9.4",
     "tailwind-merge": "^3.3.1",

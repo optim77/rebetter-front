@@ -9,7 +9,8 @@ import DashboardHome from "@/pages/dashboard/DashboardHome.tsx";
 import Companies from "@/pages/dashboard/Companies.tsx";
 import Clients from "@/pages/dashboard/Clients.tsx";
 import Navbar from "@/components/layout/Navbar.tsx";
-import { Sidebar } from "lucide-react";
+import Registered from "@/pages/Registered.tsx";
+import Sidebar from "@/components/layout/Sidebar.tsx";
 
 const PrivateRoute = observer(() => {
     if (!authStore.token) {
@@ -39,6 +40,7 @@ export default function AppRouter() {
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/registered" element={<Registered />} />
 
                 <Route element={<PrivateRoute />}>
                     <Route path="/dashboard" element={<DashboardLayout />}>

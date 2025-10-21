@@ -38,7 +38,32 @@
     "register_title": "Create a new account",
     "email": "Email address",
     "password": "Password",
-    "submit": "Submit"
+    "submit": "Submit",
+    "sign_in": "Sign in",
+    "sing_up_question": "Don’t have an account?",
+    "register": "Register",
+    "register_description": "Create your ReBetter account",
+    "full_name": "Full Name",
+    "john_doe": "John Doe",
+    "sign_up": "Sign up",
+    "signing_in": "Signing in",
+    "registering": "Registering",
+    "sing_ip_question": "Already have an account?",
+    "registration_success": "Account created 🎉",
+    "check_email_description": "Please check your email inbox and click the activation link to complete your registration.",
+    "go_to_login": "Go to login"
+
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "companies": "Companies",
+    "clients": "Clients"
+  },
+  "errors": {
+    "Email already exists": "Email already exists",
+    "Invalid credentials": "Invalid credentials",
+    "Unexpected server error. Please try again later.": "Unexpected server error. Please try again later.",
+    "Unknown error occurred": "Unknown error occurred"
   },
   "utils": {
     "all_rights_reserved": "All rights reserved"

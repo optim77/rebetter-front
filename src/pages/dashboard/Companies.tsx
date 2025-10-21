@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input.tsx";
 
 export default function Companies() {
     const [search, setSearch] = useState("");
+
     const { data, isLoading } = useQuery({
         queryKey: ["companies", search],
         queryFn: () => getCompanies({ search_term: search }),

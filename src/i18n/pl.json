@@ -38,8 +38,34 @@
     "register_title": "Utwórz nowe konto",
     "email": "Adres e-mail",
     "password": "Hasło",
-    "submit": "Zatwierdź"
+    "submit": "Zatwierdź",
+    "sign_in": "Zaloguj",
+    "sing_up_question": "Nie masz konta?",
+    "register": "Zarejestruj",
+    "register_description": "Utwórz konto ReBetter",
+    "full_name": "Imię i nazwisko",
+    "john_doe": "Jan Kowalski",
+    "sign_up": "Zarejestruj",
+    "registering": "Wysyłanie",
+    "signing_in": "Logowanie",
+    "sing_ip_question": "Masz już konto?",
+    "registration_success": "Konto zostało utworzone 🎉",
+    "check_email_description": "Sprawdź swoją skrzynkę pocztową i kliknij w link aktywacyjny, aby dokończyć rejestrację.",
+    "go_to_login": "Przejdź do logowania"
+
   },
+  "sidebar": {
+    "dashboard": "Pulpit",
+    "companies": "Firmy",
+    "clients": "Klienci"
+  },
+  "errors": {
+    "Email already exists": "Podany adres e-mail jest już zarejestrowany",
+    "Invalid credentials": "Nieprawidłowy adres e-mail lub hasło",
+    "Unexpected server error. Please try again later.": "Wystąpił nieoczekiwany błąd serwera. Spróbuj ponownie później.",
+    "Unknown error occurred": "Wystąpił nieznany błąd"
+  },
+
   "utils": {
     "all_rights_reserved": "Wszystkie prawa zastrzeżone"
   }
