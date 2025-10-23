@@ -18,7 +18,7 @@ export function useLogin() {
     const mutation = useMutation({
         mutationFn: async (data: LoginData) => {
             const res = await api.post("/auth/login", data);
-            authStore.setToken(res.data.token);
+            authStore.setToken(res.data.access_token);
         },
         onSuccess: async () => {
             navigate("/dashboard");

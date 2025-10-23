@@ -2,7 +2,34 @@
   "action": {
     "get_started": "Wypróbuj",
     "learn_more": "Dowiedz się więcej",
-    "send_message": "Wyślij wiadomość"
+    "send_message": "Wyślij wiadomość",
+    "search": "Wyszukaj",
+    "loading": "Ładowanie",
+    "save": "Zapisz",
+    "saving": "Zapisywanie"
+  },
+  "clients": {
+    "clients": "Klienci",
+    "add_client": "Dodaj klienta",
+    "name": "Imię i nazwisko",
+    "name_placeholder": "Jan Kowalski",
+    "email": "Email",
+    "phone": "Numer telefonu",
+    "service": "Usługa",
+    "note": "Notatki",
+    "created_successfully": "Poprawnie utworzono klienta"
+  },
+  "companies": {
+    "companies": "Firmy",
+    "add_company": "Dodaj firmę",
+    "create_title": "Utwórz firmę",
+    "name": "Nazwa firmy",
+    "name_placeholder": "Wpisz nazwę firmy",
+    "description": "Opis",
+    "description_placeholder": "Wpisz opis (opcjonalnie)",
+    "create_button": "Utwórz firmę",
+    "creating": "Tworzenie...",
+    "created_successfully": "Firma została utworzona pomyślnie!"
   },
   "contact": {
     "head": "Skontaktuj się z nami",

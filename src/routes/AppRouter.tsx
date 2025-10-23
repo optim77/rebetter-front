@@ -5,17 +5,19 @@ import { authStore } from "../store/auth";
 import LandingPage from "@/pages/Landing.tsx";
 import Login from "@/pages/auth/Login.tsx";
 import Register from "@/pages/auth/Register.tsx";
-import DashboardHome from "@/pages/dashboard/DashboardHome.tsx";
-import Companies from "@/pages/dashboard/Companies.tsx";
-import Clients from "@/pages/dashboard/Clients.tsx";
-import Navbar from "@/components/layout/Navbar.tsx";
 import Registered from "@/pages/Registered.tsx";
+
+import Navbar from "@/components/layout/Navbar.tsx";
 import Sidebar from "@/components/layout/Sidebar.tsx";
+import DashboardHome from "@/pages/dashboard/DashboardHome.tsx";
+import Companies from "@/pages/companies/Companies.tsx";
+import CreateCompany from "@/pages/companies/CreateCompany.tsx";
+import Clients from "@/pages/clients/Clients.tsx";
+import CreateClient from "@/pages/clients/CreateClient.tsx";
+
 
 const PrivateRoute = observer(() => {
-    if (!authStore.token) {
-        return <Navigate to="/login" replace />;
-    }
+    if (!authStore.token) return <Navigate to="/login" replace />;
     return <Outlet />;
 });
 
@@ -45,12 +47,17 @@ export default function AppRouter() {
                 <Route element={<PrivateRoute />}>
                     <Route path="/dashboard" element={<DashboardLayout />}>
                         <Route index element={<DashboardHome />} />
+                        <Route path="create_company" element={<CreateCompany />} />
                         <Route path="companies" element={<Companies />} />
-                        <Route path="clients" element={<Clients />} />
+
+                        <Route path="company/:companyId" element={<Outlet />}>
+                            <Route index element={<DashboardHome />} />
+                            <Route path="create_client" element={<CreateClient />} />
+                            <Route path="clients" element={<Clients />} />
+                        </Route>
                     </Route>
                 </Route>
 
-                {/* 404 */}
                 <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
         </BrowserRouter>

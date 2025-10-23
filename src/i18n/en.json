@@ -2,7 +2,34 @@
   "action": {
     "get_started": "Get Started",
     "learn_more": "Learn more",
-    "send_message": "Send message"
+    "send_message": "Send message",
+    "search": "Search",
+    "loading": "Loading",
+    "save": "Save",
+    "saving": "Saving"
+  },
+  "clients": {
+    "clients": "Clients",
+    "add_client": "Add client",
+    "name": "Name",
+    "name_placeholder": "John Doe",
+    "email": "Email",
+    "phone": "Phone",
+    "service": "Usługa",
+    "note": "Note",
+    "created_successfully": "Client was created successfully"
+  },
+  "companies": {
+    "companies": "Companies",
+    "add_company": "Add company",
+    "create_title": "Create Company",
+    "name": "Company name",
+    "name_placeholder": "Enter company name",
+    "description": "Description",
+    "description_placeholder": "Enter description (optional)",
+    "create_button": "Create Company",
+    "creating": "Creating...",
+    "created_successfully": "Company created successfully!"
   },
   "contact": {
     "head": "Contact us",
