@@ -6,7 +6,10 @@
     "search": "Search",
     "loading": "Loading",
     "save": "Save",
-    "saving": "Saving"
+    "saving": "Saving",
+    "back": "Back",
+    "edit": "Edit",
+    "delete": "Delete"
   },
   "clients": {
     "clients": "Clients",
@@ -84,7 +87,8 @@
   "sidebar": {
     "dashboard": "Dashboard",
     "companies": "Companies",
-    "clients": "Clients"
+    "clients": "Clients",
+    "campaign": "Campaign"
   },
   "errors": {
     "Email already exists": "Email already exists",

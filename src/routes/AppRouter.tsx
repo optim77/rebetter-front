@@ -14,6 +14,8 @@ import Companies from "@/pages/companies/Companies.tsx";
 import CreateCompany from "@/pages/companies/CreateCompany.tsx";
 import Clients from "@/pages/clients/Clients.tsx";
 import CreateClient from "@/pages/clients/CreateClient.tsx";
+import Client from "@/pages/clients/Client.tsx";
+import Campaign from "@/pages/campaings/Campaign.tsx";
 
 
 const PrivateRoute = observer(() => {
@@ -53,8 +55,16 @@ export default function AppRouter() {
                         <Route path="company/:companyId" element={<Outlet />}>
                             <Route index element={<DashboardHome />} />
                             <Route path="create_client" element={<CreateClient />} />
+                            <Route path="client" element={<Client />} />
                             <Route path="clients" element={<Clients />} />
+                            <Route path="campaign" element={<Campaign />} />
                         </Route>
+
+                        <Route path="company/:companyId/client/:clientId" element={<Outlet />}>
+                            <Route index element={<Client />} />
+                        </Route>
+
+
                     </Route>
                 </Route>
 

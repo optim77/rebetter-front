@@ -32,6 +32,11 @@ export default function Sidebar() {
                             <Users className="w-4 h-4" />
                             {t("sidebar.clients")}
                         </NavLink>
+
+                        <NavLink to={`/dashboard/company/${companyId}/campaign`} className={linkClasses}>
+                            <Users className="w-4 h-4" />
+                            {t("sidebar.campaign")}
+                        </NavLink>
                     </>
                 )}
             </nav>

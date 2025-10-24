@@ -6,7 +6,10 @@
     "search": "Wyszukaj",
     "loading": "Ładowanie",
     "save": "Zapisz",
-    "saving": "Zapisywanie"
+    "saving": "Zapisywanie",
+    "back": "Cofnij",
+    "edit": "Edytuj",
+    "delete": "Usuń"
   },
   "clients": {
     "clients": "Klienci",
@@ -84,7 +87,8 @@
   "sidebar": {
     "dashboard": "Pulpit",
     "companies": "Firmy",
-    "clients": "Klienci"
+    "clients": "Klienci",
+    "campaign": "Kampanie"
   },
   "errors": {
     "Email already exists": "Podany adres e-mail jest już zarejestrowany",
