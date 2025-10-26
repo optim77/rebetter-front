@@ -41,6 +41,7 @@
     "email": "Email",
     "message": "Wiadomość"
   },
+
   "navbar": {
     "home": "Strona główna",
     "login": "Zaloguj się",
@@ -84,17 +85,27 @@
     "go_to_login": "Przejdź do logowania"
 
   },
+  "services": {
+    "services": "Usługi",
+    "add_service": "Dodaj usługę",
+    "name": "Nazwa usługi",
+    "name_placeholder": "Obsługa spotkania",
+    "description": "Opis usługi",
+    "created_successfully": "Pomyślnie utworzono usługę"
+  },
   "sidebar": {
     "dashboard": "Pulpit",
     "companies": "Firmy",
     "clients": "Klienci",
-    "campaign": "Kampanie"
+    "campaign": "Kampanie",
+    "services": "Usługi"
   },
   "errors": {
     "Email already exists": "Podany adres e-mail jest już zarejestrowany",
     "Invalid credentials": "Nieprawidłowy adres e-mail lub hasło",
     "Unexpected server error. Please try again later.": "Wystąpił nieoczekiwany błąd serwera. Spróbuj ponownie później.",
-    "Unknown error occurred": "Wystąpił nieznany błąd"
+    "Unknown error occurred": "Wystąpił nieznany błąd",
+    "client_not_found": "Nie znaleziono klienta"
   },
 
   "utils": {

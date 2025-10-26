@@ -1,9 +1,7 @@
-import { type JSX } from "react";
-
-export default function DashboardHome(): JSX.Element {
+export default function DashboardHome() {
     return (
         <>
+            dashboar home
         </>
     )
-
 }

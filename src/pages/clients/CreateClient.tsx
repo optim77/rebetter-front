@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { type ChangeEvent, type FormEvent, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
@@ -23,10 +23,7 @@ export default function CreateClient() {
 
     const mutation = useMutation({
         mutationFn: async () =>
-            clientsApi.createClient({
-                ...form,
-                company: companyId!,
-            }),
+            clientsApi.createClient(form, companyId),
         onSuccess: () => {
             toast.success(t("clients.created_successfully"));
             navigate(`/dashboard/company/${companyId}/clients`);
@@ -39,12 +36,12 @@ export default function CreateClient() {
         },
     });
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setForm((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         mutation.mutate();
     };

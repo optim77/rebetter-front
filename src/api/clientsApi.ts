@@ -1,5 +1,6 @@
 import api from "@/api/axios.ts";
 import type { PaginationParams } from "@/api/type.ts";
+import type { AxiosResponse } from "axios";
 
 export interface Client {
     id: string;
@@ -25,15 +26,26 @@ export interface CreateClient{
     phone: string;
     service: string;
     note: string;
-    company: string;
 }
 
 export const clientsApi = {
-    getClients: async (companyId: string, params: PaginationParams) => {
+    getClient: async (companyId: string, clientId: string): Promise<Client> => {
+        const res = await api.get<Client>(`/clients/${companyId}/${clientId}`);
+        return res.data;
+    },
+    getClients: async (companyId: string, params: PaginationParams): Promise<AxiosResponse> => {
         return await api.get<ClientResponse>(`/clients/${companyId}`, {params});
     },
-    createClient: async (data: CreateClient) => {
-        const res = await api.post<Client>("/clients/", data);
+    createClient: async (data: CreateClient, companyId: string | undefined) => {
+        if (!companyId) throw new Error();
+        const res = await api.post<Client>(`/clients/${companyId}`, data);
         return res.data;
+    },
+    updateClient: async (companyId: string, clientId: string, client: CreateClient): Promise<Client> => {
+        const res = await api.put<Client>(`/clients/${companyId}/${clientId}`, client);
+        return res.data;
+    },
+    deleteClient: async (companyId: string, clientId: string): Promise<AxiosResponse> => {
+        return await api.delete<Client>(`/clients/${companyId}/${clientId}`);
     }
 }

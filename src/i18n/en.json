@@ -84,17 +84,27 @@
     "go_to_login": "Go to login"
 
   },
+  "services": {
+    "services": "Services",
+    "add_service": "Add service",
+    "name": "Service name",
+    "name_placeholder": "Wolf cut",
+    "description": "Service description",
+    "created_successfully": "Created service successfully"
+  },
   "sidebar": {
     "dashboard": "Dashboard",
     "companies": "Companies",
     "clients": "Clients",
-    "campaign": "Campaign"
+    "campaign": "Campaign",
+    "services": "Services"
   },
   "errors": {
     "Email already exists": "Email already exists",
     "Invalid credentials": "Invalid credentials",
     "Unexpected server error. Please try again later.": "Unexpected server error. Please try again later.",
-    "Unknown error occurred": "Unknown error occurred"
+    "Unknown error occurred": "Unknown error occurred",
+    "client_not_found": "Client not found"
   },
   "utils": {
     "all_rights_reserved": "All rights reserved"

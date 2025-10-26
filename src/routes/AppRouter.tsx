@@ -9,13 +9,16 @@ import Registered from "@/pages/Registered.tsx";
 
 import Navbar from "@/components/layout/Navbar.tsx";
 import Sidebar from "@/components/layout/Sidebar.tsx";
-import DashboardHome from "@/pages/dashboard/DashboardHome.tsx";
+import DashboardCompany from "@/pages/dashboard/DashboardCompany.tsx";
 import Companies from "@/pages/companies/Companies.tsx";
 import CreateCompany from "@/pages/companies/CreateCompany.tsx";
 import Clients from "@/pages/clients/Clients.tsx";
 import CreateClient from "@/pages/clients/CreateClient.tsx";
 import Client from "@/pages/clients/Client.tsx";
 import Campaign from "@/pages/campaings/Campaign.tsx";
+import Services from "@/pages/services/Services.tsx";
+import DashboardHome from "@/pages/dashboard/DashboardHome.tsx";
+import CreateService from "@/pages/services/CreateService.tsx";
 
 
 const PrivateRoute = observer(() => {
@@ -53,11 +56,13 @@ export default function AppRouter() {
                         <Route path="companies" element={<Companies />} />
 
                         <Route path="company/:companyId" element={<Outlet />}>
-                            <Route index element={<DashboardHome />} />
+                            <Route index element={<DashboardCompany />} />
                             <Route path="create_client" element={<CreateClient />} />
                             <Route path="client" element={<Client />} />
                             <Route path="clients" element={<Clients />} />
                             <Route path="campaign" element={<Campaign />} />
+                            <Route path="services" element={<Services />} />
+                            <Route path="create_service" element={<CreateService />} />
                         </Route>
 
                         <Route path="company/:companyId/client/:clientId" element={<Outlet />}>

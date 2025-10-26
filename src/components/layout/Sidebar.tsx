@@ -1,5 +1,5 @@
 import { NavLink, useParams } from "react-router-dom";
-import { Building2, Users, LayoutDashboard } from "lucide-react";
+import { Building2, Users, LayoutDashboard, TicketsPlane, Briefcase } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 export default function Sidebar() {
@@ -34,8 +34,13 @@ export default function Sidebar() {
                         </NavLink>
 
                         <NavLink to={`/dashboard/company/${companyId}/campaign`} className={linkClasses}>
-                            <Users className="w-4 h-4" />
+                            <TicketsPlane className="w-4 h-4" />
                             {t("sidebar.campaign")}
+                        </NavLink>
+
+                        <NavLink to={`/dashboard/company/${companyId}/services`} className={linkClasses}>
+                            <Briefcase className="w-4 h-4" />
+                            {t("sidebar.services")}
                         </NavLink>
                     </>
                 )}

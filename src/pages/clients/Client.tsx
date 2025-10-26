@@ -1,10 +1,10 @@
-import { useParams, Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
 import { t } from "i18next";
-import api from "@/api/axios";
+import { clientsApi } from "@/api/clientsApi.ts";
 
 interface Client {
     id: string;
@@ -20,14 +20,14 @@ export default function Client() {
     const { data, isLoading, isError } = useQuery({
         queryKey: ["client", companyId, clientId],
         queryFn: async (): Promise<Client> => {
-            const res = await api.get(`/clients/${companyId}/${clientId}`);
-            return res.data;
+            if (!companyId || !clientId) throw new Error("Companies not found!");
+            return clientsApi.getClient(companyId, clientId);
         },
         enabled: !!companyId && !!clientId,
     });
 
     if (isLoading) return <p>{t("action.loading")}</p>;
-    if (isError || !data) return <p>{t("error.client_not_found")}</p>;
+    if (isError || !data) return <p>{t("errors.client_not_found")}</p>;
 
     return (
         <div className="p-6 space-y-4">
