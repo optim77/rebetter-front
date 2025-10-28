@@ -2,9 +2,19 @@ import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Send } from "lucide-react";
 import { t } from "i18next";
 import { clientsApi } from "@/api/clientsApi.ts";
+import { useState } from "react";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
 
 interface Client {
     id: string;
@@ -16,7 +26,7 @@ interface Client {
 
 export default function Client() {
     const { companyId, clientId } = useParams<{ companyId: string; clientId: string }>();
-
+    const [open, setOpen] = useState(false);
     const { data, isLoading, isError } = useQuery({
         queryKey: ["client", companyId, clientId],
         queryFn: async (): Promise<Client> => {
@@ -54,7 +64,49 @@ export default function Client() {
                         <p className="text-sm text-gray-500">{t("clients.phone")}</p>
                         <p className="font-medium">{data.phone || "-"}</p>
                     </div>
+
                     <div className="flex items-center gap-2 justify-end">
+                        <Dialog open={open} onOpenChange={setOpen}>
+                            <DialogTrigger asChild>
+                                <Button onClick={() => setOpen(true)}>
+                                    <Send className="w-4 h-4 mr-2" />
+                                    {t("messages.send_sms_message")}
+                                </Button>
+                            </DialogTrigger>
+
+                            <DialogContent className="sm:max-w-md">
+                                <DialogHeader>
+                                    <DialogTitle>{t("messages.send_sms_message")}</DialogTitle>
+                                    <DialogDescription>
+                                        {t("messages.send_message_description")}
+                                    </DialogDescription>
+                                </DialogHeader>
+
+                                <form
+                                    className="space-y-4 mt-4"
+                                    onSubmit={(e) => {
+                                        e.preventDefault();
+                                        setOpen(false);
+                                    }}
+                                >
+                                    <div className="space-y-2 text-left">
+                                        <label className="text-sm font-medium">
+                                            {t("messages.content")}
+                                        </label>
+                                        <Textarea
+                                            placeholder={t("messages.content_placeholder") || ""}
+                                            rows={5}
+                                        />
+                                    </div>
+
+                                    <div className="flex justify-end gap-2">
+
+                                        <Button type="submit">{t("action.send")}</Button>
+                                    </div>
+                                </form>
+                            </DialogContent>
+                        </Dialog>
+
                         <Button>{t("action.edit")}</Button>
                         <Button variant="destructive">{t("action.delete")}</Button>
                     </div>

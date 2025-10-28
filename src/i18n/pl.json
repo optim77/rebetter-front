@@ -3,13 +3,15 @@
     "get_started": "Wypróbuj",
     "learn_more": "Dowiedz się więcej",
     "send_message": "Wyślij wiadomość",
+    "send": "Wyślij",
     "search": "Wyszukaj",
     "loading": "Ładowanie",
     "save": "Zapisz",
     "saving": "Zapisywanie",
     "back": "Cofnij",
     "edit": "Edytuj",
-    "delete": "Usuń"
+    "delete": "Usuń",
+    "cancel": "Anuluj"
   },
   "clients": {
     "clients": "Klienci",
@@ -32,7 +34,23 @@
     "description_placeholder": "Wpisz opis (opcjonalnie)",
     "create_button": "Utwórz firmę",
     "creating": "Tworzenie...",
-    "created_successfully": "Firma została utworzona pomyślnie!"
+    "created_successfully": "Firma została utworzona pomyślnie!",
+    "google_review_link": "Link opinii google",
+    "enter_google_review_link": "Wprowadź link opinii Google",
+    "facebook_url": "Facebook URL",
+    "enter_facebook_url": "Wprowadź Facebook URL",
+    "instagram_url": "Instagram URL",
+    "enter_instagram_url": "Wprowadź Instagram URL",
+    "linkedin_url": "LinkedIn URL",
+    "enter_linkedin_url": "Wprowadź LinkedIn URL",
+    "tiktok_url": "TikTok URL",
+    "enter_tiktok_url": "Wprowadź TikTok URL",
+    "znanylekarz_url": "Znany Lekarz URL",
+    "enter_znanylekarz_url": "Wprowadź Znany Lekarz URL",
+    "booksy_url": "Booksy URL",
+    "enter_booksy_url": "Wprowadź Booksy URL",
+    "your_links": "Twoje linki",
+    "google": "Google"
   },
   "contact": {
     "head": "Skontaktuj się z nami",
@@ -63,6 +81,12 @@
       "head": "Gotowy, aby wzmocnić swoją reputację?",
       "description": "Zacznij zbierać więcej 5-gwiazdkowych recenzji już dziś."
     }
+  },
+  "messages": {
+    "send_sms_message": "Wyślij wiadomość SMS",
+    "send_message_description": "Wyślij wiadomość do pojedyńczego użytkownika. W karcie Wiadomosći będziesz mógł podjerzeć jej status",
+    "content": "Wiadomość",
+    "content_placeholder": "Wiadomość"
   },
   "auth": {
     "login_title": "Zaloguj się na swoje konto",

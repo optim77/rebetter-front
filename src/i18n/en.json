@@ -3,13 +3,15 @@
     "get_started": "Get Started",
     "learn_more": "Learn more",
     "send_message": "Send message",
+    "send": "Send",
     "search": "Search",
     "loading": "Loading",
     "save": "Save",
     "saving": "Saving",
     "back": "Back",
     "edit": "Edit",
-    "delete": "Delete"
+    "delete": "Delete",
+    "cancel": "Cancel"
   },
   "clients": {
     "clients": "Clients",
@@ -32,7 +34,23 @@
     "description_placeholder": "Enter description (optional)",
     "create_button": "Create Company",
     "creating": "Creating...",
-    "created_successfully": "Company created successfully!"
+    "created_successfully": "Company created successfully!",
+    "google_review_link": "Google review link",
+    "enter_google_review_link": "Enter Google review link",
+    "facebook_url": "Facebook URL",
+    "enter_facebook_url": "Enter Facebook URL",
+    "instagram_url": "Instagram URL",
+    "enter_instagram_url": "Enter Instagram URL",
+    "linkedin_url": "LinkedIn URL",
+    "enter_linkedin_url": "Enter LinkedIn URL",
+    "tiktok_url": "TikTok URL",
+    "enter_tiktok_url": "Enter TikTok URL",
+    "znanylekarz_url": "Znany Lekarz URL",
+    "enter_znanylekarz_url": "Enter Znany Lekarz URL",
+    "booksy_url": "Booksy URL",
+    "enter_booksy_url": "Enter Booksy URL",
+    "your_links": "Your links",
+    "google": "Google"
   },
   "contact": {
     "head": "Contact us",
@@ -62,6 +80,12 @@
       "head": "Ready to grow your reputation?",
       "description": "Start collecting more 5-star reviews today."
     }
+  },
+  "messages": {
+    "send_sms_message": "Send SMS Message",
+    "send_message_description": "Send a message to a single user. In the Messages tab, you will be able to view its status.",
+    "content": "Message",
+    "content_placeholder": "Message"
   },
   "auth": {
     "login_title": "Sign in to your account",

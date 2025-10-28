@@ -1,39 +1,38 @@
-import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
-import { Building2 } from "lucide-react";
+import {
+    Building2,
+    Facebook,
+    Instagram,
+    Linkedin,
+    Star,
+    Stethoscope,
+    Scissors,
+    Video,
+} from "lucide-react";
 import { t } from "i18next";
-import type { ApiError } from "@/types/apiError.ts";
-import { handleApiError } from "@/utils/handleApiError.ts";
-import toast from "react-hot-toast";
-import { companiesApi } from "@/api/companiesApi.ts";
+import { useState } from "react";
+import { useCreateCompany } from "@/hooks/useCreateCompany.ts";
+
+const socialOptions = [
+    { key: "googleReviewLink", label: "Google", icon: Star },
+    { key: "facebookUrl", label: "Facebook", icon: Facebook },
+    { key: "instagramUrl", label: "Instagram", icon: Instagram },
+    { key: "linkedinUrl", label: "LinkedIn", icon: Linkedin },
+    { key: "tiktokUrl", label: "TikTok", icon: Video },
+    { key: "znanyLekarzUrl", label: "Znany Lekarz", icon: Stethoscope },
+    { key: "booksyUrl", label: "Booksy", icon: Scissors },
+];
 
 export default function CreateCompany() {
-    const [name, setName] = useState("");
-    const [description, setDescription] = useState("");
-
-    const navigate = useNavigate();
-
-    const mutation = useMutation({
-        mutationFn: async () => {
-            return await companiesApi.createCompany({name, description});
-        },
-        onSuccess: (data) => {
-            toast.success(t("companies.created_successfully", { defaultValue: "Company created successfully!" }));
-            navigate(`/dashboard/company/${data.id}`);
-        },
-        onError: (error) => {
-            const apiError: ApiError = handleApiError(error);
-            console.log(apiError)
-            toast.error(t(`errors.${apiError.message}`) || apiError.message);
-            console.error("Registration failed:", apiError);
-        },
-    });
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        mutation.mutate();
+    const [activeSocials, setActiveSocials] = useState<string[]>([]);
+    const toggleSocial = (key: string) => {
+        setActiveSocials((prev) =>
+            prev.includes(key)
+                ? prev.filter((s) => s !== key)
+                : [...prev, key]
+        );
     };
+
+    const { handleSubmit, form, handleChange, mutation } = useCreateCompany();
 
     return (
         <div className="max-w-lg mx-auto bg-white p-8 rounded-xl shadow-md">
@@ -44,17 +43,20 @@ export default function CreateCompany() {
                 </h1>
             </div>
 
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+                {/* Basic fields */}
                 <div>
                     <label className="block text-gray-600 mb-1">
                         {t("companies.name", { defaultValue: "Company name" })}
                     </label>
                     <input
                         type="text"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        value={form.name}
+                        onChange={(e) => handleChange("name")(e.target.value)}
                         className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-400 outline-none"
-                        placeholder={t("companies.name_placeholder", { defaultValue: "Enter company name" })}
+                        placeholder={t("companies.name_placeholder", {
+                            defaultValue: "Enter company name",
+                        })}
                         required
                     />
                 </div>
@@ -64,12 +66,65 @@ export default function CreateCompany() {
                         {t("companies.description", { defaultValue: "Description" })}
                     </label>
                     <textarea
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        rows={4}
+                        value={form.description}
+                        onChange={(e) => handleChange("description")(e.target.value)}
+                        rows={3}
                         className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-400 outline-none resize-none"
-                        placeholder={t("companies.description_placeholder", { defaultValue: "Enter description (optional)" })}
+                        placeholder={t("companies.description_placeholder", {
+                            defaultValue: "Enter description (optional)",
+                        })}
                     />
+                </div>
+
+                <div>
+                    <label className="block text-gray-700 font-medium mb-2">
+                        {t("companies.social_media", { defaultValue: "Social Media Links" })}
+                    </label>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        {socialOptions.map(({ key, label, icon: Icon }) => (
+                            <button
+                                type="button"
+                                key={key}
+                                onClick={() => toggleSocial(key)}
+                                className={`flex items-center gap-2 border rounded-lg px-3 py-2 transition ${
+                                    activeSocials.includes(key)
+                                        ? "bg-indigo-50 border-indigo-400 text-indigo-700"
+                                        : "bg-gray-50 hover:bg-gray-100"
+                                }`}
+                            >
+                                <Icon
+                                    className={`w-4 h-4 ${
+                                        activeSocials.includes(key)
+                                            ? "text-indigo-600"
+                                            : "text-gray-500"
+                                    }`}
+                                />
+                                <span className="text-sm font-medium">{label}</span>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="flex flex-col gap-4">
+                    {activeSocials.map((key) => {
+                        const label =
+                            socialOptions.find((opt) => opt.key === key)?.label || key;
+
+                        return (
+                            <div key={key}>
+                                <label className="block text-gray-600 mb-1">{label} URL</label>
+                                <input
+                                    type="text"
+                                    value={form[key as keyof typeof form] ?? ""}
+                                    onChange={(e) =>
+                                        handleChange(key as keyof typeof form)(e.target.value)
+                                    }
+                                    className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-400 outline-none"
+                                    placeholder={`Enter ${label} link`}
+                                />
+                            </div>
+                        );
+                    })}
                 </div>
 
                 <button

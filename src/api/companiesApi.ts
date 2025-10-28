@@ -10,11 +10,23 @@ export interface Company {
     id: string;
     name: string;
     description?: string;
+    google_review_link?: string;
+    facebook_url?: string;
+    instagram_url?: string;
+    linkedin_url?: string;
+    tiktok_url?: string;
+    znany_lekarz?: string;
+    booksy_url?: string;
+
 }
 
 export const companiesApi = {
     getCompanies: async (params: PaginationParams) => {
         const res = await api.get("/companies/", { params });
+        return res.data;
+    },
+    getCompany: async (companyId: string): Promise<Company> => {
+        const res = await api.get<Company>(`/companies/${companyId}`);
         return res.data;
     },
     createCompany: async (data: CreateCompany) => {
