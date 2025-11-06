@@ -1,5 +1,6 @@
 import api from "@/api/axios.ts";
 import type { PaginationParams } from "@/api/type.ts";
+import type { AxiosResponse } from "axios";
 
 export interface CreateCompany {
     name: string;
@@ -32,5 +33,8 @@ export const companiesApi = {
     createCompany: async (data: CreateCompany) => {
         const res = await api.post<Company>("/companies/", data);
         return res.data;
-    }
+    },
+    getSocials: async (companyId: string): Promise<AxiosResponse> => {
+        return await api.get<AxiosResponse>(`/companies/${companyId}/socials`);
+    },
 }

@@ -2,21 +2,14 @@ import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft, Send } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { t } from "i18next";
 import { clientsApi } from "@/api/clientsApi.ts";
 import { useState } from "react";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger
-} from "@/components/ui/dialog";
-import { Textarea } from "@/components/ui/textarea";
+import { companiesApi } from "@/api/companiesApi.ts";
+import type { AxiosResponse } from "axios";
 
-interface Client {
+export interface Client {
     id: string;
     name: string;
     email: string;
@@ -27,7 +20,7 @@ interface Client {
 export default function Client() {
     const { companyId, clientId } = useParams<{ companyId: string; clientId: string }>();
     const [open, setOpen] = useState(false);
-    const { data, isLoading, isError } = useQuery({
+    const { data: userData, isLoading: isLoadingUser, isError: isErrorUser } = useQuery({
         queryKey: ["client", companyId, clientId],
         queryFn: async (): Promise<Client> => {
             if (!companyId || !clientId) throw new Error("Companies not found!");
@@ -36,8 +29,19 @@ export default function Client() {
         enabled: !!companyId && !!clientId,
     });
 
-    if (isLoading) return <p>{t("action.loading")}</p>;
-    if (isError || !data) return <p>{t("errors.client_not_found")}</p>;
+    const { data: socials, isLoading: isLoadingSocials, isError: isErrorSocials } = useQuery({
+        queryKey: ["socials", companyId, clientId],
+        queryFn: async (): Promise<AxiosResponse> => {
+            if (!companyId || !clientId) throw new Error("Companies not found!");
+            return companiesApi.getSocials(companyId);
+        },
+        enabled: !!companyId && !!clientId,
+    });
+
+    console.log(socials?.data);
+
+    if (isLoadingUser) return <p>{t("action.loading")}</p>;
+    if (isErrorUser || !userData) return <p>{t("errors.client_not_found")}</p>;
 
     return (
         <div className="p-6 space-y-4">
@@ -49,7 +53,7 @@ export default function Client() {
                             {t("action.back")}
                         </Button>
                     </Link>
-                    <h1 className="text-2xl font-bold">{data.name}</h1>
+                    <h1 className="text-2xl font-bold">{userData.name}</h1>
                 </div>
             </div>
 
@@ -57,56 +61,17 @@ export default function Client() {
                 <CardContent className="space-y-3 pt-6">
                     <div>
                         <p className="text-sm text-gray-500">{t("clients.email")}</p>
-                        <p className="font-medium">{data.email || "-"}</p>
+                        <p className="font-medium">{userData.email || "-"}</p>
                     </div>
 
                     <div>
                         <p className="text-sm text-gray-500">{t("clients.phone")}</p>
-                        <p className="font-medium">{data.phone || "-"}</p>
+                        <p className="font-medium">{userData.phone || "-"}</p>
                     </div>
 
                     <div className="flex items-center gap-2 justify-end">
-                        <Dialog open={open} onOpenChange={setOpen}>
-                            <DialogTrigger asChild>
-                                <Button onClick={() => setOpen(true)}>
-                                    <Send className="w-4 h-4 mr-2" />
-                                    {t("messages.send_sms_message")}
-                                </Button>
-                            </DialogTrigger>
 
-                            <DialogContent className="sm:max-w-md">
-                                <DialogHeader>
-                                    <DialogTitle>{t("messages.send_sms_message")}</DialogTitle>
-                                    <DialogDescription>
-                                        {t("messages.send_message_description")}
-                                    </DialogDescription>
-                                </DialogHeader>
-
-                                <form
-                                    className="space-y-4 mt-4"
-                                    onSubmit={(e) => {
-                                        e.preventDefault();
-                                        setOpen(false);
-                                    }}
-                                >
-                                    <div className="space-y-2 text-left">
-                                        <label className="text-sm font-medium">
-                                            {t("messages.content")}
-                                        </label>
-                                        <Textarea
-                                            placeholder={t("messages.content_placeholder") || ""}
-                                            rows={5}
-                                        />
-                                    </div>
-
-                                    <div className="flex justify-end gap-2">
-
-                                        <Button type="submit">{t("action.send")}</Button>
-                                    </div>
-                                </form>
-                            </DialogContent>
-                        </Dialog>
-
+                        <Link to={`send_sms`}>{t("messages.send_sms_message")}</Link>
                         <Button>{t("action.edit")}</Button>
                         <Button variant="destructive">{t("action.delete")}</Button>
                     </div>

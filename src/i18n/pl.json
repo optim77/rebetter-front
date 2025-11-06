@@ -88,6 +88,11 @@
     "content": "Wiadomość",
     "content_placeholder": "Wiadomość"
   },
+  "sms": {
+    "phone": "Numer",
+    "service": "Usługa",
+    "message": "Wiadomość"
+  },
   "auth": {
     "login_title": "Zaloguj się na swoje konto",
     "register_title": "Utwórz nowe konto",

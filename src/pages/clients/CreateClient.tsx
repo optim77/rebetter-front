@@ -18,7 +18,8 @@ export default function CreateClient() {
         email: "",
         phone: "",
         service: "",
-        note: ""
+        note: "",
+        company: companyId
     });
 
     const mutation = useMutation({

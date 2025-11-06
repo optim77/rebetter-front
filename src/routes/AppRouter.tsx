@@ -19,6 +19,7 @@ import Campaign from "@/pages/campaings/Campaign.tsx";
 import Services from "@/pages/services/Services.tsx";
 import DashboardHome from "@/pages/dashboard/DashboardHome.tsx";
 import CreateService from "@/pages/services/CreateService.tsx";
+import { SendSMSMessage } from "@/pages/messages/SendSMSMessage.tsx";
 
 
 const PrivateRoute = observer(() => {
@@ -67,6 +68,7 @@ export default function AppRouter() {
 
                         <Route path="company/:companyId/client/:clientId" element={<Outlet />}>
                             <Route index element={<Client />} />
+                            <Route path="send_sms" element={<SendSMSMessage/>} />
                         </Route>
 
 
