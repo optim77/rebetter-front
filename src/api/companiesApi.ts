@@ -18,7 +18,16 @@ export interface Company {
     tiktok_url?: string;
     znany_lekarz?: string;
     booksy_url?: string;
+}
 
+export interface Socials {
+    google: string | null;
+    facebook: string | null;
+    instagram: string | null;
+    tiktok: string | null;
+    linkedin: string | null;
+    booksy: string | null;
+    znany_lekarz: string | null;
 }
 
 export const companiesApi = {
@@ -34,7 +43,8 @@ export const companiesApi = {
         const res = await api.post<Company>("/companies/", data);
         return res.data;
     },
-    getSocials: async (companyId: string): Promise<AxiosResponse> => {
-        return await api.get<AxiosResponse>(`/companies/${companyId}/socials`);
+    getSocials: async (companyId: string): Promise<Socials> => {
+        const res = await api.get<Socials>(`/companies/${companyId}/socials`);
+        return res.data;
     },
 }

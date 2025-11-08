@@ -11,7 +11,9 @@
     "back": "Cofnij",
     "edit": "Edytuj",
     "delete": "Usuń",
-    "cancel": "Anuluj"
+    "cancel": "Anuluj",
+    "open": "Otwórz",
+    "choose": "Wybierz"
   },
   "clients": {
     "clients": "Klienci",
@@ -50,7 +52,9 @@
     "booksy_url": "Booksy URL",
     "enter_booksy_url": "Wprowadź Booksy URL",
     "your_links": "Twoje linki",
-    "google": "Google"
+    "google": "Google",
+    "choose_social_platform": "Wybierz platformę by wysłać wiadomość",
+    "no_socials_available": "Brak dostępnych linków do opinii"
   },
   "contact": {
     "head": "Skontaktuj się z nami",
@@ -59,7 +63,6 @@
     "email": "Email",
     "message": "Wiadomość"
   },
-
   "navbar": {
     "home": "Strona główna",
     "login": "Zaloguj się",
@@ -89,9 +92,12 @@
     "content_placeholder": "Wiadomość"
   },
   "sms": {
+    "send_message": "Wyślij wiadomość SMS",
     "phone": "Numer",
     "service": "Usługa",
-    "message": "Wiadomość"
+    "message": "Wiadomość",
+    "enter_message": "Wprowadź wiadomość",
+    "enter_phone": "Wprowadź numer"
   },
   "auth": {
     "login_title": "Zaloguj się na swoje konto",
@@ -120,7 +126,9 @@
     "name": "Nazwa usługi",
     "name_placeholder": "Obsługa spotkania",
     "description": "Opis usługi",
-    "created_successfully": "Pomyślnie utworzono usługę"
+    "created_successfully": "Pomyślnie utworzono usługę",
+    "select_service": "Wybierz usługę",
+    "add_services_info": "Dodaj usługi aby móc dodawać je do wiadomości"
   },
   "sidebar": {
     "dashboard": "Pulpit",
@@ -134,7 +142,8 @@
     "Invalid credentials": "Nieprawidłowy adres e-mail lub hasło",
     "Unexpected server error. Please try again later.": "Wystąpił nieoczekiwany błąd serwera. Spróbuj ponownie później.",
     "Unknown error occurred": "Wystąpił nieznany błąd",
-    "client_not_found": "Nie znaleziono klienta"
+    "client_not_found": "Nie znaleziono klienta",
+    "data_loading_failed": "Błąd ładowania danych"
   },
 
   "utils": {

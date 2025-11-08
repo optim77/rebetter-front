@@ -11,7 +11,9 @@
     "back": "Back",
     "edit": "Edit",
     "delete": "Delete",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "open": "Otwórz",
+    "choose": "Choose"
   },
   "clients": {
     "clients": "Clients",
@@ -50,7 +52,9 @@
     "booksy_url": "Booksy URL",
     "enter_booksy_url": "Enter Booksy URL",
     "your_links": "Your links",
-    "google": "Google"
+    "google": "Google",
+    "choose_social_platform": "Choose platform to send a message",
+    "no_socials_available": "No socials links available"
   },
   "contact": {
     "head": "Contact us",
@@ -88,9 +92,12 @@
     "content_placeholder": "Message"
   },
   "sms": {
+    "send_message": "Send SMS",
     "phone": "Phone",
     "service": "Service",
-    "message": "Message"
+    "message": "Message",
+    "enter_message": "Enter message",
+    "enter_phone": "Enter phone"
   },
   "auth": {
     "login_title": "Sign in to your account",
@@ -119,7 +126,9 @@
     "name": "Service name",
     "name_placeholder": "Wolf cut",
     "description": "Service description",
-    "created_successfully": "Created service successfully"
+    "created_successfully": "Created service successfully",
+    "select_service": "Select services",
+    "add_services_info": "Add services to include it in message"
   },
   "sidebar": {
     "dashboard": "Dashboard",
@@ -133,7 +142,8 @@
     "Invalid credentials": "Invalid credentials",
     "Unexpected server error. Please try again later.": "Unexpected server error. Please try again later.",
     "Unknown error occurred": "Unknown error occurred",
-    "client_not_found": "Client not found"
+    "client_not_found": "Client not found",
+    "data_loading_failed": "Error data loading"
   },
   "utils": {
     "all_rights_reserved": "All rights reserved"

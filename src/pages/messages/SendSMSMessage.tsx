@@ -5,15 +5,19 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { type Client, clientsApi } from "@/api/clientsApi";
-import { type Service, servicesApi } from "@/api/servicesApi";
 import { SMSMessagesAPI } from "@/api/SMSMessagesAPI";
 import { toast } from "react-hot-toast";
 import { handleApiError } from "@/utils/handleApiError";
 import type { ApiError } from "@/types/apiError";
+import { SocialLinksForMessageSelector } from "@/components/messages/SocialLinksForMessageSelector.tsx";
+import { ServiceForMessageSelector } from "@/components/messages/ServiceForMessageSelector.tsx";
 
 export const SendSMSMessage = (): JSX.Element => {
-    const { companyId, clientId } = useParams<{ companyId: string; clientId: string }>();
+    const {companyId, clientId} = useParams<{ companyId: string; clientId: string }>();
+    const [social, setSocial] = useState<{ social: string, url: string }>();
+    const [service, setService] = useState<string | undefined>();
     const navigate = useNavigate();
+
 
     const {
         data: userData,
@@ -28,19 +32,6 @@ export const SendSMSMessage = (): JSX.Element => {
         enabled: !!companyId && !!clientId,
     });
 
-    const {
-        data: serviceData,
-        isLoading: isLoadingService,
-        isError: isErrorService,
-    } = useQuery({
-        queryKey: ["service", companyId, clientId],
-        queryFn: async (): Promise<Service> => {
-            if (!companyId || !clientId) throw new Error("Missing company or client ID!");
-            return servicesApi.getServices(companyId);
-        },
-        enabled: !!companyId && !!clientId,
-    });
-
     const [form, setForm] = useState({
         message: "",
         phone: "",
@@ -49,7 +40,7 @@ export const SendSMSMessage = (): JSX.Element => {
 
     useEffect(() => {
         if (userData?.phone) {
-            setForm((prev) => ({ ...prev, phone: userData.phone }));
+            setForm((prev) => ({...prev, phone: userData.phone}));
         }
     }, [userData]);
 
@@ -68,11 +59,9 @@ export const SendSMSMessage = (): JSX.Element => {
             console.error("SMS sending failed:", apiError);
         },
     });
-
-    // --- Handlers ---
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
-        setForm((prev) => ({ ...prev, [name]: value }));
+        const {name, value} = e.target;
+        setForm((prev) => ({...prev, [name]: value}));
     };
 
     const handleSubmit = (e: FormEvent) => {
@@ -80,11 +69,11 @@ export const SendSMSMessage = (): JSX.Element => {
         mutation.mutate();
     };
 
-    if (isLoadingUser || isLoadingService) {
-        return <p>{t("loading")}...</p>;
+    if (isLoadingUser) {
+        return <p>{t("action.loading")}...</p>;
     }
 
-    if (isErrorUser || isErrorService) {
+    if (isErrorUser) {
         return <p className="text-red-500">{t("errors.data_loading_failed")}</p>;
     }
 
@@ -105,20 +94,11 @@ export const SendSMSMessage = (): JSX.Element => {
                     />
                 </div>
 
+                <ServiceForMessageSelector onSelect={setService} selected={service} />
+
                 <div>
-                    <label className="block mb-1 text-sm font-medium">{t("sms.service")}</label>
-                    <Input
-                        name="service"
-                        type="text"
-                        value={form.service}
-                        onChange={handleChange}
-                        placeholder={t("sms.enter_service_name") || ""}
-                    />
-                    {serviceData && (
-                        <p className="text-xs text-gray-500 mt-1">
-                            {t("sms.service_info")}: {serviceData.name}
-                        </p>
-                    )}
+
+                    <SocialLinksForMessageSelector onSelect={(e) => setSocial(e)}/>
                 </div>
 
                 <div>
@@ -134,7 +114,7 @@ export const SendSMSMessage = (): JSX.Element => {
                 </div>
 
                 <Button type="submit" className="w-full" disabled={mutation.isPending}>
-                    {mutation.isPending ? t("sms.sending") : t("sms.send")}
+                    {mutation.isPending ? t("action.sending") : t("action.send")}
                 </Button>
             </form>
         </div>
