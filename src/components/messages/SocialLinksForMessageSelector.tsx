@@ -8,7 +8,7 @@ import { ExternalLink } from "lucide-react";
 import { Label } from "@/components/ui/label.tsx";
 
 interface Props {
-    onSelect?: (data: { social: string; url: string }) => void;
+    onSelect?: (data: { social: string }) => void;
 }
 
 export const SocialLinksForMessageSelector = ({ onSelect }: Props) => {
@@ -46,8 +46,8 @@ export const SocialLinksForMessageSelector = ({ onSelect }: Props) => {
             <RadioGroup
                 className="space-y-3"
                 onValueChange={(val) => {
-                    const [social, url] = val.split("|");
-                    onSelect?.({ social, url });
+                    const [social] = val.split("|");
+                    onSelect?.({ social });
                 }}
             >
                 {activeSocials.map(([key, url], index) => (

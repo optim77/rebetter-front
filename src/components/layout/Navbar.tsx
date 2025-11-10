@@ -37,7 +37,7 @@ const Navbar = observer(() => {
                 )}
                 <button
                     onClick={handleLogout}
-                    className="p-2 text-gray-600 hover:text-red-600 transition-colors"
+                    className="p-2 text-gray-600 hover:text-red-600 transition-colors cursor-pointer"
                     title="Logout"
                 >
                     <LogOut className="w-5 h-5" />

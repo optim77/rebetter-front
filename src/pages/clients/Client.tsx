@@ -5,9 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
 import { t } from "i18next";
 import { clientsApi } from "@/api/clientsApi.ts";
-import { useState } from "react";
-import { companiesApi } from "@/api/companiesApi.ts";
-import type { AxiosResponse } from "axios";
+import { ClientMessagesList } from "@/components/client/ClientMessagesList.tsx";
 
 export interface Client {
     id: string;
@@ -19,7 +17,6 @@ export interface Client {
 
 export default function Client() {
     const { companyId, clientId } = useParams<{ companyId: string; clientId: string }>();
-    const [open, setOpen] = useState(false);
     const { data: userData, isLoading: isLoadingUser, isError: isErrorUser } = useQuery({
         queryKey: ["client", companyId, clientId],
         queryFn: async (): Promise<Client> => {
@@ -28,17 +25,6 @@ export default function Client() {
         },
         enabled: !!companyId && !!clientId,
     });
-
-    const { data: socials, isLoading: isLoadingSocials, isError: isErrorSocials } = useQuery({
-        queryKey: ["socials", companyId, clientId],
-        queryFn: async (): Promise<AxiosResponse> => {
-            if (!companyId || !clientId) throw new Error("Companies not found!");
-            return companiesApi.getSocials(companyId);
-        },
-        enabled: !!companyId && !!clientId,
-    });
-
-    console.log(socials?.data);
 
     if (isLoadingUser) return <p>{t("action.loading")}</p>;
     if (isErrorUser || !userData) return <p>{t("errors.client_not_found")}</p>;
@@ -77,6 +63,8 @@ export default function Client() {
                     </div>
                 </CardContent>
             </Card>
+
+            <ClientMessagesList />
         </div>
     );
 }

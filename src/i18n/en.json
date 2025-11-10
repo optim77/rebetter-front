@@ -13,7 +13,11 @@
     "delete": "Delete",
     "cancel": "Cancel",
     "open": "Otwórz",
-    "choose": "Choose"
+    "choose": "Choose",
+    "sending": "Sending"
+  },
+  "common": {
+    "sent_successfully": "Sent successfully"
   },
   "clients": {
     "clients": "Clients",
@@ -89,7 +93,9 @@
     "send_sms_message": "Send SMS Message",
     "send_message_description": "Send a message to a single user. In the Messages tab, you will be able to view its status.",
     "content": "Message",
-    "content_placeholder": "Message"
+    "content_placeholder": "Message",
+    "no_sms_messages_for_client": "No SMS messages for client",
+    "client_opinion": "Client opinion"
   },
   "sms": {
     "send_message": "Send SMS",
@@ -143,7 +149,8 @@
     "Unexpected server error. Please try again later.": "Unexpected server error. Please try again later.",
     "Unknown error occurred": "Unknown error occurred",
     "client_not_found": "Client not found",
-    "data_loading_failed": "Error data loading"
+    "data_loading_failed": "Error data loading",
+    "error_fetching_messages": "Error fetching messages"
   },
   "utils": {
     "all_rights_reserved": "All rights reserved"

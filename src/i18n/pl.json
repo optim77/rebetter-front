@@ -13,7 +13,11 @@
     "delete": "Usuń",
     "cancel": "Anuluj",
     "open": "Otwórz",
-    "choose": "Wybierz"
+    "choose": "Wybierz",
+    "sending": "Wysyłanie"
+  },
+  "common": {
+    "sent_successfully": "Wysłano pomyślnie"
   },
   "clients": {
     "clients": "Klienci",
@@ -89,7 +93,9 @@
     "send_sms_message": "Wyślij wiadomość SMS",
     "send_message_description": "Wyślij wiadomość do pojedyńczego użytkownika. W karcie Wiadomosći będziesz mógł podjerzeć jej status",
     "content": "Wiadomość",
-    "content_placeholder": "Wiadomość"
+    "content_placeholder": "Wiadomość",
+    "no_sms_messages_for_client": "Brak wiadomosci SMS dla tego klienta",
+    "client_opinion": "Opinia klienta"
   },
   "sms": {
     "send_message": "Wyślij wiadomość SMS",
@@ -143,7 +149,8 @@
     "Unexpected server error. Please try again later.": "Wystąpił nieoczekiwany błąd serwera. Spróbuj ponownie później.",
     "Unknown error occurred": "Wystąpił nieznany błąd",
     "client_not_found": "Nie znaleziono klienta",
-    "data_loading_failed": "Błąd ładowania danych"
+    "data_loading_failed": "Błąd ładowania danych",
+    "error_fetching_messages": "Błąd podczas pobierania wiadomości"
   },
 
   "utils": {

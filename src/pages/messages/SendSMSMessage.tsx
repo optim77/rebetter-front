@@ -14,8 +14,6 @@ import { ServiceForMessageSelector } from "@/components/messages/ServiceForMessa
 
 export const SendSMSMessage = (): JSX.Element => {
     const {companyId, clientId} = useParams<{ companyId: string; clientId: string }>();
-    const [social, setSocial] = useState<{ social: string, url: string }>();
-    const [service, setService] = useState<string | undefined>();
     const navigate = useNavigate();
 
 
@@ -36,6 +34,7 @@ export const SendSMSMessage = (): JSX.Element => {
         message: "",
         phone: "",
         service: "",
+        platform: "",
     });
 
     useEffect(() => {
@@ -94,12 +93,14 @@ export const SendSMSMessage = (): JSX.Element => {
                     />
                 </div>
 
-                <ServiceForMessageSelector onSelect={setService} selected={service} />
+                <ServiceForMessageSelector
+                    onSelect={(value) => setForm((prev) => ({ ...prev, service: value }))}
+                    selected={form.service}
+                />
 
-                <div>
-
-                    <SocialLinksForMessageSelector onSelect={(e) => setSocial(e)}/>
-                </div>
+                <SocialLinksForMessageSelector
+                    onSelect={(social) => setForm((prev) => ({ ...prev, platform: social.social }))}
+                />
 
                 <div>
                     <label className="block mb-1 text-sm font-medium">{t("sms.message")}</label>
