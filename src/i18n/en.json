@@ -17,7 +17,10 @@
     "sending": "Sending"
   },
   "common": {
-    "sent_successfully": "Sent successfully"
+    "sent_successfully": "Sent successfully",
+    "yes": "Yes",
+    "no": "No",
+    "feedback": "Feedback"
   },
   "clients": {
     "clients": "Clients",
@@ -67,6 +70,9 @@
     "email": "Email",
     "message": "Message"
   },
+  "invitation": {
+    "head_text": "Do you rate the quality of our services positively?"
+  },
   "navbar": {
     "home": "Home",
     "login": "Login",
@@ -94,8 +100,13 @@
     "send_message_description": "Send a message to a single user. In the Messages tab, you will be able to view its status.",
     "content": "Message",
     "content_placeholder": "Message",
-    "no_sms_messages_for_client": "No SMS messages for client",
-    "client_opinion": "Client opinion"
+    "no_sms_messages_for_client": "No messages for client",
+    "client_opinion": "Client opinion",
+    "positive_response": "Positive response",
+    "negative_response": "Negative response",
+    "clicked_response": "Link was clicked but not answered",
+    "no_response": "No response",
+    "client_messages": "Client messages"
   },
   "sms": {
     "send_message": "Send SMS",
@@ -150,7 +161,8 @@
     "Unknown error occurred": "Unknown error occurred",
     "client_not_found": "Client not found",
     "data_loading_failed": "Error data loading",
-    "error_fetching_messages": "Error fetching messages"
+    "error_fetching_messages": "Error fetching messages",
+    "error_fetching_invitation": "Error fetching form, try again"
   },
   "utils": {
     "all_rights_reserved": "All rights reserved"

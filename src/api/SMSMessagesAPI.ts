@@ -11,9 +11,9 @@ export interface GetMessagesForUserResponse {
     message: string;
     send_at: string;
     messageType: string;
-    responded: string | null;
+    clicked_at: number | null;
     feedback: string | null;
-    invitation_id: string;
+    tracking_id: string;
 }
 
 export const SMSMessagesAPI = {

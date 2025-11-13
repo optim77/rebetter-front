@@ -49,7 +49,7 @@ export const SendSMSMessage = (): JSX.Element => {
             return SMSMessagesAPI.createMessage(form, companyId, clientId);
         },
         onSuccess: () => {
-            toast.success(t("sms.sent_successfully"));
+            toast.success(t("common.sent_successfully"));
             navigate(`/dashboard/company/${companyId}/clients`);
         },
         onError: (error) => {

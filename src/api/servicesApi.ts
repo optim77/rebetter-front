@@ -1,4 +1,4 @@
-import type { PaginationParams } from "@/api/type.ts";
+import type { PaginationParams } from "@/api/Types.ts";
 import api from "@/api/axios.ts";
 
 export interface Service {

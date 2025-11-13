@@ -34,7 +34,7 @@ export const SocialLinksForMessageSelector = ({ onSelect }: Props) => {
     const activeSocials = Object.entries(socials).filter(([_, value]) => !!value);
 
     if (activeSocials.length === 0) {
-        return <p className="text-gray-500 text-sm">{t("company.no_socials_available")}</p>;
+        return <p className="text-gray-500 text-sm">{t("companies.no_socials_available")}</p>;
     }
 
     return (

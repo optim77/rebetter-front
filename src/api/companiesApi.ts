@@ -1,6 +1,5 @@
 import api from "@/api/axios.ts";
-import type { PaginationParams } from "@/api/type.ts";
-import type { AxiosResponse } from "axios";
+import type { PaginationParams } from "@/api/Types.ts";
 
 export interface CreateCompany {
     name: string;
@@ -11,11 +10,11 @@ export interface Company {
     id: string;
     name: string;
     description?: string;
-    google_review_link?: string;
-    facebook_url?: string;
-    instagram_url?: string;
-    linkedin_url?: string;
-    tiktok_url?: string;
+    google?: string;
+    facebook?: string;
+    instagram?: string;
+    linkedin?: string;
+    tiktok?: string;
     znany_lekarz?: string;
     booksy_url?: string;
 }

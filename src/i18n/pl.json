@@ -17,7 +17,10 @@
     "sending": "Wysyłanie"
   },
   "common": {
-    "sent_successfully": "Wysłano pomyślnie"
+    "sent_successfully": "Wysłano pomyślnie",
+    "yes": "Tak",
+    "no": "Nie",
+    "feedback": "Twoja opinia"
   },
   "clients": {
     "clients": "Klienci",
@@ -67,6 +70,9 @@
     "email": "Email",
     "message": "Wiadomość"
   },
+  "invitation": {
+    "head_text": "Czy pozytywnie oceniasz jakość naszych usług?"
+  },
   "navbar": {
     "home": "Strona główna",
     "login": "Zaloguj się",
@@ -94,8 +100,13 @@
     "send_message_description": "Wyślij wiadomość do pojedyńczego użytkownika. W karcie Wiadomosći będziesz mógł podjerzeć jej status",
     "content": "Wiadomość",
     "content_placeholder": "Wiadomość",
-    "no_sms_messages_for_client": "Brak wiadomosci SMS dla tego klienta",
-    "client_opinion": "Opinia klienta"
+    "no_sms_messages_for_client": "Brak wiadomosci dla tego klienta",
+    "client_opinion": "Opinia klienta",
+    "positive_response": "Pozytywna odpowiedź",
+    "negative_response": "Negatywna odpowiedź",
+    "clicked_response": "Kliknięto w wiadomość ale nie udzielono odpowiedzi",
+    "no_response": "Brak odpowiedzi",
+    "client_messages": "Wiadomości do klienta"
   },
   "sms": {
     "send_message": "Wyślij wiadomość SMS",
@@ -150,7 +161,8 @@
     "Unknown error occurred": "Wystąpił nieznany błąd",
     "client_not_found": "Nie znaleziono klienta",
     "data_loading_failed": "Błąd ładowania danych",
-    "error_fetching_messages": "Błąd podczas pobierania wiadomości"
+    "error_fetching_messages": "Błąd podczas pobierania wiadomości",
+    "error_fetching_invitation": "Błąd podczas pobierania formularza, spróbuj ponownie"
   },
 
   "utils": {

@@ -1,5 +1,5 @@
 import api from "@/api/axios.ts";
-import type { PaginationParams } from "@/api/type.ts";
+import type { PaginationParams } from "@/api/Types.ts";
 import type { AxiosResponse } from "axios";
 
 export interface Client {

@@ -1,12 +1,11 @@
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { servicesApi } from "@/api/servicesApi.ts";
+import { type Service, servicesApi } from "@/api/servicesApi.ts";
 import { useState } from "react";
 import { t } from "i18next";
 import { Button } from "@/components/ui/button.tsx";
 import { PlusCircle } from "lucide-react";
 import { Input } from "@/components/ui/input.tsx";
-import type { Client } from "@/api/clientsApi.ts";
 
 export default function Services() {
     const { companyId } = useParams<{ companyId: string }>();
@@ -41,11 +40,11 @@ export default function Services() {
             />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {data && data?.data.items.map((c: Client) => (
-                    <Link to={`/dashboard/company/${c.company_id}/client/${c.id}`}>
+                {data && data.items.map((c: Service) => (
+                    <Link to={`/dashboard/company/${companyId}/services/${c.id}`}>
                         <div key={c.id} className="p-4 border rounded-xl bg-white shadow-sm">
                             <h2 className="text-lg font-semibold">{c.name}</h2>
-                            <p className="text-gray-500 text-sm">{c.email}</p>
+                            <p className="text-gray-500 text-sm">{c.description}</p>
                         </div>
                     </Link>
 

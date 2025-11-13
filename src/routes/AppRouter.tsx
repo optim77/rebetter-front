@@ -20,6 +20,7 @@ import Services from "@/pages/services/Services.tsx";
 import DashboardHome from "@/pages/dashboard/DashboardHome.tsx";
 import CreateService from "@/pages/services/CreateService.tsx";
 import { SendSMSMessage } from "@/pages/messages/SendSMSMessage.tsx";
+import { Review } from "@/pages/reviews/Review.tsx";
 
 
 const PrivateRoute = observer(() => {
@@ -49,6 +50,7 @@ export default function AppRouter() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/registered" element={<Registered />} />
+                <Route path="/invitations/review/:companyId/:clientId/:trackingId" element={<Review />} />
 
                 <Route element={<PrivateRoute />}>
                     <Route path="/dashboard" element={<DashboardLayout />}>

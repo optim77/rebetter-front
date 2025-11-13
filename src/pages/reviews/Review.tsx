@@ -1,0 +1,57 @@
+import { type JSX, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { InvitationAPI } from "@/api/InvitationAPI.ts";
+import { Loader } from "@/components/elements/Loader.tsx";
+import { ErrorBanner } from "@/components/elements/ErrorBanner.tsx";
+
+import { RedirectFlow } from "@/components/review/RedirectFlow.tsx";
+import { toast } from "react-hot-toast";
+import { t } from "i18next";
+import type { ApiError } from "@/types/apiError.ts";
+import { handleApiError } from "@/utils/handleApiError.ts";
+
+export const Review = ():JSX.Element => {
+
+    const { companyId, clientId, trackingId } = useParams<{companyId: string, clientId: string, trackingId: string}>();
+
+    const { data: invitation, isLoading, isError, error } = useQuery({
+        queryKey: ["invitation", companyId, clientId, trackingId],
+        queryFn: async () => {
+            if (!companyId || !clientId || !trackingId) throw new Error("Missing companyId");
+            return InvitationAPI.fetchInvitation(companyId, clientId, trackingId);
+        },
+        enabled: !!companyId || !!clientId || !!trackingId,
+    });
+
+    const mutation = useMutation({
+        mutationFn: async () => {
+            if (!companyId || !clientId || !trackingId) throw new Error("Missing company or client ID!");
+            return InvitationAPI.pingClicked(companyId, clientId, trackingId);
+        },
+        onSuccess: () => {
+        },
+        onError: (error) => {
+            const apiError: ApiError = handleApiError(error);
+            toast.error(t(`errors.${apiError.message}`) || apiError.message);
+            console.error("Failed to send ping:", apiError);
+        },
+    });
+
+    useEffect(() => {
+        mutation.mutate();
+    }, [companyId, clientId, trackingId]);
+
+    if (isLoading) {
+        return <Loader />
+    }
+    if (isError) {
+        return <ErrorBanner error={error} error_translate={'error_fetching_invitation'} />
+    }
+
+    return (
+        <>
+            {invitation?.is_redirect && (<RedirectFlow redirectUrl={invitation.portal} />)}
+        </>
+    )
+}
