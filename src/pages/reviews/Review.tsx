@@ -10,48 +10,64 @@ import { toast } from "react-hot-toast";
 import { t } from "i18next";
 import type { ApiError } from "@/types/apiError.ts";
 import { handleApiError } from "@/utils/handleApiError.ts";
+import { FeedbackAlreadyDone } from "@/components/review/FeedbackAlreadyDone.tsx";
 
-export const Review = ():JSX.Element => {
+export const Review = (): JSX.Element => {
 
-    const { companyId, clientId, trackingId } = useParams<{companyId: string, clientId: string, trackingId: string}>();
+    const {companyId, clientId, trackingId} = useParams<{ companyId: string, clientId: string, trackingId: string }>();
 
-    const { data: invitation, isLoading, isError, error } = useQuery({
+    const {data: invitation, isLoading, isError, error} = useQuery({
         queryKey: ["invitation", companyId, clientId, trackingId],
+        retry: false,
         queryFn: async () => {
             if (!companyId || !clientId || !trackingId) throw new Error("Missing companyId");
             return InvitationAPI.fetchInvitation(companyId, clientId, trackingId);
         },
-        enabled: !!companyId || !!clientId || !!trackingId,
+        enabled: !!companyId && !!clientId && !!trackingId,
     });
-
-    const mutation = useMutation({
+    const ping = useMutation({
         mutationFn: async () => {
             if (!companyId || !clientId || !trackingId) throw new Error("Missing company or client ID!");
-            return InvitationAPI.pingClicked(companyId, clientId, trackingId);
+            return InvitationAPI.pingClicked(companyId, clientId, trackingId).catch((error: Error) => {
+                console.error(error);
+            });
         },
         onSuccess: () => {
         },
         onError: (error) => {
+            console.error(error)
             const apiError: ApiError = handleApiError(error);
             toast.error(t(`errors.${apiError.message}`) || apiError.message);
             console.error("Failed to send ping:", apiError);
         },
     });
 
+
     useEffect(() => {
-        mutation.mutate();
+        ping.mutate();
     }, [companyId, clientId, trackingId]);
 
     if (isLoading) {
-        return <Loader />
-    }
-    if (isError) {
-        return <ErrorBanner error={error} error_translate={'error_fetching_invitation'} />
+        return <Loader/>
     }
 
+    if (isError && error.status === 409) {
+        return (
+            <FeedbackAlreadyDone />
+        );
+    }
+    if (isError) {
+        return <ErrorBanner error={error} error_translate={'error_fetching_invitation'}/>
+    }
     return (
         <>
-            {invitation?.is_redirect && (<RedirectFlow redirectUrl={invitation.portal} />)}
+            {invitation?.is_redirect && (
+                <RedirectFlow
+                    redirectUrl={invitation.portal}
+                    clientId={clientId}
+                    companyId={companyId}
+                    trackingId={trackingId}/>
+            )}
         </>
     )
 }

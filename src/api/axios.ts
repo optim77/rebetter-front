@@ -19,6 +19,7 @@ api.interceptors.response.use(
         if (error.response && error.response.status === 403 && error.response.data.details == "Could not validate credentials") {
             authStore.logout();
         }
+        return Promise.reject(error)
     }
 )
 

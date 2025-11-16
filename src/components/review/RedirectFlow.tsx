@@ -12,34 +12,56 @@ import { toast } from "react-hot-toast";
 
 interface RedirectFlowProps {
     redirectUrl: string;
+    companyId: string | undefined;
+    clientId: string | undefined;
+    trackingId: string | undefined;
 }
 
-export const RedirectFlow = ({ redirectUrl }: RedirectFlowProps): JSX.Element => {
-    const [showForm, setShowForm] = useState(false);
-    const [feedback, setFeedback] = useState<string>("");
+export const RedirectFlow = ({
+                                 redirectUrl,
+                                 companyId,
+                                 clientId,
+                                 trackingId
+}: RedirectFlowProps): JSX.Element => {
 
 
-    const mutation = useMutation({
-        mutationFn: async () => {
-            if (!redirectUrl) throw new Error("Missing redirectUrl!");
-            return InvitationAPI.pingClicked(companyId, clientId, trackingId);
-        },
-        onSuccess: () => {
-        },
-        onError: (error) => {
-            const apiError: ApiError = handleApiError(error);
-            toast.error(t(`errors.${apiError.message}`) || apiError.message);
-            console.error("Failed to send ping:", apiError);
-        },
-    });
+    const [form, setForm] = useState<{showForm:boolean, feedback: string | null}>({showForm:false, feedback: null});
 
     const moveToPortal = () => {
         window.location.href = redirectUrl;
     }
 
-    const sendFeedback = () => {
+    const positiveFeedback = useMutation({
+        mutationFn: async () => {
+            if (!companyId || !clientId || !trackingId) throw new Error("Missing required parameters!");
+            return InvitationAPI.sendRedirectPositiveResponse(companyId, clientId, trackingId);
+        },
+        onSuccess: () => {
+            moveToPortal();
+        },
+        onError: (error) => {
+            const apiError: ApiError = handleApiError(error);
+            toast.error(t('errors.base_error'));
+            console.error("Failed to send ping:", apiError);
+        },
+    });
 
-    }
+
+
+    const negativeFeedback = useMutation({
+        mutationFn: async () => {
+            if (!companyId || !clientId || !trackingId) throw new Error("Missing required parameters!");
+            return InvitationAPI.sendRedirectNegativeResponse(companyId, clientId, trackingId, form.feedback);
+        },
+        onSuccess: () => {
+
+        },
+        onError: (error) => {
+            const apiError: ApiError = handleApiError(error);
+            toast.error(t('errors.base_error'));
+            console.error("Failed to send ping:", apiError);
+        },
+    })
 
     return (
         <div className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-teal-100 px-4">
@@ -70,7 +92,7 @@ export const RedirectFlow = ({ redirectUrl }: RedirectFlowProps): JSX.Element =>
                     {t("invitation.head_text")}
                 </motion.h2>
 
-                {!showForm && (
+                {!form?.showForm && (
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -78,14 +100,17 @@ export const RedirectFlow = ({ redirectUrl }: RedirectFlowProps): JSX.Element =>
                         className="flex justify-center gap-4 mt-4"
                     >
                         <Button
-                            onClick={() => moveToPortal()}
+                            onClick={() => positiveFeedback.mutate()}
                             className="flex-1 h-12 flex items-center justify-center text-white font-medium rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:scale-[1.03] hover:shadow-lg transition-all cursor-pointer"
                         >
                             {t("common.yes")}
                         </Button>
                         <Button
                             variant="outline"
-                            onClick={() => setShowForm(true)}
+                            onClick={() => setForm(prevState => ({
+                                ...prevState,
+                                showForm: true
+                            }))}
                             className="flex-1 h-12 border-emerald-300 text-emerald-700 hover:bg-emerald-50 hover:border-emerald-400 transition-all cursor-pointer"
                         >
                             {t("common.no")}
@@ -94,7 +119,7 @@ export const RedirectFlow = ({ redirectUrl }: RedirectFlowProps): JSX.Element =>
                 )}
 
                 <AnimatePresence>
-                    {showForm && (
+                    {form.showForm && (
                         <motion.div
                             key="form"
                             initial={{ opacity: 0, y: -20, scale: 0.98 }}
@@ -106,7 +131,6 @@ export const RedirectFlow = ({ redirectUrl }: RedirectFlowProps): JSX.Element =>
                             <form
                                 onSubmit={(e) => {
                                     e.preventDefault();
-                                    // 📨 obsługa feedbacku
                                 }}
                                 className="space-y-5"
                             >
@@ -119,7 +143,10 @@ export const RedirectFlow = ({ redirectUrl }: RedirectFlowProps): JSX.Element =>
                                     </Label>
                                     <Textarea
                                         id="feedback"
-                                        onChange={(e) => setFeedback(e.target.value)}
+                                        onChange={(e) => setForm(prevState => ({
+                                            ...prevState,
+                                            feedback: e.target.value
+                                        }))}
                                         placeholder={t("common.feedback")}
                                         className="min-h-[120px] rounded-2xl border-emerald-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-400 transition-all"
                                     />
@@ -128,7 +155,10 @@ export const RedirectFlow = ({ redirectUrl }: RedirectFlowProps): JSX.Element =>
                                 <div className="flex gap-4 pt-2">
                                     <Button
                                         type="button"
-                                        onClick={() => setShowForm(false)}
+                                        onClick={() => setForm(prevState => ({
+                                            ...prevState,
+                                            showForm: false
+                                        }))}
                                         className="flex-1 h-11 bg-white border border-emerald-200 text-emerald-600 font-medium rounded-xl hover:bg-emerald-50 transition-all"
                                     >
                                         {t("action.back")}
@@ -136,6 +166,7 @@ export const RedirectFlow = ({ redirectUrl }: RedirectFlowProps): JSX.Element =>
                                     <Button
                                         type="submit"
                                         className="flex-1 h-11 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold rounded-xl hover:scale-[1.02] hover:shadow-lg transition-all"
+                                        onClick={() => negativeFeedback.mutate()}
                                     >
                                         {t("action.send")}
                                     </Button>

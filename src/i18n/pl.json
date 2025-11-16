@@ -70,6 +70,10 @@
     "email": "Email",
     "message": "Wiadomość"
   },
+  "feedback": {
+    "already_done_feedback": "Ta recenzja została już wypełniona.",
+    "thank_you_for_your_time": "Dziękujemy za poświęcony czas"
+  },
   "invitation": {
     "head_text": "Czy pozytywnie oceniasz jakość naszych usług?"
   },
@@ -162,7 +166,8 @@
     "client_not_found": "Nie znaleziono klienta",
     "data_loading_failed": "Błąd ładowania danych",
     "error_fetching_messages": "Błąd podczas pobierania wiadomości",
-    "error_fetching_invitation": "Błąd podczas pobierania formularza, spróbuj ponownie"
+    "error_fetching_invitation": "Błąd podczas pobierania formularza, spróbuj ponownie",
+    "base_error": "Coś poszło nie tak"
   },
 
   "utils": {

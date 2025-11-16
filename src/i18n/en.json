@@ -70,6 +70,10 @@
     "email": "Email",
     "message": "Message"
   },
+  "feedback": {
+    "already_done_feedback": "This feedback is already done.",
+    "thank_you_for_your_time": "Thank you for your time"
+  },
   "invitation": {
     "head_text": "Do you rate the quality of our services positively?"
   },
@@ -162,7 +166,8 @@
     "client_not_found": "Client not found",
     "data_loading_failed": "Error data loading",
     "error_fetching_messages": "Error fetching messages",
-    "error_fetching_invitation": "Error fetching form, try again"
+    "error_fetching_invitation": "Error fetching form, try again",
+    "base_error": "Something went wrong"
   },
   "utils": {
     "all_rights_reserved": "All rights reserved"

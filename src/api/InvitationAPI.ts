@@ -27,9 +27,12 @@ export const InvitationAPI = {
         const res = await api.get(`/messages/review/${company_id}/${client_id}/${invitation_id}/ping`);
         return  res.data;
     },
-    sendRedirectResponse: async (company_id: string | undefined, client_id: string | undefined, invitation_id: string | undefined, type: string, feedback: string | undefined) => {
-        const res = await api.post(`/messages/review/${company_id}/${client_id}/${invitation_id}/feedback`, {
-            type: type,
+    sendRedirectPositiveResponse: async (company_id: string | undefined, client_id: string | undefined, invitation_id: string | undefined) => {
+        const res = await api.post(`/messages/review/${company_id}/${client_id}/${invitation_id}/url_feedback_positive`);
+        return res.data;
+    },
+    sendRedirectNegativeResponse: async (company_id: string | undefined, client_id: string | undefined, invitation_id: string | undefined, feedback: string | null) => {
+        const res = await api.post(`/messages/review/${company_id}/${client_id}/${invitation_id}/url_feedback_negative`, {
             feedback: feedback,
         });
         return res.data;
