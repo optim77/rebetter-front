@@ -34,7 +34,7 @@ export default function Client() {
             <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
                     <Link to={`/dashboard/company/${companyId}/clients`}>
-                        <Button className="mt-2" variant="ghost">
+                        <Button className="mt-2 cursor-pointer" variant="ghost">
                             <ArrowLeft className="w-4 h-4 mr-2" />
                             {t("action.back")}
                         </Button>

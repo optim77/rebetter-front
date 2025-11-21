@@ -11,6 +11,8 @@ import { handleApiError } from "@/utils/handleApiError";
 import type { ApiError } from "@/types/apiError";
 import { SocialLinksForMessageSelector } from "@/components/messages/SocialLinksForMessageSelector.tsx";
 import { ServiceForMessageSelector } from "@/components/messages/ServiceForMessageSelector.tsx";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group.tsx";
+import { Label } from "@/components/ui/label.tsx";
 
 export const SendSMSMessage = (): JSX.Element => {
     const {companyId, clientId} = useParams<{ companyId: string; clientId: string }>();
@@ -35,7 +37,9 @@ export const SendSMSMessage = (): JSX.Element => {
         phone: "",
         service: "",
         platform: "",
+        type: ""
     });
+
 
     useEffect(() => {
         if (userData?.phone) {
@@ -82,6 +86,28 @@ export const SendSMSMessage = (): JSX.Element => {
 
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
+                    <RadioGroup
+                        required={true}
+                        value={form.type}
+                        onValueChange={(value) => setForm((prev) => ({...prev, type: value}))}
+                    >
+                        <div className="flex items-center gap-3">
+                            <RadioGroupItem value="redirect" id="redirect"/>
+                            <Label htmlFor="is_redirect">{t("common.simple_redirect")}</Label>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                            <RadioGroupItem value="rating" id="rating"/>
+                            <Label htmlFor="is_rating">{t("common.rating")}</Label>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                            <RadioGroupItem value="survey" id="survey"/>
+                            <Label htmlFor="is_survey">{t("common.survey")}</Label>
+                        </div>
+                    </RadioGroup>
+                </div>
+                <div>
                     <label className="block mb-1 text-sm font-medium">{t("sms.phone")}</label>
                     <Input
                         name="phone"
@@ -94,12 +120,12 @@ export const SendSMSMessage = (): JSX.Element => {
                 </div>
 
                 <ServiceForMessageSelector
-                    onSelect={(value) => setForm((prev) => ({ ...prev, service: value }))}
+                    onSelect={(value) => setForm((prev) => ({...prev, service: value}))}
                     selected={form.service}
                 />
 
                 <SocialLinksForMessageSelector
-                    onSelect={(social) => setForm((prev) => ({ ...prev, platform: social.social }))}
+                    onSelect={(social) => setForm((prev) => ({...prev, platform: social.social }))}
                 />
 
                 <div>

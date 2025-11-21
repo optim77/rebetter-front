@@ -20,7 +20,11 @@
     "sent_successfully": "Sent successfully",
     "yes": "Yes",
     "no": "No",
-    "feedback": "Feedback"
+    "feedback": "Feedback",
+    "survey": "Survey",
+    "rating": "Rating",
+    "simple_redirect": "Simple redirect",
+    "total": "Total"
   },
   "clients": {
     "clients": "Clients",

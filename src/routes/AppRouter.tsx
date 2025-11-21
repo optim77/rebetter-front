@@ -21,6 +21,7 @@ import DashboardHome from "@/pages/dashboard/DashboardHome.tsx";
 import CreateService from "@/pages/services/CreateService.tsx";
 import { SendSMSMessage } from "@/pages/messages/SendSMSMessage.tsx";
 import { Review } from "@/pages/reviews/Review.tsx";
+import { PostNegativeReviewView } from "@/components/review/PostNegativeReviewView.tsx";
 
 
 const PrivateRoute = observer(() => {
@@ -51,6 +52,7 @@ export default function AppRouter() {
                 <Route path="/register" element={<Register />} />
                 <Route path="/registered" element={<Registered />} />
                 <Route path="/invitations/review/:companyId/:clientId/:trackingId" element={<Review />} />
+                <Route path="/post_negative" element={<PostNegativeReviewView />} />
 
                 <Route element={<PrivateRoute />}>
                     <Route path="/dashboard" element={<DashboardLayout />}>

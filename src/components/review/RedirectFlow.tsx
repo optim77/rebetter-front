@@ -9,6 +9,7 @@ import { InvitationAPI } from "@/api/InvitationAPI.ts";
 import type { ApiError } from "@/types/apiError.ts";
 import { handleApiError } from "@/utils/handleApiError.ts";
 import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 interface RedirectFlowProps {
     redirectUrl: string;
@@ -26,6 +27,7 @@ export const RedirectFlow = ({
 
 
     const [form, setForm] = useState<{showForm:boolean, feedback: string | null}>({showForm:false, feedback: null});
+    const navigate = useNavigate();
 
     const moveToPortal = () => {
         window.location.href = redirectUrl;
@@ -54,7 +56,7 @@ export const RedirectFlow = ({
             return InvitationAPI.sendRedirectNegativeResponse(companyId, clientId, trackingId, form.feedback);
         },
         onSuccess: () => {
-
+            navigate('/post_negative');
         },
         onError: (error) => {
             const apiError: ApiError = handleApiError(error);
