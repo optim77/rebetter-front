@@ -24,7 +24,10 @@
     "survey": "Ankieta",
     "rating": "Ocena",
     "simple_redirect": "Proste przekierowanie",
-    "total": "Ilość"
+    "total": "Ilość",
+    "next": "Następna",
+    "previous": "Poprzednia",
+    "page": "Strona"
   },
   "clients": {
     "clients": "Klienci",

@@ -22,6 +22,7 @@ import CreateService from "@/pages/services/CreateService.tsx";
 import { SendSMSMessage } from "@/pages/messages/SendSMSMessage.tsx";
 import { Review } from "@/pages/reviews/Review.tsx";
 import { PostNegativeReviewView } from "@/components/review/PostNegativeReviewView.tsx";
+import { SMSMessageDetails } from "@/pages/message/SMS/SMSMessageDetails.tsx";
 
 
 const PrivateRoute = observer(() => {
@@ -73,6 +74,7 @@ export default function AppRouter() {
                         <Route path="company/:companyId/client/:clientId" element={<Outlet />}>
                             <Route index element={<Client />} />
                             <Route path="send_sms" element={<SendSMSMessage/>} />
+                            <Route path="sms_message_details/:smsId" element={<SMSMessageDetails/>} />
                         </Route>
 
 

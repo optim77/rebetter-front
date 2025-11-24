@@ -24,7 +24,10 @@
     "survey": "Survey",
     "rating": "Rating",
     "simple_redirect": "Simple redirect",
-    "total": "Total"
+    "total": "Total",
+    "next": "Next",
+    "previous": "Previous",
+    "page": "Page"
   },
   "clients": {
     "clients": "Clients",

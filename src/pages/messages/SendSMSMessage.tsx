@@ -37,7 +37,7 @@ export const SendSMSMessage = (): JSX.Element => {
         phone: "",
         service: "",
         platform: "",
-        type: ""
+        type: "redirect"
     });
 
 
@@ -87,23 +87,22 @@ export const SendSMSMessage = (): JSX.Element => {
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                     <RadioGroup
-                        required={true}
                         value={form.type}
-                        onValueChange={(value) => setForm((prev) => ({...prev, type: value}))}
+                        onValueChange={(value) => setForm((prev) => ({ ...prev, type: value }))}
                     >
                         <div className="flex items-center gap-3">
-                            <RadioGroupItem value="redirect" id="redirect"/>
-                            <Label htmlFor="is_redirect">{t("common.simple_redirect")}</Label>
+                            <RadioGroupItem value="redirect" id="redirect" />
+                            <Label htmlFor="redirect">{t("common.simple_redirect")}</Label>
                         </div>
 
                         <div className="flex items-center gap-3">
-                            <RadioGroupItem value="rating" id="rating"/>
-                            <Label htmlFor="is_rating">{t("common.rating")}</Label>
+                            <RadioGroupItem value="rating" id="rating" />
+                            <Label htmlFor="rating">{t("common.rating")}</Label>
                         </div>
 
                         <div className="flex items-center gap-3">
-                            <RadioGroupItem value="survey" id="survey"/>
-                            <Label htmlFor="is_survey">{t("common.survey")}</Label>
+                            <RadioGroupItem value="survey" id="survey" />
+                            <Label htmlFor="survey">{t("common.survey")}</Label>
                         </div>
                     </RadioGroup>
                 </div>

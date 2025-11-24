@@ -44,8 +44,12 @@ export const SMSMessagesAPI = {
         const res = await api.post(`/messages/${company_id}/${client_id}/send_single_sms`, message);
         return res.data;
     },
-    fetchMessagesForUser: async (company_id: string, client_id: string) => {
-        const res = await api.get<PagedUserMessageResponse>(`/messages/${company_id}/${client_id}`);
+    fetchMessagesForUser: async (company_id: string, client_id: string, page = 1, size = 5) => {
+        const res = await api.get<PagedUserMessageResponse>(`/messages/${company_id}/${client_id}?page=${page}&size=${size}`);
+        return res.data;
+    },
+    fetchSMSMessageDetails: async (company_id: string, client_id: string, sms_id: string) => {
+        const res = await api.get<PagedUserMessageResponse>(`/messages/review/${company_id}/${client_id}/sms_message_details/${sms_id}`);
         return res.data;
     }
 }
