@@ -20,6 +20,7 @@
     "sent_successfully": "Sent successfully",
     "yes": "Yes",
     "no": "No",
+    "none": "None",
     "feedback": "Feedback",
     "survey": "Survey",
     "rating": "Rating",
@@ -27,7 +28,27 @@
     "total": "Total",
     "next": "Next",
     "previous": "Previous",
-    "page": "Page"
+    "page": "Page",
+    "message_id": "Message ID",
+    "message_content": "Content",
+    "message_type": "Message Type",
+    "send_date": "Send date",
+    "portal": "Portal",
+    "tracking_id": "Tracking ID",
+    "clicked": "Clicked",
+    "not_clicked": "Not clicked",
+    "redirect": "Redirect",
+    "is_redirect": "Is redirect",
+    "redirect_response": "Odpowiedź przekierowania",
+    "redirect_feedback": "Negative redirect feedback",
+    "is_rating": "Rating",
+    "rating_value": "Rating value",
+    "rating_feedback": "Rating feedback",
+    "is_survey": "Survey",
+    "completed": "Completed",
+    "completed_at": "Completed at",
+    "service": "Service",
+    "clicked_at": "Clicked at"
   },
   "clients": {
     "clients": "Clients",
@@ -125,7 +146,9 @@
     "service": "Service",
     "message": "Message",
     "enter_message": "Enter message",
-    "enter_phone": "Enter phone"
+    "enter_phone": "Enter phone",
+    "no_message_data": "No message's data",
+    "sms_message_details": "SMS message details"
   },
   "auth": {
     "login_title": "Sign in to your account",

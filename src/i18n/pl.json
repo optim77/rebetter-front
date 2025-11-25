@@ -20,6 +20,7 @@
     "sent_successfully": "Wysłano pomyślnie",
     "yes": "Tak",
     "no": "Nie",
+    "none": "Brak",
     "feedback": "Twoja opinia",
     "survey": "Ankieta",
     "rating": "Ocena",
@@ -27,7 +28,27 @@
     "total": "Ilość",
     "next": "Następna",
     "previous": "Poprzednia",
-    "page": "Strona"
+    "page": "Strona",
+    "message_id": "ID Wiadomości",
+    "message_content": "Zawartość",
+    "message_type": "Typ wiadomości",
+    "send_date": "Data wysłania",
+    "portal": "Portal",
+    "tracking_id": "Tracking ID",
+    "clicked": "Kliknięto",
+    "not_clicked": "Nie kliknięto",
+    "redirect": "Przekierowanie",
+    "is_redirect": "Czy przekierowanie",
+    "redirect_response": "Odpowiedź przekierowania",
+    "redirect_feedback": "Negatywny feedback przekierowania",
+    "is_rating": "Ocena",
+    "rating_value": "Wartość oceny",
+    "rating_feedback": "Feedback oceny",
+    "is_survey": "Ankieta",
+    "completed": "Zakończone",
+    "completed_at": "Data zakończenia",
+    "service": "Usługa",
+    "clicked_at": "Kliknięto"
   },
   "clients": {
     "clients": "Klienci",
@@ -125,7 +146,9 @@
     "service": "Usługa",
     "message": "Wiadomość",
     "enter_message": "Wprowadź wiadomość",
-    "enter_phone": "Wprowadź numer"
+    "enter_phone": "Wprowadź numer",
+    "no_message_data": "Brak danych wiadomości",
+    "sms_message_details": "Szczegóły wiadomości SMS"
   },
   "auth": {
     "login_title": "Zaloguj się na swoje konto",

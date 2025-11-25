@@ -38,6 +38,26 @@ export type PagedUserMessageResponse = {
     total: number
     items: UserMessageResponse[];
 }
+export type SMSMessageDetailsResponse = {
+    id: string;
+    message: string;
+    tracking_id: string
+    clicked_at: number | null
+    messageType: string;
+    send_at: number;
+    portal: string
+    is_redirect: boolean | null;
+    redirect_response: string | null;
+    redirect_feedback: string | null;
+    is_rating: boolean | null;
+    rating: number | null;
+    rating_feedback: string | null;
+    is_survey: boolean | null;
+    completed: boolean | null;
+    completed_at: number | null;
+    service_id: string | null;
+    service_name: string | null;
+}
 
 export const SMSMessagesAPI = {
     createMessage: async (message: CreateMessage, company_id: string, client_id: string) => {
@@ -49,7 +69,7 @@ export const SMSMessagesAPI = {
         return res.data;
     },
     fetchSMSMessageDetails: async (company_id: string, client_id: string, sms_id: string) => {
-        const res = await api.get<PagedUserMessageResponse>(`/messages/review/${company_id}/${client_id}/sms_message_details/${sms_id}`);
+        const res = await api.get<SMSMessageDetailsResponse>(`/messages/review/${company_id}/${client_id}/sms_message_details/${sms_id}`);
         return res.data;
     }
 }
