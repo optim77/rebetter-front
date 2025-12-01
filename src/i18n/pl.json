@@ -48,7 +48,8 @@
     "completed": "Zakończone",
     "completed_at": "Data zakończenia",
     "service": "Usługa",
-    "clicked_at": "Kliknięto"
+    "clicked_at": "Kliknięto",
+    "content": "Treść"
   },
   "clients": {
     "clients": "Klienci",
@@ -186,7 +187,25 @@
     "companies": "Firmy",
     "clients": "Klienci",
     "campaign": "Kampanie",
-    "services": "Usługi"
+    "services": "Usługi",
+    "surveys": "Ankiety"
+  },
+  "surveys": {
+    "surveys": "Ankiety",
+    "no_surveys": "Brak ankiet",
+    "create_new_survey": "Utwórz nową ankietę",
+    "survey_title": "Tytuł ankiety",
+    "survey_description": "Opis ankiety",
+    "add_field": "Dodaj pole",
+    "save_survey": "Zapisz ankietę",
+    "field": "Pole",
+    "field_label": "Opis pola",
+    "text_field": "Pole tekstowe",
+    "select_field": "Pole wyboru",
+    "options": "Opcje",
+    "add_option": "Dodaj opcję",
+    "option": "Opcja",
+    "rating": "Ocena"
   },
   "errors": {
     "Email already exists": "Podany adres e-mail jest już zarejestrowany",
@@ -197,7 +216,8 @@
     "data_loading_failed": "Błąd ładowania danych",
     "error_fetching_messages": "Błąd podczas pobierania wiadomości",
     "error_fetching_invitation": "Błąd podczas pobierania formularza, spróbuj ponownie",
-    "base_error": "Coś poszło nie tak"
+    "base_error": "Coś poszło nie tak",
+    "error_fetching_surveys": "Błąd pobierania ankiet"
   },
 
   "utils": {

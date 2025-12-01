@@ -12,6 +12,14 @@ import { t } from "i18next";
 import { Loader } from "@/components/elements/Loader";
 import { ErrorBanner } from "@/components/elements/ErrorBanner";
 
+type StatusVariant = "default" | "secondary" | "destructive" | "outline";
+
+interface StatusInfo {
+    label: string;
+    icon: string;
+    variant: StatusVariant;
+}
+
 export const ClientMessagesList = (): JSX.Element => {
     const {companyId, clientId} = useParams<{ companyId: string; clientId: string }>();
 
@@ -42,7 +50,7 @@ export const ClientMessagesList = (): JSX.Element => {
         );
     }
 
-    const getStatus = (msg: UserMessageResponse) => {
+    const getStatus = (msg: UserMessageResponse): StatusInfo => {
         if (msg.completed && msg.redirect_feedback)
             return {label: t("messages.negative_response"), icon: "❌", variant: "destructive"};
 
@@ -68,6 +76,7 @@ export const ClientMessagesList = (): JSX.Element => {
                 const status = getStatus(msg);
 
 
+                
                 return (
                     <Link to={`sms_message_details/${msg.id}`}>
 
@@ -115,8 +124,7 @@ export const ClientMessagesList = (): JSX.Element => {
                     </Link>
                 );
             })}
-
-            {/* PAGINATION */}
+            
             <div className="flex justify-between pt-3 border-t">
                 <Button
                     variant="outline"

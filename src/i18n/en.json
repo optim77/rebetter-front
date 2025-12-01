@@ -48,7 +48,8 @@
     "completed": "Completed",
     "completed_at": "Completed at",
     "service": "Service",
-    "clicked_at": "Clicked at"
+    "clicked_at": "Clicked at",
+    "content": "Content"
   },
   "clients": {
     "clients": "Clients",
@@ -186,7 +187,25 @@
     "companies": "Companies",
     "clients": "Clients",
     "campaign": "Campaign",
-    "services": "Services"
+    "services": "Services",
+    "surveys": "Surveys"
+  },
+  "surveys": {
+    "surveys": "Surveys",
+    "no_surveys": "No surveys",
+    "create_new_survey": "Create new survey",
+    "survey_title": "Survey title",
+    "survey_description": "Survey description",
+    "add_field": "Add field",
+    "save_survey": "Save survey",
+    "field": "Field",
+    "field_label": "Field label",
+    "text_field": "Text field",
+    "select_field": "Select field",
+    "options": "Options",
+    "add_option": "Add option",
+    "option": "Option {{n}}",
+    "rating": "Rating"
   },
   "errors": {
     "Email already exists": "Email already exists",
@@ -197,7 +216,8 @@
     "data_loading_failed": "Error data loading",
     "error_fetching_messages": "Error fetching messages",
     "error_fetching_invitation": "Error fetching form, try again",
-    "base_error": "Something went wrong"
+    "base_error": "Something went wrong",
+    "error_fetching_surveys": "Error fetching surveys"
   },
   "utils": {
     "all_rights_reserved": "All rights reserved"
