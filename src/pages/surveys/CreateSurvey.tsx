@@ -25,6 +25,7 @@ import { Label } from "@/components/ui/label";
 
 import { Plus, Trash, GripVertical } from "lucide-react";
 import { t } from "i18next";
+import { Textarea } from "@/components/ui/textarea.tsx";
 
 type QuestionType = "text" | "choice" | "rating";
 
@@ -75,6 +76,7 @@ const SortableQuestion = ({
                 <Button
                     variant="destructive"
                     size="icon"
+                    className="cursor-pointer"
                     onClick={() => removeQuestion(question.id)}
                 >
                     <Trash className="h-4 w-4" />
@@ -99,7 +101,7 @@ const SortableQuestion = ({
                                     key={i}
                                     value={opt}
                                     onChange={(e) => onOptionChange(question.id, i, e.target.value)}
-                                    placeholder={`Option ${i + 1}`}
+                                    placeholder={t("surveys.option", {n: i + 1})}
                                 />
                             ))}
                         </div>
@@ -107,11 +109,11 @@ const SortableQuestion = ({
                         <Button
                             variant="secondary"
                             size="sm"
-                            className="mt-2"
+                            className="mt-2 cursor-pointer"
                             onClick={() => addOption(question.id)}
                         >
                             <Plus className="h-4 w-4 mr-1" />
-                            Add option
+                            {t("surveys.add_option")}
                         </Button>
                     </div>
                 )}
@@ -136,9 +138,6 @@ const SortableQuestion = ({
     );
 };
 
-//
-// PAGE
-//
 export const CreateSurvey = (): JSX.Element => {
     const { t } = useTranslation();
     const [questions, setQuestions] = useState<Question[]>([]);
@@ -215,21 +214,34 @@ export const CreateSurvey = (): JSX.Element => {
 
     return (
         <div className="max-w-3xl mx-auto p-6">
+
             <h1 className="text-3xl font-semibold mb-6">{t("surveys.create_new_survey")}</h1>
 
+            <div className="grid gap-3 mb-6">
+                <Label className="text-sm">{t("surveys.survey_title")}</Label>
+                <Input
+                    className="mt-1 mb-3"
+                    placeholder={t("surveys.survey_title")}
+
+                />
+
+                <Label className="text-sm">{t("surveys.survey_description")}</Label>
+                <Textarea placeholder={t("surveys.survey_description")}></Textarea>
+            </div>
+
             <div className="flex gap-3 mb-6">
-                <Button onClick={() => addQuestion("text")}>
-                    <Plus className="h-4 w-4 mr-1" />
+                <Button className="cursor-pointer" onClick={() => addQuestion("text")}>
+                    <Plus className="h-4 w-4 mr-1"/>
                     {t("surveys.text_field")}
                 </Button>
 
-                <Button onClick={() => addQuestion("choice")}>
-                    <Plus className="h-4 w-4 mr-1" />
+                <Button className="cursor-pointer" onClick={() => addQuestion("choice")}>
+                    <Plus className="h-4 w-4 mr-1"/>
                     {t("surveys.select_field")}
                 </Button>
 
-                <Button onClick={() => addQuestion("rating")}>
-                    <Plus className="h-4 w-4 mr-1" />
+                <Button className="cursor-pointer" onClick={() => addQuestion("rating")}>
+                    <Plus className="h-4 w-4 mr-1"/>
                     {t("surveys.rating")}
                 </Button>
             </div>
@@ -249,7 +261,7 @@ export const CreateSurvey = (): JSX.Element => {
                 </SortableContext>
             </DndContext>
 
-            <Button className="mt-6" onClick={saveSurvey}>
+            <Button className="mt-6 cursor-pointer" onClick={saveSurvey}>
                 {t("surveys.save_survey")}
             </Button>
         </div>

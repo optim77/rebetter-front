@@ -204,7 +204,7 @@
     "select_field": "Pole wyboru",
     "options": "Opcje",
     "add_option": "Dodaj opcję",
-    "option": "Opcja",
+    "option": "Opcja {{n}}",
     "rating": "Ocena"
   },
   "errors": {
