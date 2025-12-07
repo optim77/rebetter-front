@@ -25,6 +25,7 @@ import { PostNegativeReviewView } from "@/components/review/PostNegativeReviewVi
 import { SMSMessageDetails } from "@/pages/message/SMS/SMSMessageDetails.tsx";
 import { Surveys } from "@/pages/surveys/Surveys.tsx";
 import { CreateSurvey } from "@/pages/surveys/CreateSurvey.tsx";
+import { Survey } from "@/pages/surveys/Survey.tsx";
 
 
 const PrivateRoute = observer(() => {
@@ -79,6 +80,10 @@ export default function AppRouter() {
                             <Route index element={<Client />} />
                             <Route path="send_sms" element={<SendSMSMessage/>} />
                             <Route path="sms_message_details/:smsId" element={<SMSMessageDetails/>} />
+                        </Route>
+
+                        <Route path="company/:companyId/survey/:surveyId" element={<Outlet />}>
+                            <Route index element={<Survey />} />
                         </Route>
 
 

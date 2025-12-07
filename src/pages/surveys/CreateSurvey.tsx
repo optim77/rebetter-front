@@ -26,6 +26,10 @@ import { Label } from "@/components/ui/label";
 import { Plus, Trash, GripVertical } from "lucide-react";
 import { t } from "i18next";
 import { Textarea } from "@/components/ui/textarea.tsx";
+import { useNavigate, useParams } from "react-router-dom";
+import { SurveysAPI } from "@/api/SurveysAPI.ts";
+import { useMutation } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 type QuestionType = "text" | "choice" | "rating";
 
@@ -36,9 +40,6 @@ interface Question {
     options?: string[];
 }
 
-//
-// Sortable Item
-//
 const SortableQuestion = ({
                               question,
                               onLabelChange,
@@ -52,7 +53,7 @@ const SortableQuestion = ({
     addOption: (qid: string) => void;
     removeQuestion: (id: string) => void;
 }) => {
-    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: question.id });
+    const {attributes, listeners, setNodeRef, transform, transition} = useSortable({id: question.id});
 
     const style = {
         transform: CSS.Transform.toString(transform),
@@ -79,7 +80,7 @@ const SortableQuestion = ({
                     className="cursor-pointer"
                     onClick={() => removeQuestion(question.id)}
                 >
-                    <Trash className="h-4 w-4" />
+                    <Trash className="h-4 w-4"/>
                 </Button>
             </CardHeader>
 
@@ -112,7 +113,7 @@ const SortableQuestion = ({
                             className="mt-2 cursor-pointer"
                             onClick={() => addOption(question.id)}
                         >
-                            <Plus className="h-4 w-4 mr-1" />
+                            <Plus className="h-4 w-4 mr-1"/>
                             {t("surveys.add_option")}
                         </Button>
                     </div>
@@ -139,12 +140,19 @@ const SortableQuestion = ({
 };
 
 export const CreateSurvey = (): JSX.Element => {
-    const { t } = useTranslation();
+    const {t} = useTranslation();
     const [questions, setQuestions] = useState<Question[]>([]);
+    const [name, setName] = useState<string | null>();
+    const [description, setDescription] = useState<string | null>();
+    const { companyId,  } = useParams<{ companyId: string; }>();
+    const navigate = useNavigate();
+
 
     const sensors = useSensors(
         useSensor(PointerSensor)
     );
+
+    console.log(questions);
 
     const addQuestion = (type: QuestionType) => {
         setQuestions([
@@ -159,7 +167,7 @@ export const CreateSurvey = (): JSX.Element => {
     };
 
     const onLabelChange = (id: string, label: string) => {
-        setQuestions(q => q.map(item => item.id === id ? { ...item, label } : item));
+        setQuestions(q => q.map(item => item.id === id ? {...item, label} : item));
     };
 
     const onOptionChange = (qid: string, index: number, value: string) => {
@@ -181,7 +189,7 @@ export const CreateSurvey = (): JSX.Element => {
         setQuestions(q =>
             q.map(item =>
                 item.id === qid && item.options
-                    ? { ...item, options: [...item.options, ""] }
+                    ? {...item, options: [...item.options, ""]}
                     : item
             )
         );
@@ -192,7 +200,7 @@ export const CreateSurvey = (): JSX.Element => {
     };
 
     const onDragEnd = (event: any) => {
-        const { active, over } = event;
+        const {active, over} = event;
         if (!over || active.id === over.id) return;
 
         const oldIndex = questions.findIndex(q => q.id === active.id);
@@ -209,8 +217,33 @@ export const CreateSurvey = (): JSX.Element => {
     };
 
     const saveSurvey = () => {
-        console.log("Survey saved:", questions);
+        if (!name || !name.trim()) {
+            toast.error(t("surveys.survey_name_is_required"))
+            return;
+        }
+
+        const payload = {
+            name,
+            description,
+            content: questions,
+        };
+
+        createSurveyMutation.mutate(payload);
     };
+
+    const createSurveyMutation = useMutation({
+        mutationFn: (payload: any) =>
+            SurveysAPI.createSurvey(companyId, payload),
+
+        onSuccess: (data) => {
+            toast.success("surveys.created_survey")
+            navigate(`/dashboard/company/${companyId}/survey/${data.id}`);
+        },
+
+        onError: (error) => {
+            console.error("Błąd zapisu ankiety:", error);
+        }
+    });
 
     return (
         <div className="max-w-3xl mx-auto p-6">
@@ -220,13 +253,17 @@ export const CreateSurvey = (): JSX.Element => {
             <div className="grid gap-3 mb-6">
                 <Label className="text-sm">{t("surveys.survey_title")}</Label>
                 <Input
+                    onChange={(e) => setName(e.target.value)}
                     className="mt-1 mb-3"
                     placeholder={t("surveys.survey_title")}
 
                 />
 
                 <Label className="text-sm">{t("surveys.survey_description")}</Label>
-                <Textarea placeholder={t("surveys.survey_description")}></Textarea>
+                <Textarea onChange={(e) => setDescription(e.target.value)}
+                          placeholder={t("surveys.survey_description")}>
+
+                </Textarea>
             </div>
 
             <div className="flex gap-3 mb-6">

@@ -14,7 +14,8 @@
     "cancel": "Anuluj",
     "open": "Otwórz",
     "choose": "Wybierz",
-    "sending": "Wysyłanie"
+    "sending": "Wysyłanie",
+    "update": "Edytuj"
   },
   "common": {
     "sent_successfully": "Wysłano pomyślnie",
@@ -205,7 +206,12 @@
     "options": "Opcje",
     "add_option": "Dodaj opcję",
     "option": "Opcja {{n}}",
-    "rating": "Ocena"
+    "rating": "Ocena",
+    "survey_name_is_required": "Nazwa ankiety jest wymagana",
+    "no_description": "Brak opisu",
+    "created_survey": "Utworzono ankietę",
+    "not_found_survey": "Nie znaleziono ankiety",
+    "delete_surveys": "Usunięto ankietę"
   },
   "errors": {
     "Email already exists": "Podany adres e-mail jest już zarejestrowany",
@@ -217,7 +223,8 @@
     "error_fetching_messages": "Błąd podczas pobierania wiadomości",
     "error_fetching_invitation": "Błąd podczas pobierania formularza, spróbuj ponownie",
     "base_error": "Coś poszło nie tak",
-    "error_fetching_surveys": "Błąd pobierania ankiet"
+    "error_fetching_surveys": "Błąd pobierania ankiet",
+    "error_fetching_survey": "Błąd pobierania ankiety"
   },
 
   "utils": {

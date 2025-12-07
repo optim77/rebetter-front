@@ -14,7 +14,8 @@
     "cancel": "Cancel",
     "open": "Otwórz",
     "choose": "Choose",
-    "sending": "Sending"
+    "sending": "Sending",
+    "update": "Update"
   },
   "common": {
     "sent_successfully": "Sent successfully",
@@ -205,7 +206,12 @@
     "options": "Options",
     "add_option": "Add option",
     "option": "Option {{n}}",
-    "rating": "Rating"
+    "rating": "Rating",
+    "survey_name_is_required": "Survey name is required",
+    "no_description": "No description",
+    "created_survey": "Created survey",
+    "not_found_survey": "Not found survey",
+    "delete_surveys": "Deleted survey"
   },
   "errors": {
     "Email already exists": "Email already exists",
@@ -217,7 +223,8 @@
     "error_fetching_messages": "Error fetching messages",
     "error_fetching_invitation": "Error fetching form, try again",
     "base_error": "Something went wrong",
-    "error_fetching_surveys": "Error fetching surveys"
+    "error_fetching_surveys": "Error fetching surveys",
+    "error_fetching_survey": "Error fetching survey"
   },
   "utils": {
     "all_rights_reserved": "All rights reserved"

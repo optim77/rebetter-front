@@ -47,7 +47,7 @@ export const Surveys = (): JSX.Element => {
     return (
         <div className="space-y-4">
             <div className="flex justify-between items-center mb-2">
-                <p className="text-xl font-semibold">{t("surveys.title")}</p>
+                <p className="text-xl font-semibold">{t("surveys.surveys")}</p>
 
                 <Button asChild>
                     <Link to={`/dashboard/company/${companyId}/surveys/create`}>
@@ -58,7 +58,7 @@ export const Surveys = (): JSX.Element => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {data.items.map((survey) => (
-                    <Link to={`/${companyId}/surveys/${survey.id}`} key={survey.id}>
+                    <Link to={`/dashboard/company/${companyId}/survey/${survey.id}`} key={survey.id}>
                         <Card className="rounded-xl border border-border/60 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer">
                             <CardContent className="p-4 space-y-1">
                                 <div className="flex justify-between items-center">
