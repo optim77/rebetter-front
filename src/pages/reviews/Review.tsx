@@ -61,7 +61,7 @@ export const Review = (): JSX.Element => {
     }
     return (
         <>
-            {invitation?.is_redirect && (
+            {invitation?.is_feedback && (
                 <RedirectFlow
                     redirectUrl={invitation.portal}
                     clientId={clientId}

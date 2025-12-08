@@ -51,10 +51,10 @@ export const ClientMessagesList = (): JSX.Element => {
     }
 
     const getStatus = (msg: UserMessageResponse): StatusInfo => {
-        if (msg.completed && msg.redirect_feedback)
+        if (msg.completed && msg.feedback_content)
             return {label: t("messages.negative_response"), icon: "❌", variant: "destructive"};
 
-        if (msg.redirect_response === "positiveResponse")
+        if (msg.feedback_response === "positiveResponse")
             return {label: t("messages.positive_response"), icon: "💚", variant: "secondary"};
 
         if (msg.clicked_at && !msg.completed)
@@ -106,9 +106,9 @@ export const ClientMessagesList = (): JSX.Element => {
                                         {msg.message}
                                     </p>
 
-                                    {msg.redirect_feedback && (
+                                    {msg.feedback_content && (
                                         <p className=" text-muted-foreground italic mt-1">
-                                            {t("messages.client_opinion")}: “{msg.redirect_feedback}”
+                                            {t("messages.client_opinion")}: “{msg.feedback_content}”
                                         </p>
                                     )}
 

@@ -26,6 +26,7 @@ import { SMSMessageDetails } from "@/pages/message/SMS/SMSMessageDetails.tsx";
 import { Surveys } from "@/pages/surveys/Surveys.tsx";
 import { CreateSurvey } from "@/pages/surveys/CreateSurvey.tsx";
 import { Survey } from "@/pages/surveys/Survey.tsx";
+import { EditSurvey } from "@/pages/surveys/EditSurvey.tsx";
 
 
 const PrivateRoute = observer(() => {
@@ -84,6 +85,7 @@ export default function AppRouter() {
 
                         <Route path="company/:companyId/survey/:surveyId" element={<Outlet />}>
                             <Route index element={<Survey />} />
+                            <Route path="edit" element={<EditSurvey/>} />
                         </Route>
 
 

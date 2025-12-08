@@ -9,9 +9,10 @@ import { Label } from "@/components/ui/label.tsx";
 
 interface Props {
     onSelect?: (data: { social: string }) => void;
+    disabled?: boolean;
 }
 
-export const SocialLinksForMessageSelector = ({ onSelect }: Props) => {
+export const SocialLinksForMessageSelector = ({ onSelect, disabled }: Props) => {
     const { companyId } = useParams<{ companyId: string }>();
 
     const { data: socials, isLoading, isError } = useQuery({
@@ -31,14 +32,19 @@ export const SocialLinksForMessageSelector = ({ onSelect }: Props) => {
         return <p className="text-red-500">{t("errors.data_loading_failed")}</p>;
     }
 
-    const activeSocials = Object.entries(socials).filter(([_, value]) => !!value);
+    const activeSocials = Object.entries(socials).filter(([, value]) => !!value);
 
     if (activeSocials.length === 0) {
         return <p className="text-gray-500 text-sm">{t("companies.no_socials_available")}</p>;
     }
 
     return (
-        <div className="bg-white p-6 rounded-2xl shadow-md max-w-md">
+        <div
+            className={`
+            bg-white p-6 rounded-2xl shadow-md max-w-md transition
+            ${disabled ? "opacity-50 pointer-events-none grayscale" : ""}
+        `}
+        >
             <h2 className="text-lg font-semibold mb-4">
                 {t("companies.choose_social_platform")}
             </h2>
@@ -56,14 +62,23 @@ export const SocialLinksForMessageSelector = ({ onSelect }: Props) => {
                         className="flex items-center justify-between border rounded-xl px-3 py-2 hover:bg-gray-50 transition"
                     >
                         <div className="flex items-center gap-3">
-                            <RadioGroupItem value={`${key}|${url}`} id={`social-${index}`} />
-                            <Label htmlFor={`social-${index}`} className="capitalize">
+                            <RadioGroupItem
+                                value={`${key}|${url}`}
+                                id={`social-${index}`}
+                                disabled={disabled}
+                            />
+                            <Label
+                                htmlFor={`social-${index}`}
+                                className={`capitalize ${disabled ? "cursor-not-allowed" : ""}`}
+                            >
                                 {key.replace("_", " ")}
                             </Label>
                         </div>
+
                         <Button
                             variant="ghost"
                             size="sm"
+                            disabled={disabled}
                             className="flex items-center gap-1 text-blue-600 hover:text-blue-800"
                             onClick={() => window.open(url || "", "_blank")}
                         >
@@ -75,4 +90,5 @@ export const SocialLinksForMessageSelector = ({ onSelect }: Props) => {
             </RadioGroup>
         </div>
     );
+
 };

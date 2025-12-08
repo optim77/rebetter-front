@@ -69,9 +69,9 @@ export const SMSMessageDetails = (): JSX.Element => {
                 />
 
                 <Section title={t("common.redirect")}>
-                    <Item label={t("common.is_redirect")} value={data.is_redirect ? t("common.yes") : t("common.no")} />
-                    <Item label={t("common.redirect_response")} value={data.redirect_response || t("common.none")} />
-                    <Item label={t("common.redirect_feedback")} value={data.redirect_feedback || t("common.none")} />
+                    <Item label={t("common.is_redirect")} value={data.is_feedback ? t("common.yes") : t("common.no")} />
+                    <Item label={t("common.feedback_response")} value={data.feedback_response || t("common.none")} />
+                    <Item label={t("common.feedback_content")} value={data.feedback_content || t("common.none")} />
                 </Section>
 
                 <Section title={t("common.rating")}>

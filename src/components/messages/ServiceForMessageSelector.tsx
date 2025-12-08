@@ -12,6 +12,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select.tsx";
+import { TooltipHelper } from "@/components/elements/TooltipHelper.tsx";
 
 interface Props {
     onSelect: (e: string) => void;
@@ -55,8 +56,10 @@ export const ServiceForMessageSelector = ({ onSelect, selected }: Props): JSX.El
 
     return (
         <div className="space-y-1">
-            <label className="block mb-1 text-sm font-medium">{t("services.select_service")}</label>
-
+            <div className="flex gap-2">
+                <label className="block mb-1 text-sm font-medium">{t("services.select_service")}</label>
+                <TooltipHelper content={t("messages.enter_sms")} />
+            </div>
             <Select value={selected} onValueChange={onSelect}>
                 <SelectTrigger>
                     <SelectValue placeholder={t("action.choose")} />

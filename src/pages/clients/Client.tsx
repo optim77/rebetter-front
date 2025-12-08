@@ -57,6 +57,7 @@ export default function Client() {
 
                     <div className="flex items-center gap-2 justify-end">
 
+                        <Link to={`send_email`}>{t("messages.send_email_message")}</Link>
                         <Link to={`send_sms`}>{t("messages.send_sms_message")}</Link>
                         <Button>{t("action.edit")}</Button>
                         <Button variant="destructive">{t("action.delete")}</Button>

@@ -25,7 +25,7 @@
     "feedback": "Feedback",
     "survey": "Survey",
     "rating": "Rating",
-    "simple_redirect": "Simple redirect",
+    "simple_feedback": "Simple feedback",
     "total": "Total",
     "next": "Next",
     "previous": "Previous",
@@ -40,8 +40,8 @@
     "not_clicked": "Not clicked",
     "redirect": "Redirect",
     "is_redirect": "Is redirect",
-    "redirect_response": "Odpowiedź przekierowania",
-    "redirect_feedback": "Negative redirect feedback",
+    "feedback_response": "Odpowiedź na feedback",
+    "feedback_content": "Negative redirect feedback",
     "is_rating": "Rating",
     "rating_value": "Rating value",
     "rating_feedback": "Rating feedback",
@@ -130,7 +130,8 @@
     }
   },
   "messages": {
-    "send_sms_message": "Send SMS Message",
+    "send_sms_message": "Send SMS message",
+    "send_email_message": "Send E-mail message",
     "send_message_description": "Send a message to a single user. In the Messages tab, you will be able to view its status.",
     "content": "Message",
     "content_placeholder": "Message",
@@ -140,7 +141,21 @@
     "negative_response": "Negative response",
     "clicked_response": "Link was clicked but not answered",
     "no_response": "No response",
-    "client_messages": "Client messages"
+    "client_messages": "Client messages",
+    "enter_rating_question": "Enter rating question",
+    "rating_question": "Rating question",
+    "redirect_description": "The redirect link will provide a link to the customer. The customer will be able to choose positive or negative feedback. After selecting negative feedback, they will be redirected to an internal system to submit their opinion. After submitting positive feedback, they will be redirected to the selected opinion platform.",
+    "select_survey": "Select survey",
+    "choose_survey": "Choose survey",
+    "your_surveys": "Your surveys",
+    "feedback_question": "Feedback question",
+    "enter_feedback_question": "Enter feedback question",
+    "redirect_after_action": "Redirect after action",
+    "link_to_message_preview": "Link to submit feedback",
+    "preview_placeholder": "Your perfect message",
+    "see_display": "See how your message will display",
+    "message_type": "Message type",
+    "phone_number_info": "Phone number, which will be use to send SMS message"
   },
   "sms": {
     "send_message": "Send SMS",
@@ -211,7 +226,9 @@
     "no_description": "No description",
     "created_survey": "Created survey",
     "not_found_survey": "Not found survey",
-    "delete_surveys": "Deleted survey"
+    "delete_surveys": "Deleted survey",
+    "edit_survey": "Edit survey",
+    "updated_successfully": "Updated survey"
   },
   "errors": {
     "Email already exists": "Email already exists",

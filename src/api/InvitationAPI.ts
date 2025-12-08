@@ -7,7 +7,7 @@ export interface InvitationResponse {
     company_logo: string;
     company_name: string;
     is_rating: boolean | null;
-    is_redirect: boolean | null;
+    is_feedback: boolean | null;
     is_survey: boolean | null;
 }
 

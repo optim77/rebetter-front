@@ -76,7 +76,16 @@ export const Survey = (): JSX.Element => {
     return (
         <div className="max-w-3xl mx-auto p-6 space-y-6">
             <div className="flex items-end gap-2">
-                <Button className="cursor-pointer">{t("action.update")}</Button>
+                <Button
+                    className="cursor-pointer"
+                    onClick={() =>
+                        navigate(
+                            `/dashboard/company/${companyId}/survey/${surveyId}/edit`
+                        )
+                    }
+                >
+                    {t("action.update")}
+                </Button>
                 <Button onClick={() => deleteSurvey.mutate()} className="cursor-pointer" variant="destructive">{t("action.delete")}</Button>
             </div>
             <Card>

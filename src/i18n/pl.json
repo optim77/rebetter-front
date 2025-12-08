@@ -25,7 +25,7 @@
     "feedback": "Twoja opinia",
     "survey": "Ankieta",
     "rating": "Ocena",
-    "simple_redirect": "Proste przekierowanie",
+    "simple_feedback": "Prosty feedback",
     "total": "Ilość",
     "next": "Następna",
     "previous": "Poprzednia",
@@ -40,8 +40,8 @@
     "not_clicked": "Nie kliknięto",
     "redirect": "Przekierowanie",
     "is_redirect": "Czy przekierowanie",
-    "redirect_response": "Odpowiedź przekierowania",
-    "redirect_feedback": "Negatywny feedback przekierowania",
+    "feedback_response": "Odpowiedź na feedback",
+    "feedback_content": "Negatywny feedback",
     "is_rating": "Ocena",
     "rating_value": "Wartość oceny",
     "rating_feedback": "Feedback oceny",
@@ -131,6 +131,7 @@
   },
   "messages": {
     "send_sms_message": "Wyślij wiadomość SMS",
+    "send_email_message": "Wyślij wiadomość E-mail",
     "send_message_description": "Wyślij wiadomość do pojedyńczego użytkownika. W karcie Wiadomosći będziesz mógł podjerzeć jej status",
     "content": "Wiadomość",
     "content_placeholder": "Wiadomość",
@@ -140,7 +141,21 @@
     "negative_response": "Negatywna odpowiedź",
     "clicked_response": "Kliknięto w wiadomość ale nie udzielono odpowiedzi",
     "no_response": "Brak odpowiedzi",
-    "client_messages": "Wiadomości do klienta"
+    "client_messages": "Wiadomości do klienta",
+    "enter_rating_question": "Wprowadż pytanie do oceny",
+    "rating_question": "Pytanie do oceny",
+    "redirect_description": "Link przekierowujący zapewni klientowi dostęp do linku. Klient będzie mógł wybrać pozytywną lub negatywną opinię. Po wybraniu negatywnej opinii zostanie przekierowany do wewnętrznego systemu, aby przesłać swoją opinię. Po przesłaniu pozytywnej opinii zostanie przekierowany do wybranej platformy opinii.",
+    "select_survey": "Wybierz ankietę",
+    "choose_survey": "Wybierz ankietę",
+    "your_surveys": "Twoje ankiety",
+    "feedback_question": "Pytanie Feedback-u",
+    "enter_feedback_question": "Wprowadź pytanie do feedbacku",
+    "redirect_after_action": "Przekieruj po akcji",
+    "link_to_message_preview": "Link do oddania opinii",
+    "preview_placeholder": "Twoja wspaniała wiadomość",
+    "see_display": "Zobacz jak twoja wiadomość bedzie wyglądać",
+    "message_type": "Typ wiadomości",
+    "phone_number_info": "Numer, na który zostanie wysłana wiadomość SMS"
   },
   "sms": {
     "send_message": "Wyślij wiadomość SMS",
@@ -211,7 +226,9 @@
     "no_description": "Brak opisu",
     "created_survey": "Utworzono ankietę",
     "not_found_survey": "Nie znaleziono ankiety",
-    "delete_surveys": "Usunięto ankietę"
+    "delete_surveys": "Usunięto ankietę",
+    "edit_survey": "Edycja ankiety",
+    "updated_successfully": "Zaktualizowano ankietę"
   },
   "errors": {
     "Email already exists": "Podany adres e-mail jest już zarejestrowany",

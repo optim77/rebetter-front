@@ -22,12 +22,12 @@ export type UserMessageResponse = {
     "send_at": string,
     "messageType": string,
     "clicked_at": string | null;
-    "redirect_feedback": string | null,
+    "feedback_content": string | null,
     "tracking_id": string,
-    "is_redirect": boolean | null,
+    "is_feedback": boolean | null,
     "is_rating": boolean | null,
     "is_survey": boolean | null,
-    "redirect_response": string | null,
+    "feedback_response": string | null,
     "completed": boolean | null,
     "completed_at": string | null
 }
@@ -46,9 +46,9 @@ export type SMSMessageDetailsResponse = {
     messageType: string;
     send_at: number;
     portal: string
-    is_redirect: boolean | null;
-    redirect_response: string | null;
-    redirect_feedback: string | null;
+    is_feedback: boolean | null;
+    feedback_response: string | null;
+    feedback_content: string | null;
     is_rating: boolean | null;
     rating: number | null;
     rating_feedback: string | null;
