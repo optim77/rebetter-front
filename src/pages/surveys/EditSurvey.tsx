@@ -30,6 +30,8 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { SurveysAPI } from "@/api/SurveysAPI";
 import toast from "react-hot-toast";
 import { Loader } from "@/components/elements/Loader";
+import { Checkbox } from "@/components/ui/checkbox.tsx";
+import { t } from "i18next";
 
 type QuestionType = "text" | "choice" | "rating";
 
@@ -37,6 +39,7 @@ type Question = {
     id: string;
     type: QuestionType;
     label: string;
+    required: boolean;
     options?: string[];
 };
 
@@ -46,12 +49,14 @@ const SortableQuestion = ({
                               onOptionChange,
                               addOption,
                               removeQuestion,
+                              toggleRequired
                           }: {
     question: Question;
     onLabelChange: (id: string, label: string) => void;
     onOptionChange: (qid: string, index: number, value: string) => void;
     addOption: (qid: string) => void;
     removeQuestion: (id: string) => void;
+    toggleRequired: (id: string) => void;
 }) => {
     const { attributes, listeners, setNodeRef, transform, transition } =
         useSortable({ id: question.id });
@@ -95,6 +100,14 @@ const SortableQuestion = ({
                     }
                 />
 
+                <div className="flex items-center gap-2 mb-3">
+                    <Checkbox
+                        checked={question.required}
+                        onCheckedChange={() => toggleRequired(question.id)}
+                    />
+                    <Label>{t("surveys.required")}</Label>
+                </div>
+
                 {question.type === "choice" && (
                     <div>
                         <Label>Opcje</Label>
@@ -120,7 +133,7 @@ const SortableQuestion = ({
                             className="mt-2 cursor-pointer"
                             onClick={() => addOption(question.id)}
                         >
-                            <Plus className="h-4 w-4 mr-1" />
+                            <Plus className="h-4 w-4 mr-1"/>
                             Dodaj opcję
                         </Button>
                     </div>
@@ -147,8 +160,8 @@ const SortableQuestion = ({
 };
 
 export const EditSurvey = (): JSX.Element => {
-    const { t } = useTranslation();
-    const { companyId, surveyId } = useParams<{
+    const {t} = useTranslation();
+    const {companyId, surveyId} = useParams<{
         companyId: string;
         surveyId: string;
     }>() as { companyId: string; surveyId: string };
@@ -200,6 +213,7 @@ export const EditSurvey = (): JSX.Element => {
                 id: crypto.randomUUID(),
                 type,
                 label: "",
+                required: false,
                 options: type === "choice" ? [""] : undefined,
             },
         ]);
@@ -242,6 +256,14 @@ export const EditSurvey = (): JSX.Element => {
 
     const removeQuestion = (id: string) => {
         setQuestions((q) => q.filter((item) => item.id !== id));
+    };
+
+    const toggleRequired = (id: string) => {
+        setQuestions(q =>
+            q.map(item =>
+                item.id === id ? { ...item, required: !item.required } : item
+            )
+        );
     };
 
     const onDragEnd = (event: any) => {
@@ -329,6 +351,7 @@ export const EditSurvey = (): JSX.Element => {
                             onOptionChange={onOptionChange}
                             addOption={addOption}
                             removeQuestion={removeQuestion}
+                            toggleRequired={toggleRequired}
                         />
                     ))}
                 </SortableContext>

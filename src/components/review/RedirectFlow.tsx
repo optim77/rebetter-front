@@ -11,26 +11,38 @@ import { handleApiError } from "@/utils/handleApiError.ts";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-interface RedirectFlowProps {
-    redirectUrl: string;
+interface FeedbackFlowProps {
+    service_name: string | null;
+    service_id?: string | null;
+    portal?: string | null;
+    feedback_question: string | null;
+    is_redirect: boolean;
+    company_logo?: string;
     companyId: string | undefined;
     clientId: string | undefined;
     trackingId: string | undefined;
 }
 
-export const RedirectFlow = ({
-                                 redirectUrl,
+export const FeedbackFlow = ({
+                                 service_name,
+                                 service_id,
+                                 portal,
+                                 feedback_question,
+                                 is_redirect,
+                                 company_logo,
                                  companyId,
                                  clientId,
                                  trackingId
-}: RedirectFlowProps): JSX.Element => {
+}: FeedbackFlowProps): JSX.Element => {
 
 
     const [form, setForm] = useState<{showForm:boolean, feedback: string | null}>({showForm:false, feedback: null});
     const navigate = useNavigate();
 
     const moveToPortal = () => {
-        window.location.href = redirectUrl;
+        if (typeof portal === "string") {
+            window.location.href = portal;
+        }
     }
 
     const positiveFeedback = useMutation({

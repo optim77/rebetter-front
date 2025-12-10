@@ -155,7 +155,8 @@
     "preview_placeholder": "Your perfect message",
     "see_display": "See how your message will display",
     "message_type": "Message type",
-    "phone_number_info": "Phone number, which will be use to send SMS message"
+    "phone_number_info": "Phone number, which will be use to send SMS message",
+    "select_platform_for_redirect": "Select platform for redirect"
   },
   "sms": {
     "send_message": "Send SMS",
@@ -228,7 +229,8 @@
     "not_found_survey": "Not found survey",
     "delete_surveys": "Deleted survey",
     "edit_survey": "Edit survey",
-    "updated_successfully": "Updated survey"
+    "updated_successfully": "Updated survey",
+    "required": "Required field"
   },
   "errors": {
     "Email already exists": "Email already exists",

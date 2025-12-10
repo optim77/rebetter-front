@@ -155,7 +155,8 @@
     "preview_placeholder": "Twoja wspaniała wiadomość",
     "see_display": "Zobacz jak twoja wiadomość bedzie wyglądać",
     "message_type": "Typ wiadomości",
-    "phone_number_info": "Numer, na który zostanie wysłana wiadomość SMS"
+    "phone_number_info": "Numer, na który zostanie wysłana wiadomość SMS",
+    "select_platform_for_redirect": "Wybierz platformę, na którą ma zostać wykonane przekierowanie"
   },
   "sms": {
     "send_message": "Wyślij wiadomość SMS",
@@ -228,7 +229,8 @@
     "not_found_survey": "Nie znaleziono ankiety",
     "delete_surveys": "Usunięto ankietę",
     "edit_survey": "Edycja ankiety",
-    "updated_successfully": "Zaktualizowano ankietę"
+    "updated_successfully": "Zaktualizowano ankietę",
+    "required": "Pole wymagane"
   },
   "errors": {
     "Email already exists": "Podany adres e-mail jest już zarejestrowany",

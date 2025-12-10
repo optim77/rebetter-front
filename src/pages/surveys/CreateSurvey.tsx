@@ -30,6 +30,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { SurveysAPI } from "@/api/SurveysAPI.ts";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { Checkbox } from "@/components/ui/checkbox.tsx";
 
 type QuestionType = "text" | "choice" | "rating";
 
@@ -37,6 +38,7 @@ interface Question {
     id: string;
     type: QuestionType;
     label: string;
+    required: boolean;
     options?: string[];
 }
 
@@ -45,13 +47,15 @@ const SortableQuestion = ({
                               onLabelChange,
                               onOptionChange,
                               addOption,
-                              removeQuestion
+                              removeQuestion,
+                              toggleRequired
                           }: {
     question: Question;
     onLabelChange: (id: string, label: string) => void;
     onOptionChange: (qid: string, index: number, value: string) => void;
     addOption: (qid: string) => void;
     removeQuestion: (id: string) => void;
+    toggleRequired: (id: string) => void;
 }) => {
     const {attributes, listeners, setNodeRef, transform, transition} = useSortable({id: question.id});
 
@@ -92,6 +96,14 @@ const SortableQuestion = ({
                     value={question.label}
                     onChange={(e) => onLabelChange(question.id, e.target.value)}
                 />
+
+                <div className="flex items-center gap-2 mb-3">
+                    <Checkbox
+                        checked={question.required}
+                        onCheckedChange={() => toggleRequired(question.id)}
+                    />
+                    <Label>{t("surveys.required")}</Label>
+                </div>
 
                 {question.type === "choice" && (
                     <div>
@@ -161,6 +173,7 @@ export const CreateSurvey = (): JSX.Element => {
                 id: crypto.randomUUID(),
                 type,
                 label: "",
+                required: false,
                 options: type === "choice" ? [""] : undefined
             }
         ]);
@@ -168,6 +181,13 @@ export const CreateSurvey = (): JSX.Element => {
 
     const onLabelChange = (id: string, label: string) => {
         setQuestions(q => q.map(item => item.id === id ? {...item, label} : item));
+    };
+    const toggleRequired = (id: string) => {
+        setQuestions(q =>
+            q.map(item =>
+                item.id === id ? { ...item, required: !item.required } : item
+            )
+        );
     };
 
     const onOptionChange = (qid: string, index: number, value: string) => {
@@ -236,7 +256,7 @@ export const CreateSurvey = (): JSX.Element => {
             SurveysAPI.createSurvey(companyId, payload),
 
         onSuccess: (data) => {
-            toast.success("surveys.created_survey")
+            toast.success(t("surveys.created_survey"));
             navigate(`/dashboard/company/${companyId}/survey/${data.id}`);
         },
 
@@ -293,6 +313,7 @@ export const CreateSurvey = (): JSX.Element => {
                             onOptionChange={onOptionChange}
                             addOption={addOption}
                             removeQuestion={removeQuestion}
+                            toggleRequired={toggleRequired}
                         />
                     ))}
                 </SortableContext>

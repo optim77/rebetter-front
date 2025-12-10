@@ -105,6 +105,10 @@ export const SendSMSMessage = (): JSX.Element => {
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
+        if (form.isRedirect && !form.platform) {
+            toast.error(t("messages.select_platform_for_redirect"))
+            return
+        }
         mutation.mutate();
     };
 
@@ -291,6 +295,7 @@ export const SendSMSMessage = (): JSX.Element => {
                 </div>
 
                 <SocialLinksForMessageSelector
+                    isRequired={form.isRedirect}
                     disabled={!form.isRedirect}
                     onSelect={(social) => setForm((prev) => ({...prev, platform: social.social}))}
                 />

@@ -1,22 +1,24 @@
 import { type JSX, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { InvitationAPI } from "@/api/InvitationAPI.ts";
+import { InvitationAPI, type InvitationResponse } from "@/api/InvitationAPI.ts";
 import { Loader } from "@/components/elements/Loader.tsx";
 import { ErrorBanner } from "@/components/elements/ErrorBanner.tsx";
 
-import { RedirectFlow } from "@/components/review/RedirectFlow.tsx";
+import { FeedbackFlow } from "@/components/review/RedirectFlow.tsx";
 import { toast } from "react-hot-toast";
 import { t } from "i18next";
 import type { ApiError } from "@/types/apiError.ts";
 import { handleApiError } from "@/utils/handleApiError.ts";
 import { FeedbackAlreadyDone } from "@/components/review/FeedbackAlreadyDone.tsx";
+import type { AxiosError } from "axios";
+
 
 export const Review = (): JSX.Element => {
 
     const {companyId, clientId, trackingId} = useParams<{ companyId: string, clientId: string, trackingId: string }>();
 
-    const {data: invitation, isLoading, isError, error} = useQuery({
+    const {data: invitation, isLoading, isError, error} = useQuery<InvitationResponse, AxiosError<ApiError>>({
         queryKey: ["invitation", companyId, clientId, trackingId],
         retry: false,
         queryFn: async () => {
@@ -62,11 +64,16 @@ export const Review = (): JSX.Element => {
     return (
         <>
             {invitation?.is_feedback && (
-                <RedirectFlow
-                    redirectUrl={invitation.portal}
+                <FeedbackFlow
+                    service_name={invitation.service_name}
+                    service_id={invitation.service_id}
+                    portal={invitation.portal}
+                    feedback_question={invitation.feedback_question}
                     clientId={clientId}
                     companyId={companyId}
-                    trackingId={trackingId}/>
+                    trackingId={trackingId}
+                    is_redirect={invitation.is_redirect}
+                />
             )}
         </>
     )

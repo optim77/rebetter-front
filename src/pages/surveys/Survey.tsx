@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button.tsx";
 import type { ApiError } from "@/types/apiError.ts";
 import { handleApiError } from "@/utils/handleApiError.ts";
 import { toast } from "react-hot-toast";
+import { Checkbox } from "@/components/ui/checkbox.tsx";
 
 type QuestionType = "text" | "choice" | "rating";
 
@@ -17,6 +18,7 @@ type Question = {
     id: string;
     type: QuestionType;
     label: string;
+    required: boolean;
     options?: string[];
 };
 
@@ -146,6 +148,13 @@ export const Survey = (): JSX.Element => {
                                     ))}
                                 </div>
                             )}
+                            <div className="flex items-center gap-2 mb-3">
+                                <Checkbox
+                                    checked={q.required}
+                                    disabled={true}
+                                />
+                                <Label>{t("surveys.required")}</Label>
+                            </div>
                         </CardContent>
                     </Card>
                 ))}

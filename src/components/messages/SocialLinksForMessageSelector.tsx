@@ -10,9 +10,10 @@ import { Label } from "@/components/ui/label.tsx";
 interface Props {
     onSelect?: (data: { social: string }) => void;
     disabled?: boolean;
+    isRequired?: boolean;
 }
 
-export const SocialLinksForMessageSelector = ({ onSelect, disabled }: Props) => {
+export const SocialLinksForMessageSelector = ({ onSelect, disabled, isRequired }: Props) => {
     const { companyId } = useParams<{ companyId: string }>();
 
     const { data: socials, isLoading, isError } = useQuery({
@@ -55,6 +56,7 @@ export const SocialLinksForMessageSelector = ({ onSelect, disabled }: Props) => 
                     const [social] = val.split("|");
                     onSelect?.({ social });
                 }}
+                required={isRequired}
             >
                 {activeSocials.map(([key, url], index) => (
                     <div
