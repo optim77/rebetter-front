@@ -12,6 +12,7 @@ import type { ApiError } from "@/types/apiError.ts";
 import { handleApiError } from "@/utils/handleApiError.ts";
 import { FeedbackAlreadyDone } from "@/components/review/FeedbackAlreadyDone.tsx";
 import type { AxiosError } from "axios";
+import { RatingFlow } from "@/components/review/RatingFlow.tsx";
 
 
 export const Review = (): JSX.Element => {
@@ -63,7 +64,7 @@ export const Review = (): JSX.Element => {
     }
     return (
         <>
-            {invitation?.is_feedback && (
+            {invitation?.is_feedback && !invitation.is_redirect && (
                 <FeedbackFlow
                     service_name={invitation.service_name}
                     portal={invitation.portal}
@@ -74,6 +75,19 @@ export const Review = (): JSX.Element => {
                     is_redirect={invitation.is_redirect}
                 />
             )}
+
+            {invitation && invitation.is_rating && (
+                <RatingFlow
+                    portal={invitation.portal}
+                    service_name={invitation.service_name}
+                    rating_question={invitation.rating_question}
+                    is_redirect={invitation.is_redirect}
+                    companyId={companyId}
+                    clientId={clientId}
+                    trackingId={trackingId}
+                />
+            )}
+
         </>
     )
 }

@@ -35,4 +35,8 @@ export const InvitationAPI = {
         const res = await api.post(`/messages/review/${company_id}/${client_id}/${invitation_id}/send_feedback`, {feedback});
         return res.data;
     },
+    sendRatingFeedback: async (company_id: string | undefined, client_id: string | undefined, invitation_id: string | undefined, rating: number,  feedback: string) => {
+        const res = await api.post(`/messages/review/${company_id}/${client_id}/${invitation_id}/send_rating`, {rating, feedback});
+        return res.data;
+    },
 }

@@ -13,7 +13,7 @@ import { SocialLinksForMessageSelector } from "@/components/messages/SocialLinks
 import { ServiceForMessageSelector } from "@/components/messages/ServiceForMessageSelector.tsx";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group.tsx";
 import { Label } from "@/components/ui/label.tsx";
-import { SurveysAPI } from "@/api/SurveysAPI.ts";
+import { type Survey, SurveysAPI } from "@/api/SurveysAPI.ts";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip.tsx";
 import { Info } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select.tsx";
@@ -243,7 +243,7 @@ export const SendSMSMessage = (): JSX.Element => {
                                             </SelectTrigger>
 
                                             <SelectContent>
-                                                {surveysData?.items?.map((survey: any) => (
+                                                {surveysData?.items?.map((survey: Survey) => (
                                                     <SelectItem
                                                         key={survey.id}
                                                         value={survey.id}

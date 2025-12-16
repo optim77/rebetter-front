@@ -50,7 +50,8 @@
     "completed_at": "Data zakończenia",
     "service": "Usługa",
     "clicked_at": "Kliknięto",
-    "content": "Treść"
+    "content": "Treść",
+    "feedback_rating": "Feedback + ocena"
   },
   "clients": {
     "clients": "Klienci",
@@ -102,7 +103,9 @@
   },
   "feedback": {
     "already_done_feedback": "Ta recenzja została już wypełniona.",
-    "thank_you_for_your_time": "Dziękujemy za poświęcony czas"
+    "thank_you_for_your_time": "Dziękujemy za poświęcony czas",
+    "rating_value": "Twoja ocena",
+    "rating_service": "Oceniana usługa"
   },
   "invitation": {
     "head_text": "Czy pozytywnie oceniasz jakość naszych usług?",
