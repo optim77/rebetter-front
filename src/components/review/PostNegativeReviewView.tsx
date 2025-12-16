@@ -1,5 +1,5 @@
 import { type JSX } from "react";
-
+// TODO: Translate
 export const PostNegativeReviewView = (): JSX.Element => {
     return (
         <div className="min-h-screen flex flex-col items-center justify-center px-6 text-center bg-gradient-to-b from-[#fdfbfb] to-[#ebedee]">

@@ -5,7 +5,7 @@ import { InvitationAPI, type InvitationResponse } from "@/api/InvitationAPI.ts";
 import { Loader } from "@/components/elements/Loader.tsx";
 import { ErrorBanner } from "@/components/elements/ErrorBanner.tsx";
 
-import { FeedbackFlow } from "@/components/review/RedirectFlow.tsx";
+import { FeedbackFlow } from "@/components/review/FeedbackFlow.tsx";
 import { toast } from "react-hot-toast";
 import { t } from "i18next";
 import type { ApiError } from "@/types/apiError.ts";
@@ -66,7 +66,6 @@ export const Review = (): JSX.Element => {
             {invitation?.is_feedback && (
                 <FeedbackFlow
                     service_name={invitation.service_name}
-                    service_id={invitation.service_id}
                     portal={invitation.portal}
                     feedback_question={invitation.feedback_question}
                     clientId={clientId}

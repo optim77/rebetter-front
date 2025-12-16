@@ -105,7 +105,8 @@
     "thank_you_for_your_time": "Dziękujemy za poświęcony czas"
   },
   "invitation": {
-    "head_text": "Czy pozytywnie oceniasz jakość naszych usług?"
+    "head_text": "Czy pozytywnie oceniasz jakość naszych usług?",
+    "placeholder": "Podziel się swoją opinią"
   },
   "navbar": {
     "home": "Strona główna",

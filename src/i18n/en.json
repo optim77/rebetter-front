@@ -105,7 +105,8 @@
     "thank_you_for_your_time": "Thank you for your time"
   },
   "invitation": {
-    "head_text": "Do you rate the quality of our services positively?"
+    "head_text": "Do you rate the quality of our services positively?",
+    "placeholder": "Share your opinion"
   },
   "navbar": {
     "home": "Home",

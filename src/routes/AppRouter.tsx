@@ -27,6 +27,7 @@ import { Surveys } from "@/pages/surveys/Surveys.tsx";
 import { CreateSurvey } from "@/pages/surveys/CreateSurvey.tsx";
 import { Survey } from "@/pages/surveys/Survey.tsx";
 import { EditSurvey } from "@/pages/surveys/EditSurvey.tsx";
+import { PostFeedbackView } from "@/components/review/PostFeedbackView.tsx";
 
 
 const PrivateRoute = observer(() => {
@@ -58,6 +59,7 @@ export default function AppRouter() {
                 <Route path="/registered" element={<Registered />} />
                 <Route path="/invitations/review/:companyId/:clientId/:trackingId" element={<Review />} />
                 <Route path="/post_negative" element={<PostNegativeReviewView />} />
+                <Route path="/post_feedback" element={<PostFeedbackView />} />
 
                 <Route element={<PrivateRoute />}>
                     <Route path="/dashboard" element={<DashboardLayout />}>
