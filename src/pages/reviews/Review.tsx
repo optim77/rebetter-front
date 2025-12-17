@@ -13,6 +13,7 @@ import { handleApiError } from "@/utils/handleApiError.ts";
 import { FeedbackAlreadyDone } from "@/components/review/FeedbackAlreadyDone.tsx";
 import type { AxiosError } from "axios";
 import { RatingFlow } from "@/components/review/RatingFlow.tsx";
+import { SurveyFlow } from "@/components/review/SurveyFlow.tsx";
 
 
 export const Review = (): JSX.Element => {
@@ -87,6 +88,19 @@ export const Review = (): JSX.Element => {
                     trackingId={trackingId}
                 />
             )}
+
+            {invitation && invitation.is_survey && (
+                <SurveyFlow
+                    portal={invitation.portal}
+                    service_name={invitation.service_name}
+                    survey={invitation.survey}
+                    is_redirect={invitation.is_redirect}
+                    companyId={companyId}
+                    clientId={clientId}
+                    trackingId={trackingId}
+                    />
+            )}
+
 
         </>
     )

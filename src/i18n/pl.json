@@ -105,7 +105,8 @@
     "already_done_feedback": "Ta recenzja została już wypełniona.",
     "thank_you_for_your_time": "Dziękujemy za poświęcony czas",
     "rating_value": "Twoja ocena",
-    "rating_service": "Oceniana usługa"
+    "rating_service": "Oceniana usługa",
+    "no_survey": "Brak ankiety"
   },
   "invitation": {
     "head_text": "Czy pozytywnie oceniasz jakość naszych usług?",

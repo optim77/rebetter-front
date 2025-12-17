@@ -1,5 +1,6 @@
 import api from "@/api/axios.ts";
 import type { AxiosResponse } from "axios";
+import type { Survey } from "@/components/review/SurveyFlow.tsx";
 
 export interface InvitationResponse {
     service_name: string | null;
@@ -8,7 +9,7 @@ export interface InvitationResponse {
     is_feedback: boolean;
     feedback_question: string | null;
     is_survey: boolean;
-    survey_id: string | null;
+    survey: Survey;
     is_rating: boolean;
     rating_question: string | null;
     is_redirect: boolean;
@@ -36,6 +37,10 @@ export const InvitationAPI = {
         return res.data;
     },
     sendRatingFeedback: async (company_id: string | undefined, client_id: string | undefined, invitation_id: string | undefined, rating: number,  feedback: string) => {
+        const res = await api.post(`/messages/review/${company_id}/${client_id}/${invitation_id}/send_rating`, {rating, feedback});
+        return res.data;
+    },
+    sendSurvey: async (company_id: string | undefined, client_id: string | undefined, invitation_id: string | undefined, rating: number,  feedback: string) => {
         const res = await api.post(`/messages/review/${company_id}/${client_id}/${invitation_id}/send_rating`, {rating, feedback});
         return res.data;
     },
