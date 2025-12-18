@@ -23,6 +23,13 @@ export interface InvitationRequest {
 
 }
 
+export type SurveyPayload = {
+    survey_id: string;
+    answers: {
+        [key: string]: string | number;
+    }
+}
+
 export const InvitationAPI = {
     fetchInvitation: async (company_id: string | undefined, client_id: string | undefined, tracking_id: string | undefined): Promise<InvitationResponse> => {
         const res = await api.get<InvitationResponse>(`/messages/review/${company_id}/${client_id}/${tracking_id}`);
@@ -40,8 +47,8 @@ export const InvitationAPI = {
         const res = await api.post(`/messages/review/${company_id}/${client_id}/${invitation_id}/send_rating`, {rating, feedback});
         return res.data;
     },
-    sendSurvey: async (company_id: string | undefined, client_id: string | undefined, invitation_id: string | undefined, rating: number,  feedback: string) => {
-        const res = await api.post(`/messages/review/${company_id}/${client_id}/${invitation_id}/send_rating`, {rating, feedback});
+    sendSurvey: async (company_id: string | undefined, client_id: string | undefined, invitation_id: string | undefined, survey: SurveyPayload) => {
+        const res = await api.post(`/messages/review/${company_id}/${client_id}/${invitation_id}/send_survey`, {survey});
         return res.data;
     },
 }

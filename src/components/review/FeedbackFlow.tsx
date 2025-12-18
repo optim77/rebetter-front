@@ -57,7 +57,6 @@ export const FeedbackFlow = ({
         onSuccess: () => {
             if (is_redirect) moveToPortal();
             navigate('/post_feedback');
-
         },
         onError: (error) => {
             const apiError: ApiError = handleApiError(error);
@@ -67,62 +66,81 @@ export const FeedbackFlow = ({
     });
 
     return (
-        <div className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-teal-100 px-4">
-
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 px-4 py-12 overflow-hidden relative">
             <motion.div
-                className="absolute -top-20 -left-20 w-72 h-72 rounded-full bg-emerald-200/40 blur-3xl"
-                animate={{ y: [0, 40, 0], x: [0, 30, 0] }}
-                transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-            />
-            <motion.div
-                className="absolute bottom-0 right-0 w-96 h-96 rounded-full bg-teal-300/40 blur-3xl"
-                animate={{ y: [0, -50, 0], x: [0, -20, 0] }}
-                transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-            />
-
-            <motion.div
-                initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-                className="relative z-10 max-w-md w-full bg-white/70 backdrop-blur-xl border border-emerald-100 shadow-2xl rounded-3xl p-8 text-center space-y-8"
+                className="absolute inset-0 -z-10"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 2 }}
             >
+                <div className="absolute -top-40 -left-40 w-96 h-96 bg-indigo-300/30 rounded-full blur-3xl animate-pulse" />
+                <div className="absolute top-40 right-0 w-80 h-80 bg-purple-300/30 rounded-full blur-3xl animate-pulse delay-1000" />
+                <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-pink-300/30 rounded-full blur-3xl animate-pulse delay-500" />
+            </motion.div>
 
-                <motion.h2
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1, duration: 0.4 }}
-                    className="text-2xl font-semibold text-slate-800 leading-snug"
-                >
-                    {feedback_question || t("feedback.default_question")}
-                </motion.h2>
+            <motion.div
+                initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="w-full max-w-xl bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl overflow-hidden border border-white/60"
+            >
+                <div className="bg-gradient-to-r from-indigo-500 to-purple-600 p-10 text-white">
+                    {company_logo && (
+                        <motion.div
+                            initial={{ scale: 0.8 }}
+                            animate={{ scale: 1 }}
+                            transition={{ delay: 0.2, duration: 0.5 }}
+                        >
+                            <Avatar className="mx-auto w-24 h-24 shadow-2xl border-4 border-white/30">
+                                <AvatarImage src={company_logo} />
+                            </Avatar>
+                        </motion.div>
+                    )}
 
-                {company_logo && (
-                    <Avatar className="mx-auto w-20 h-20">
-                        <AvatarImage src={company_logo} />
-                    </Avatar>
-                )}
+                    {service_name && (
+                        <p className="text-center text-indigo-100 text-sm uppercase tracking-wider mt-6 mb-2">
+                            {service_name}
+                        </p>
+                    )}
 
-                {service_name && (
-                    <p className="text-slate-600 text-sm">
-                        {t("feedback.rating_service")}: <strong>{service_name}</strong>
-                    </p>
-                )}
+                    <motion.h2
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3, duration: 0.6 }}
+                        className="text-3xl font-bold text-center max-w-lg mx-auto leading-relaxed"
+                    >
+                        {feedback_question || t("feedback.default_question")}
+                    </motion.h2>
+                </div>
 
-                <Textarea
-                    required
-                    value={feedback}
-                    onChange={(e) => setFeedback(e.target.value)}
-                    placeholder={t("invitation.placeholder")}
-                    className="min-h-32 mt-4"
-                />
+                <div className="p-10 space-y-10">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.5 }}
+                    >
+                        <Textarea
+                            value={feedback}
+                            onChange={(e) => setFeedback(e.target.value)}
+                            placeholder={t("invitation.placeholder")}
+                            className="min-h-48 text-base rounded-2xl border-gray-200 focus:ring-4 focus:ring-indigo-300 focus:border-indigo-500 bg-white/70 shadow-inner resize-none"
+                        />
+                    </motion.div>
 
-                <Button
-                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
-                    onClick={() => sendFeedback.mutate()}
-                    disabled={sendFeedback.isPending}
-                >
-                    {sendFeedback.isPending ? t("action.sending") : t("action.send")}
-                </Button>
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.7 }}
+                    >
+                        <Button
+                            onClick={() => sendFeedback.mutate()}
+                            disabled={sendFeedback.isPending || !feedback.trim()}
+                            className="w-full py-6 text-lg font-bold rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-xl transform hover:scale-105 transition-all duration-300"
+                        >
+                            {sendFeedback.isPending ? t("action.sending") : t("action.send")}
+                        </Button>
+                    </motion.div>
+                </div>
             </motion.div>
         </div>
     );

@@ -1,5 +1,11 @@
 import { useState, type JSX, type FormEvent } from "react";
 import { t } from "i18next";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-hot-toast";
+import { InvitationAPI } from "@/api/InvitationAPI.ts";
+import type { ApiError } from "@/types/apiError.ts";
+import { handleApiError } from "@/utils/handleApiError.ts";
+import { useNavigate } from "react-router-dom";
 
 interface SurveyFlowProps {
     service_name: string | null;
@@ -38,8 +44,55 @@ export const SurveyFlow = ({
                                clientId,
                                trackingId,
                            }: SurveyFlowProps): JSX.Element => {
-    const [answers, setAnswers] = useState<Record<string, any>>({});
+    const [answers, setAnswers] = useState<Record<string, string | number>>({});
     const [error, setError] = useState<string | null>(null);
+    const navigate = useNavigate();
+
+    const handleChange = (questionId: string, value: string | number) => {
+        setAnswers(prev => ({ ...prev, [questionId]: value }));
+    };
+
+
+    const moveToPortal = () => {
+        if (portal) {
+            window.location.href = portal;
+        }
+    };
+
+    const sendSurvey = useMutation({
+        mutationFn: async () => {
+            if (!companyId || !clientId || !trackingId) {
+                throw new Error("Missing required parameters!");
+            }
+            if (!survey) return ;
+            for (const question of survey.content) {
+                if (question.required && !answers[question.id]) {
+                    setError("Uzupełnij wszystkie wymagane pytania");
+                    return;
+                }
+            }
+            const payload = {
+                survey_id: survey.id,
+                answers
+            };
+            return InvitationAPI.sendSurvey(companyId, clientId, trackingId, payload);
+        },
+        onSuccess: () => {
+            if (is_redirect) moveToPortal();
+            navigate('/post_feedback');
+
+        },
+        onError: (error) => {
+            const apiError: ApiError = handleApiError(error);
+            toast.error(t("errors.base_error"));
+            console.error("Failed to send feedback:", apiError);
+        }
+    });
+
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        sendSurvey.mutate();
+    };
 
     if (!survey) {
         return (
@@ -50,36 +103,6 @@ export const SurveyFlow = ({
             </div>
         );
     }
-
-    const handleChange = (questionId: string, value: any) => {
-        setAnswers(prev => ({ ...prev, [questionId]: value }));
-    };
-
-    const handleSubmit = (e: FormEvent) => {
-        e.preventDefault();
-        setError(null);
-
-        for (const question of survey.content) {
-            if (question.required && !answers[question.id]) {
-                setError("Uzupełnij wszystkie wymagane pytania");
-                return;
-            }
-        }
-
-        const payload = {
-            survey_id: survey.id,
-            answers,
-            company_id: companyId,
-            client_id: clientId,
-            tracking_id: trackingId,
-        };
-
-        console.log("SEND SURVEY:", payload);
-
-        if (is_redirect && portal) {
-            window.location.href = portal;
-        }
-    };
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 px-4 py-12">
@@ -121,8 +144,7 @@ export const SurveyFlow = ({
                                     {index + 1}. {question.label}
                                     {question.required && <span className="text-red-500 ml-1">*</span>}
                                 </p>
-
-                                {/* TEXT */}
+                                
                                 {question.type === "text" && (
                                     <textarea
                                         rows={4}
@@ -131,8 +153,7 @@ export const SurveyFlow = ({
                                         onChange={(e) => handleChange(question.id, e.target.value)}
                                     />
                                 )}
-
-                                {/* CHOICE */}
+                                
                                 {question.type === "choice" && question.options && (
                                     <div className="space-y-3">
                                         {question.options.map(option => (
@@ -167,7 +188,6 @@ export const SurveyFlow = ({
                                     </div>
                                 )}
 
-                                {/* RATING */}
                                 {question.type === "rating" && (
                                     <div className="flex justify-center gap-4 py-4">
                                         {[1, 2, 3, 4, 5].map(value => (

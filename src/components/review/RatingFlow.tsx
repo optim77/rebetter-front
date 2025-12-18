@@ -12,7 +12,6 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-
 interface RatingFlowProps {
     service_name: string | null;
     service_id?: string | null;
@@ -26,15 +25,15 @@ interface RatingFlowProps {
 }
 
 export const RatingFlow = ({
-                                 service_name,
-                                 portal,
-                                 rating_question,
-                                 is_redirect,
-                                 company_logo,
-                                 companyId,
-                                 clientId,
-                                 trackingId
-                             }: RatingFlowProps): JSX.Element => {
+                               service_name,
+                               portal,
+                               rating_question,
+                               is_redirect,
+                               company_logo,
+                               companyId,
+                               clientId,
+                               trackingId
+                           }: RatingFlowProps): JSX.Element => {
 
     const [ratingFeedback, setRatingFeedback] = useState("");
     const [rating, setRating] = useState<number>(5);
@@ -60,7 +59,6 @@ export const RatingFlow = ({
         onSuccess: () => {
             if (is_redirect) moveToPortal();
             navigate('/post_feedback');
-
         },
         onError: (error) => {
             const apiError: ApiError = handleApiError(error);
@@ -70,88 +68,117 @@ export const RatingFlow = ({
     });
 
     return (
-        <div className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-teal-100 px-4">
-
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 px-4 py-12 overflow-hidden relative">
             <motion.div
-                className="absolute -top-20 -left-20 w-72 h-72 rounded-full bg-emerald-200/40 blur-3xl"
-                animate={{ y: [0, 40, 0], x: [0, 30, 0] }}
-                transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-            />
-            <motion.div
-                className="absolute bottom-0 right-0 w-96 h-96 rounded-full bg-teal-300/40 blur-3xl"
-                animate={{ y: [0, -50, 0], x: [0, -20, 0] }}
-                transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-            />
-
-            <motion.div
-                initial={{opacity: 0, y: 20, scale: 0.95}}
-                animate={{opacity: 1, y: 0, scale: 1}}
-                transition={{duration: 0.6, ease: "easeOut"}}
-                className="relative z-10 max-w-md w-full bg-white/70 backdrop-blur-xl border border-emerald-100 shadow-2xl rounded-3xl p-8 text-center space-y-8"
+                className="absolute inset-0 -z-10"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 2 }}
             >
+                <div className="absolute -top-40 -left-40 w-96 h-96 bg-indigo-300/30 rounded-full blur-3xl animate-pulse" />
+                <div className="absolute top-40 right-0 w-80 h-80 bg-purple-300/30 rounded-full blur-3xl animate-pulse delay-1000" />
+                <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-pink-300/30 rounded-full blur-3xl animate-pulse delay-500" />
+            </motion.div>
 
-                <motion.h2
-                    initial={{opacity: 0, y: -10}}
-                    animate={{opacity: 1, y: 0}}
-                    transition={{delay: 0.1, duration: 0.4}}
-                    className="text-2xl font-semibold text-slate-800 leading-snug"
-                >
-                    {rating_question || t("feedback.default_question")}
-                </motion.h2>
+            <motion.div
+                initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="w-full max-w-xl bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl overflow-hidden border border-white/60"
+            >
+                <div className="bg-gradient-to-r from-indigo-500 to-purple-600 p-10 text-white">
+                    {company_logo && (
+                        <motion.div
+                            initial={{ scale: 0.8 }}
+                            animate={{ scale: 1 }}
+                            transition={{ delay: 0.2, duration: 0.5 }}
+                        >
+                            <Avatar className="mx-auto w-24 h-24 shadow-2xl border-4 border-white/30">
+                                <AvatarImage src={company_logo} />
+                            </Avatar>
+                        </motion.div>
+                    )}
 
-                {company_logo && (
-                    <Avatar className="mx-auto w-20 h-20">
-                        <AvatarImage src={company_logo}/>
-                    </Avatar>
-                )}
+                    {service_name && (
+                        <p className="text-center text-indigo-100 text-sm uppercase tracking-wider mt-6 mb-2">
+                            {service_name}
+                        </p>
+                    )}
 
-                {service_name && (
-                    <p className="text-slate-600 text-sm">
-                        {t("feedback.rating_service")}: <strong>{service_name}</strong>
-                    </p>
-                )}
-
-                <div className="flex flex-col items-center gap-2 mt-4">
-                    <div className="flex gap-2">
-                        {[1, 2, 3, 4, 5].map((value) => (
-                            <motion.button
-                                key={value}
-                                whileHover={{scale: 1.2}}
-                                whileTap={{scale: 0.9}}
-                                onClick={() => setRating(value)}
-                                className="focus:outline-none cursor-pointer"
-                            >
-                                <Star
-                                    className={`w-9 h-9 transition-colors ${
-                                        value <= rating
-                                            ? "fill-yellow-400 text-yellow-400"
-                                            : "text-gray-300"
-                                    }`}
-                                />
-                            </motion.button>
-                        ))}
-                    </div>
-
-                    <span className="text-sm text-slate-600">
-                        {t("feedback.rating_value", {value: rating})}
-                    </span>
+                    <motion.h2
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3, duration: 0.6 }}
+                        className="text-3xl font-bold text-center max-w-lg mx-auto"
+                    >
+                        {rating_question || t("feedback.default_question")}
+                    </motion.h2>
                 </div>
 
-                <Textarea
-                    required
-                    value={ratingFeedback}
-                    onChange={(e) => setRatingFeedback(e.target.value)}
-                    placeholder={t("invitation.placeholder")}
-                    className="min-h-32 mt-4"
-                />
+                <div className="p-10 space-y-10">
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.5 }}
+                        className="text-center"
+                    >
+                        <div className="flex justify-center gap-5 py-6">
+                            {[1, 2, 3, 4, 5].map((value) => (
+                                <motion.button
+                                    key={value}
+                                    whileHover={{ scale: 1.25, rotate: 15 }}
+                                    whileTap={{ scale: 0.9 }}
+                                    onClick={() => setRating(value)}
+                                    className="focus:outline-none"
+                                >
+                                    <Star
+                                        className={`w-16 h-16 transition-all duration-300 drop-shadow-lg cursor-pointer ${
+                                            value <= rating
+                                                ? "fill-yellow-400 text-yellow-400"
+                                                : "text-gray-300 hover:text-gray-400"
+                                        }`}
+                                    />
+                                </motion.button>
+                            ))}
+                        </div>
 
-                <Button
-                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
-                    onClick={() => sendRatingFeedback.mutate()}
-                    disabled={sendRatingFeedback.isPending}
-                >
-                    {sendRatingFeedback.isPending ? t("action.sending") : t("action.send")}
-                </Button>
+                        <motion.p
+                            key={rating}
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="text-lg text-gray-600 font-medium mt-4"
+                        >
+                            {t("feedback.rating_value", { value: rating })}
+                        </motion.p>
+                    </motion.div>
+
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.6 }}
+                    >
+                        <Textarea
+                            value={ratingFeedback}
+                            onChange={(e) => setRatingFeedback(e.target.value)}
+                            placeholder={t("invitation.placeholder")}
+                            className="min-h-40 text-base rounded-2xl border-gray-200 focus:ring-4 focus:ring-indigo-300 focus:border-indigo-500 bg-white/70 shadow-inner"
+                        />
+                    </motion.div>
+
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.8 }}
+                    >
+                        <Button
+                            onClick={() => sendRatingFeedback.mutate()}
+                            disabled={sendRatingFeedback.isPending || !ratingFeedback.trim()}
+                            className="w-full py-6 text-lg font-bold rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-xl transform hover:scale-105 transition-all duration-300"
+                        >
+                            {sendRatingFeedback.isPending ? t("action.sending") : t("action.send")}
+                        </Button>
+                    </motion.div>
+                </div>
             </motion.div>
         </div>
     );
