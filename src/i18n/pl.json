@@ -51,7 +51,11 @@
     "service": "Usługa",
     "clicked_at": "Kliknięto",
     "content": "Treść",
-    "feedback_rating": "Feedback + ocena"
+    "feedback_rating": "Feedback + ocena",
+    "basic_info": "Informacje podstawowe",
+    "client_response": "Odpowiedź klienta",
+    "no_answer": "Brak odpowiedzi",
+    "service_id": "ID usługi"
   },
   "clients": {
     "clients": "Klienci",
@@ -161,7 +165,10 @@
     "see_display": "Zobacz jak twoja wiadomość bedzie wyglądać",
     "message_type": "Typ wiadomości",
     "phone_number_info": "Numer, na który zostanie wysłana wiadomość SMS",
-    "select_platform_for_redirect": "Wybierz platformę, na którą ma zostać wykonane przekierowanie"
+    "select_platform_for_redirect": "Wybierz platformę, na którą ma zostać wykonane przekierowanie",
+    "link_clicked": "Kliknięto otrzymaną wiadomość",
+    "awaiting_response": "Oczekiwanie na odpowiedż",
+    "received_feedback": "Otrzymano odpowiedź"
   },
   "sms": {
     "send_message": "Wyślij wiadomość SMS",
@@ -235,7 +242,8 @@
     "delete_surveys": "Usunięto ankietę",
     "edit_survey": "Edycja ankiety",
     "updated_successfully": "Zaktualizowano ankietę",
-    "required": "Pole wymagane"
+    "required": "Pole wymagane",
+    "text_response_example": "Odpowiedź"
   },
   "errors": {
     "Email already exists": "Podany adres e-mail jest już zarejestrowany",

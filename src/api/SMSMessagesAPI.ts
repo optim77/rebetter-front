@@ -41,11 +41,11 @@ export type PagedUserMessageResponse = {
 export type SMSMessageDetailsResponse = {
     id: string;
     message: string;
-    tracking_id: string
-    clicked_at: number | null
+    tracking_id: string;
+    clicked_at: string | null;
     messageType: string;
-    send_at: number;
-    portal: string
+    send_at: string;
+    portal: string;
     is_feedback: boolean | null;
     feedback_response: string | null;
     feedback_content: string | null;
@@ -53,8 +53,24 @@ export type SMSMessageDetailsResponse = {
     rating: number | null;
     rating_feedback: string | null;
     is_survey: boolean | null;
+    survey: {
+        id: string;
+        name: string;
+        description: string;
+        content: {
+            id: string;
+            label: string;
+            required: boolean;
+            type: "rating" | "text" | "choice";
+            options: string[];
+        }[]
+
+    }
+    survey_answer: {
+        [key: string]: string | number;
+    }
     completed: boolean | null;
-    completed_at: number | null;
+    completed_at: string | null;
     service_id: string | null;
     service_name: string | null;
 }
