@@ -141,7 +141,7 @@ const SortableQuestion = ({
 
                 {question.type === "rating" && (
                     <div>
-                        <Label className="mb-2 block">Ocena</Label>
+                        <Label className="mb-2 block">{t("surveys.rating_scale")}</Label>
                         <div className="flex gap-2">
                             {[0, 1, 2, 3, 4, 5].map((n) => (
                                 <div
@@ -174,14 +174,12 @@ export const EditSurvey = (): JSX.Element => {
 
     const sensors = useSensors(useSensor(PointerSensor));
 
-    // 🔹 Pobieranie ankiety
     const { data: survey, isLoading } = useQuery({
         queryKey: ["survey", companyId, surveyId],
         queryFn: () => SurveysAPI.getSurvey(companyId, surveyId),
         enabled: !!companyId && !!surveyId,
     });
 
-    // 🔹 Uzupełnianie stanu po pobraniu
     useEffect(() => {
         if (survey) {
             setName(survey.name || "");
@@ -190,7 +188,6 @@ export const EditSurvey = (): JSX.Element => {
         }
     }, [survey]);
 
-    // 🔹 Mutacja update
     const updateSurveyMutation = useMutation({
         mutationFn: (payload: any) =>
             SurveysAPI.updateSurvey(companyId, surveyId, payload),

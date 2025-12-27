@@ -1,31 +1,30 @@
-import { Card } from "@/components/ui/card"
-import { t } from "i18next"
-import { PlusCircle } from "lucide-react"
-import { Link, useParams } from "react-router-dom";
+import { PlusCircle } from "lucide-react";
+import { t } from "i18next";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
-export default function AddServiceButton() {
-    const { companyId } = useParams<{ companyId: string }>();
+interface Props {
+    companyId: string;
+}
+
+export default function AddServiceButton({ companyId }: Props) {
     return (
         <Link to={`/dashboard/company/${companyId}/create_service`}>
-            <Card
-                role="button"
-                tabIndex={0}
-                className="
-                w-full
-                flex flex-col items-center justify-center
-                py-10 cursor-pointer
-                border-2 border-dashed border-gray-300
-                hover:border-blue-500 hover:bg-blue-50
-                transition-all duration-200
-                rounded-2xl
-                text-gray-600 hover:text-blue-600
-                group
-            "
+            <motion.div
+                whileHover={{ scale: 1.05, y: -8 }}
+                whileTap={{ scale: 0.98 }}
+                className="h-full"
             >
-                <PlusCircle className="w-10 h-10 mb-2 text-gray-400 group-hover:text-blue-600 transition-colors" />
-                <span className="text-lg font-medium">{t("services.add_service")}</span>
-            </Card>
+                <div className="h-full bg-white/80 backdrop-blur-md rounded-3xl shadow-xl border-2 border-dashed border-gray-300 hover:border-indigo-500 hover:bg-gradient-to-br hover:from-indigo-50/50 hover:to-purple-50/50 transition-all duration-500 cursor-pointer flex flex-col items-center justify-center p-10 group">
+                    <PlusCircle className="w-20 h-20 text-gray-400 group-hover:text-indigo-600 transition-colors duration-300 mb-6" />
+                    <span className="text-2xl font-bold text-gray-700 group-hover:text-indigo-700 transition-colors">
+                        {t("services.add_service")}
+                    </span>
+                    <p className="mt-4 text-gray-500 text-center max-w-xs">
+                        Dodaj nową usługę i zacznij zbierać opinie od klientów
+                    </p>
+                </div>
+            </motion.div>
         </Link>
-
-    )
+    );
 }

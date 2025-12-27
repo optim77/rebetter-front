@@ -73,6 +73,7 @@ export type SMSMessageDetailsResponse = {
     completed_at: string | null;
     service_id: string | null;
     service_name: string | null;
+    is_redirect: boolean | null;
 }
 
 export const SMSMessagesAPI = {

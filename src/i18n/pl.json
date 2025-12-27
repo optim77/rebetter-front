@@ -55,7 +55,9 @@
     "basic_info": "Informacje podstawowe",
     "client_response": "Odpowiedź klienta",
     "no_answer": "Brak odpowiedzi",
-    "service_id": "ID usługi"
+    "service_id": "ID usługi",
+    "redirect_portal": "Cel przekierowania",
+    "characters": "znaków"
   },
   "clients": {
     "clients": "Klienci",
@@ -66,7 +68,8 @@
     "phone": "Numer telefonu",
     "service": "Usługa",
     "note": "Notatki",
-    "created_successfully": "Poprawnie utworzono klienta"
+    "created_successfully": "Poprawnie utworzono klienta",
+    "found_clients": "znalezionych klientów"
   },
   "companies": {
     "companies": "Firmy",
@@ -96,7 +99,9 @@
     "your_links": "Twoje linki",
     "google": "Google",
     "choose_social_platform": "Wybierz platformę by wysłać wiadomość",
-    "no_socials_available": "Brak dostępnych linków do opinii"
+    "no_socials_available": "Brak dostępnych linków do opinii",
+    "no_description": "Brak opisu",
+    "found_companies": "Znalezione firmy"
   },
   "contact": {
     "head": "Skontaktuj się z nami",
@@ -139,8 +144,8 @@
     }
   },
   "messages": {
-    "send_sms_message": "Wyślij wiadomość SMS",
-    "send_email_message": "Wyślij wiadomość E-mail",
+    "send_sms_message": "SMS",
+    "send_email_message": "E-mail",
     "send_message_description": "Wyślij wiadomość do pojedyńczego użytkownika. W karcie Wiadomosći będziesz mógł podjerzeć jej status",
     "content": "Wiadomość",
     "content_placeholder": "Wiadomość",
@@ -168,7 +173,10 @@
     "select_platform_for_redirect": "Wybierz platformę, na którą ma zostać wykonane przekierowanie",
     "link_clicked": "Kliknięto otrzymaną wiadomość",
     "awaiting_response": "Oczekiwanie na odpowiedż",
-    "received_feedback": "Otrzymano odpowiedź"
+    "received_feedback": "Otrzymano odpowiedź",
+    "history": "Historia wiadomości",
+    "client_answer": "Odpowiedź klienta",
+    "client_rating": "Ocena klienta"
   },
   "sms": {
     "send_message": "Wyślij wiadomość SMS",
@@ -243,7 +251,9 @@
     "edit_survey": "Edycja ankiety",
     "updated_successfully": "Zaktualizowano ankietę",
     "required": "Pole wymagane",
-    "text_response_example": "Odpowiedź"
+    "text_response_example": "Odpowiedź",
+    "rating_scale": "Skala ocen",
+    "found_surveys": "znaleionych ankiet"
   },
   "errors": {
     "Email already exists": "Podany adres e-mail jest już zarejestrowany",

@@ -14,12 +14,11 @@ import { motion } from "framer-motion";
 import {
     MessageSquare,
     CheckCircle2,
-    XCircle,
     Star,
     FileText,
     Clock,
     Link2,
-    Heart, Check
+    Check
 } from "lucide-react";
 
 export const ClientMessagesList = (): JSX.Element => {
@@ -40,25 +39,8 @@ export const ClientMessagesList = (): JSX.Element => {
     });
 
     const getStatusInfo = (msg: UserMessageResponse) => {
-        if (msg.completed && msg.is_survey && msg.feedback_content) {
-            return {
-                label: t("messages.survey_completed_with_feedback"),
-                icon: <FileText className="w-4 h-4" />,
-                variant: "default" as const,
-                color: "text-indigo-600 bg-indigo-50"
-            };
-        }
 
-        if (msg.feedback_response === "positiveResponse") {
-            return {
-                label: t("messages.positive_rating"),
-                icon: <Heart className="w-4 h-4" />,
-                variant: "secondary" as const,
-                color: "text-green-600 bg-green-50"
-            };
-        }
-
-        if (msg.completed && msg.feedback_content) {
+        if (msg.completed) {
             return {
                 label: t("messages.received_feedback"),
                 icon: <Check className="w-4 h-4" />,
@@ -123,7 +105,7 @@ export const ClientMessagesList = (): JSX.Element => {
                         return (
                             <motion.div
                                 key={msg.id}
-                                initial={{ opacity: 0, x: -30 }}
+                                initial={{ opacity: 0, x: -10 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: index * 0.05 }}
                             >
@@ -131,17 +113,29 @@ export const ClientMessagesList = (): JSX.Element => {
                                     <Card className="bg-white/80 backdrop-blur-md hover:bg-white/95 border border-gray-200/50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden">
                                         <CardContent className="p-6">
                                             <div className="flex gap-5 items-start">
-                                                <div className="p-3 rounded-xl bg-gradient-to-br from-indigo-100 to-purple-100">
+                                                <div className="p-1 rounded-xl bg-gradient-to-br from-indigo-100 to-purple-100">
                                                     {msg.is_survey ? <FileText className="w-6 h-6 text-indigo-600" />
                                                         : msg.is_rating ? <Star className="w-6 h-6 text-yellow-500" />
                                                             : <MessageSquare className="w-6 h-6 text-gray-600" />}
+
+
                                                 </div>
 
-                                                <div className="flex-1 space-y-3">
+                                                <div className="flex-1 ">
                                                     <div className="flex justify-between items-start">
-                                                        <Badge variant="outline" className="font-medium">
-                                                            {msg.messageType.toUpperCase()}
-                                                        </Badge>
+                                                        <div>
+                                                            <Badge variant="outline" className="font-medium mr-2">
+                                                                {msg.messageType.toUpperCase()}
+                                                            </Badge>
+                                                            <Badge variant="outline" className="font-medium">
+                                                                {msg.is_survey ? (<p>{t("common.survey")}</p>)
+                                                                    : msg.is_rating ? (<p>{t("common.rating")}</p>)
+                                                                        : (<p>{t("common.simple_feedback")}</p>)}
+                                                            </Badge>
+                                                        </div>
+
+
+
                                                         <span className="text-sm text-gray-500">
                                                             {format(new Date(msg.send_at), "dd MMM yyyy, HH:mm", { locale: pl })}
                                                         </span>

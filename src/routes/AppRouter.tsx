@@ -37,11 +37,11 @@ const PrivateRoute = observer(() => {
 
 function DashboardLayout() {
     return (
-        <div className="flex min-h-screen bg-gray-50">
+        <div className="flex min-h-screen bg-gray-50 ">
             <Sidebar />
             <div className="flex flex-col flex-1">
                 <Navbar />
-                <main className="p-6 flex-1 overflow-y-auto">
+                <main className="p-6 flex-1 overflow-y-auto min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 px-6 py-12 overflow-hidden relative">
                     <Outlet />
                 </main>
             </div>
