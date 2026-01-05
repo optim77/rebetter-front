@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { type Client, clientsApi } from "@/api/clientsApi";
-import { SMSMessagesAPI } from "@/api/SMSMessagesAPI";
+import { MessagesAPI } from "@/api/MessagesAPI.ts";
 import { toast } from "react-hot-toast";
 import { handleApiError } from "@/utils/handleApiError";
 import type { ApiError } from "@/types/apiError";
@@ -14,14 +14,18 @@ import { ServiceForMessageSelector } from "@/components/messages/ServiceForMessa
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { type Survey, SurveysAPI } from "@/api/SurveysAPI.ts";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip.tsx";
+import { Tooltip } from "@/components/ui/tooltip.tsx";
 import { Info, MessageSquareText, Star, FileText } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select.tsx";
 import { Checkbox } from "@/components/ui/checkbox.tsx";
 import { TooltipHelper } from "@/components/elements/TooltipHelper.tsx";
 import { motion } from "framer-motion";
 
-export const SendSMSMessage = (): JSX.Element => {
+interface SendMessageProps {
+    messageType: "sms" | "email";
+}
+
+export const SendSMSMessage = ({messageType}: SendMessageProps): JSX.Element => {
     const { companyId, clientId } = useParams<{ companyId: string; clientId: string }>();
     const navigate = useNavigate();
 
@@ -33,19 +37,23 @@ export const SendSMSMessage = (): JSX.Element => {
 
     const [form, setForm] = useState({
         message: "",
+        email: "",
         phone: "",
         service: "",
-        platform: "",
+        platform: undefined,
         type: "feedback",
         isRedirect: false,
         ratingQuestion: "",
         feedbackQuestion: "",
-        surveyId: "",
+        surveyId: undefined,
     });
 
     useEffect(() => {
         if (userData?.phone) {
             setForm((prev) => ({ ...prev, phone: userData.phone }));
+        }
+        if (userData?.email) {
+            setForm((prev) => ({ ...prev, email: userData.email }));
         }
     }, [userData]);
 
@@ -57,7 +65,11 @@ export const SendSMSMessage = (): JSX.Element => {
                 ...(form.type === "feedback" && { feedbackQuestion: form.feedbackQuestion }),
                 ...(form.type === "survey" && { surveyId: form.surveyId || undefined }),
             };
-            return SMSMessagesAPI.createMessage(payload, companyId!, clientId!);
+            if (messageType === "sms") {
+                return MessagesAPI.createSMSMessage(payload, companyId!, clientId!);
+            } else if (messageType === "email") {
+                return MessagesAPI.createEmailMessage(payload, companyId!, clientId!);
+            }
         },
         onSuccess: () => {
             toast.success(t("common.sent_successfully"));
@@ -113,7 +125,7 @@ export const SendSMSMessage = (): JSX.Element => {
                                 <MessageSquareText className="w-10 h-10" />
                             </div>
                             <h1 className="text-4xl font-extrabold">
-                                {t("sms.send_message")}
+                                {messageType === "sms" ? t("messages.send_sms_message_header") : t("messages.send_email_message_header")}
                             </h1>
                         </div>
                         <p className="mt-4 text-indigo-100">
@@ -126,18 +138,30 @@ export const SendSMSMessage = (): JSX.Element => {
                             <div className="flex items-center gap-2">
                                 <Label className="text-lg font-semibold flex items-center gap-2">
                                     <MessageSquareText className="w-5 h-5 text-indigo-600" />
-                                    {t("sms.phone")}
+                                    {messageType === "sms" ? t("sms.phone") : t("sms.email")}
                                 </Label>
                                 <TooltipHelper content={t("messages.phone_number_info")} />
                             </div>
-                            <Input
-                                name="phone"
-                                value={form.phone}
-                                onChange={handleChange}
-                                placeholder="+48 123 456 789"
-                                className="text-base py-6 rounded-2xl"
-                                required
-                            />
+                            {messageType === "sms" ? (
+                                <Input
+                                    name="phone"
+                                    value={form.phone}
+                                    onChange={handleChange}
+                                    placeholder="+48 123 456 789"
+                                    className="text-base py-6 rounded-2xl"
+                                    required
+                                />
+                            ) : (
+                                <Input
+                                    name="email"
+                                    value={form.email}
+                                    onChange={handleChange}
+                                    placeholder="+48 123 456 789"
+                                    className="text-base py-6 rounded-2xl"
+                                    required
+                                />
+                            )}
+
                         </div>
 
                         <div className="space-y-6">

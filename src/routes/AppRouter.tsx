@@ -28,6 +28,8 @@ import { CreateSurvey } from "@/pages/surveys/CreateSurvey.tsx";
 import { Survey } from "@/pages/surveys/Survey.tsx";
 import { EditSurvey } from "@/pages/surveys/EditSurvey.tsx";
 import { PostFeedbackView } from "@/components/review/PostFeedbackView.tsx";
+import { AnalyticSurvey } from "@/pages/surveys/AnalyticSurvey.tsx";
+import { EditClient } from "@/pages/clients/EditClient.tsx";
 
 
 const PrivateRoute = observer(() => {
@@ -81,13 +83,16 @@ export default function AppRouter() {
 
                         <Route path="company/:companyId/client/:clientId" element={<Outlet />}>
                             <Route index element={<Client />} />
-                            <Route path="send_sms" element={<SendSMSMessage/>} />
-                            <Route path="sms_message_details/:smsId" element={<SMSMessageDetails/>} />
+                            <Route path="send_sms" element={<SendSMSMessage messageType={"sms"} />} />
+                            <Route path="send_email" element={<SendSMSMessage messageType={"email"} />} />
+                            <Route path="sms_message_details/:smsId" element={<SMSMessageDetails />} />
+                            <Route path="edit" element={<EditClient />} />
                         </Route>
 
                         <Route path="company/:companyId/survey/:surveyId" element={<Outlet />}>
                             <Route index element={<Survey />} />
-                            <Route path="edit" element={<EditSurvey/>} />
+                            <Route path="edit" element={<EditSurvey />} />
+                            <Route path="analytics" element={<AnalyticSurvey />} />
                         </Route>
 
 

@@ -15,7 +15,8 @@
     "open": "Otwórz",
     "choose": "Wybierz",
     "sending": "Wysyłanie",
-    "update": "Edytuj"
+    "update": "Edytuj",
+    "save_changes": "Zapisz zmiany"
   },
   "common": {
     "sent_successfully": "Wysłano pomyślnie",
@@ -69,7 +70,8 @@
     "service": "Usługa",
     "note": "Notatki",
     "created_successfully": "Poprawnie utworzono klienta",
-    "found_clients": "znalezionych klientów"
+    "found_clients": "znalezionych klientów",
+    "edit_client": "Edytuj dane klienta"
   },
   "companies": {
     "companies": "Firmy",
@@ -176,7 +178,9 @@
     "received_feedback": "Otrzymano odpowiedź",
     "history": "Historia wiadomości",
     "client_answer": "Odpowiedź klienta",
-    "client_rating": "Ocena klienta"
+    "client_rating": "Ocena klienta",
+    "send_sms_message_header": "Wyślij wiadomość SMS",
+    "send_email_message_header": "Wyślij wiadomość Email"
   },
   "sms": {
     "send_message": "Wyślij wiadomość SMS",
@@ -186,7 +190,8 @@
     "enter_message": "Wprowadź wiadomość",
     "enter_phone": "Wprowadź numer",
     "no_message_data": "Brak danych wiadomości",
-    "sms_message_details": "Szczegóły wiadomości SMS"
+    "sms_message_details": "Szczegóły wiadomości SMS",
+    "email": "Email"
   },
   "auth": {
     "login_title": "Zaloguj się na swoje konto",
@@ -253,7 +258,19 @@
     "required": "Pole wymagane",
     "text_response_example": "Odpowiedź",
     "rating_scale": "Skala ocen",
-    "found_surveys": "znaleionych ankiet"
+    "found_surveys": "znaleionych ankiet",
+    "analytics": "Analityka",
+    "text_answers": "Odpowiedzi tekstowe klientów:",
+    "votes": "głosów",
+    "responses_distribution": "Rozkład odpowiedzi:",
+    "average_rating": "Średnia ocen",
+    "answers": "odpowiedzi",
+    "surveys_counter": "Liczba wypełnionych ankiet",
+    "back_to_surveys": "Powrót do ankiet",
+    "cannot_load": "Nie udało się załadować analityki ankiety",
+    "loading": "Ładowanie analityki... (W przypadku dużej ilości odpowiedzi może to chwilę potrwać) ",
+    "answers_count": "Liczba odpowiedzi:",
+    "filled_by": "Uzupełnione przez"
   },
   "errors": {
     "Email already exists": "Podany adres e-mail jest już zarejestrowany",

@@ -7,7 +7,6 @@ export interface Client {
     name: string;
     email: string;
     phone: string;
-    service: string;
     note: string;
     company_id: string;
 }
@@ -24,7 +23,6 @@ export interface CreateClient{
     name: string;
     email: string;
     phone: string;
-    service: string;
     note: string;
 }
 

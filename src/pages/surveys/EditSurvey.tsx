@@ -160,7 +160,7 @@ const SortableQuestion = ({
 };
 
 export const EditSurvey = (): JSX.Element => {
-    const {t} = useTranslation();
+
     const {companyId, surveyId} = useParams<{
         companyId: string;
         surveyId: string;

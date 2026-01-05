@@ -84,9 +84,19 @@ export default function Client() {
 
                             <CardContent className="p-10 space-y-8 text-center">
                                 <div>
+                                    <p className="text-sm text-gray-500 mb-1">{t("clients.name")}</p>
+                                    <div className="flex items-center justify-center gap-2">
+                                        <Mail className="w-5 h-5 text-indigo-600"/>
+                                        <p className="text-xl font-semibold text-gray-800">
+                                            {client.name || "-"}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div>
                                     <p className="text-sm text-gray-500 mb-1">{t("clients.email")}</p>
                                     <div className="flex items-center justify-center gap-2">
-                                        <Mail className="w-5 h-5 text-indigo-600" />
+                                        <Mail className="w-5 h-5 text-indigo-600"/>
                                         <p className="text-xl font-semibold text-gray-800">
                                             {client.email || "-"}
                                         </p>
@@ -96,7 +106,7 @@ export default function Client() {
                                 <div>
                                     <p className="text-sm text-gray-500 mb-1">{t("clients.phone")}</p>
                                     <div className="flex items-center justify-center gap-2">
-                                        <Phone className="w-5 h-5 text-indigo-600" />
+                                        <Phone className="w-5 h-5 text-indigo-600"/>
                                         <p className="text-xl font-semibold text-gray-800">
                                             {client.phone || "-"}
                                         </p>
@@ -104,26 +114,29 @@ export default function Client() {
                                 </div>
                                 <div className="grid grid-cols-2 gap-2 pt-6 border-t border-gray-200">
                                     <Link to="send_email">
-                                        <Button className="w-full rounded-2xl bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 shadow-lg">
-                                            <Mail className="w-10 h-5 mr-2" />
+                                        <Button
+                                            className="w-full rounded-2xl bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 shadow-lg">
+                                            <Mail className="w-10 h-5 mr-2"/>
                                             {t("messages.send_email_message")}
                                         </Button>
                                     </Link>
 
                                     <Link to="send_sms">
-                                        <Button className="w-full rounded-2xl bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 shadow-lg">
-                                            <MessageSquareText className="w-10 h-5 mr-2" />
+                                        <Button
+                                            className="w-full rounded-2xl bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 shadow-lg">
+                                            <MessageSquareText className="w-10 h-5 mr-2"/>
                                             {t("messages.send_sms_message")}
                                         </Button>
                                     </Link>
-
-                                    <Button variant="outline" className="w-full rounded-2xl hover:bg-indigo-50">
-                                        <Edit3 className="w-5 h-5 mr-2" />
-                                        {t("action.edit")}
-                                    </Button>
+                                    <Link to={`edit`}>
+                                        <Button variant="outline" className="w-full rounded-2xl hover:bg-indigo-50">
+                                            <Edit3 className="w-5 h-5 mr-2"/>
+                                            {t("action.edit")}
+                                        </Button>
+                                    </Link>
 
                                     <Button variant="destructive" className="w-full rounded-2xl">
-                                        <Trash2 className="w-5 h-5 mr-2" />
+                                        <Trash2 className="w-5 h-5 mr-2"/>
                                         {t("action.delete")}
                                     </Button>
                                 </div>
@@ -132,10 +145,11 @@ export default function Client() {
                     </div>
 
                     <div className="lg:col-span-2">
-                        <Card className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/60 h-full">
+                        <Card
+                            className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/60 h-full">
                             <div className="bg-gradient-to-r from-indigo-500 to-purple-600 p-8 text-white">
                                 <h2 className="text-2xl font-bold flex items-center gap-3">
-                                    <MessageSquareText className="w-8 h-8" />
+                                    <MessageSquareText className="w-8 h-8"/>
                                     {t("messages.history")}
                                 </h2>
                             </div>

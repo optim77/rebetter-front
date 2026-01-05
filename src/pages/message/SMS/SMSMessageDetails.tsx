@@ -1,7 +1,7 @@
 import { type JSX } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { SMSMessagesAPI } from "@/api/SMSMessagesAPI.ts";
+import { MessagesAPI } from "@/api/MessagesAPI.ts";
 import { t } from "i18next";
 import { format } from "date-fns";
 import { pl } from "date-fns/locale";
@@ -36,7 +36,7 @@ export const SMSMessageDetails = (): JSX.Element => {
         error,
     } = useQuery({
         queryKey: ["SMSMessage", companyId, clientId, smsId],
-        queryFn: async () => SMSMessagesAPI.fetchSMSMessageDetails(companyId!, clientId!, smsId!),
+        queryFn: async () => MessagesAPI.fetchSMSMessageDetails(companyId!, clientId!, smsId!),
         enabled: !!companyId && !!clientId && !!smsId,
     });
 

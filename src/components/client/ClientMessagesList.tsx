@@ -1,7 +1,7 @@
 import { type JSX, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "react-router-dom";
-import { SMSMessagesAPI, type UserMessageResponse } from "@/api/SMSMessagesAPI";
+import { MessagesAPI, type UserMessageResponse } from "@/api/MessagesAPI.ts";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -34,7 +34,7 @@ export const ClientMessagesList = (): JSX.Element => {
         error,
     } = useQuery({
         queryKey: ["messages", companyId, clientId, page],
-        queryFn: async () => SMSMessagesAPI.fetchMessagesForUser(companyId!, clientId!, page, pageSize),
+        queryFn: async () => MessagesAPI.fetchMessagesForUser(companyId!, clientId!, page, pageSize),
         enabled: !!companyId && !!clientId,
     });
 

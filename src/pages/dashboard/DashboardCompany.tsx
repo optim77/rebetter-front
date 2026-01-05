@@ -1,7 +1,5 @@
 import { type JSX } from "react";
 import AddServiceButton from "@/components/elements/AddServiceButton.tsx";
-import ReviewStats from "@/components/elements/ReviewStats.tsx";
-import MediaAddress from "@/components/elements/MediaAddress.tsx";
 import { useParams } from "react-router-dom";
 import { useCompany } from "@/hooks/useCompany.ts";
 import { motion } from "framer-motion";
@@ -33,8 +31,7 @@ export default function DashboardCompany(): JSX.Element {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <AddServiceButton companyId={companyId!} />
-                    <ReviewStats />
-                    <MediaAddress data={query.data} />
+
                 </div>
             </motion.div>
         </div>

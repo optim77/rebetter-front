@@ -49,4 +49,8 @@ export const SurveysAPI = {
         const res = await api.delete(`/surveys/${companyId}/${surveyId}`);
         return res.data;
     },
+    getSurveyAnalytic: async (companyId: string, surveyId: string) => {
+        const res = await api.get(`/surveys/${companyId}/${surveyId}/analytic`);
+        return res.data;
+    }
 };

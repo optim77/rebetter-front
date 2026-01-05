@@ -76,9 +76,13 @@ export type SMSMessageDetailsResponse = {
     is_redirect: boolean | null;
 }
 
-export const SMSMessagesAPI = {
-    createMessage: async (message: CreateMessage, company_id: string, client_id: string) => {
+export const MessagesAPI = {
+    createSMSMessage: async (message: CreateMessage, company_id: string, client_id: string) => {
         const res = await api.post(`/messages/${company_id}/${client_id}/send_single_sms`, message);
+        return res.data;
+    },
+    createEmailMessage: async (message: CreateMessage, company_id: string, client_id: string) => {
+        const res = await api.post(`/messages/${company_id}/${client_id}/send_single_email`, message);
         return res.data;
     },
     fetchMessagesForUser: async (company_id: string, client_id: string, page = 1, size = 5) => {

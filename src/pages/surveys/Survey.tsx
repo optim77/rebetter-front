@@ -9,7 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { Badge } from "@/components/ui/badge.tsx";
 import { motion } from "framer-motion";
-import { FileText, Edit3, Trash2, Star, MessageSquare, CheckCircle2 } from "lucide-react";
+import { FileText, Edit3, Trash2, Star, MessageSquare, CheckCircle2, ChartArea } from "lucide-react";
 import { handleApiError } from "@/utils/handleApiError.ts";
 import toast from "react-hot-toast";
 
@@ -108,6 +108,13 @@ export const Survey = (): JSX.Element => {
                             </div>
 
                             <div className="flex gap-3">
+                                <Button
+                                    onClick={() => navigate(`/dashboard/company/${companyId}/survey/${surveyId}/analytics`)}
+                                    className="bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-md"
+                                >
+                                    <ChartArea className="w-5 h-5 mr-2" />
+                                    {t("surveys.analytics")}
+                                </Button>
                                 <Button
                                     onClick={() => navigate(`/dashboard/company/${companyId}/survey/${surveyId}/edit`)}
                                     className="bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-md"
