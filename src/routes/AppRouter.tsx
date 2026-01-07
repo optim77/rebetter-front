@@ -19,7 +19,7 @@ import Campaign from "@/pages/campaings/Campaign.tsx";
 import Services from "@/pages/services/Services.tsx";
 import DashboardHome from "@/pages/dashboard/DashboardHome.tsx";
 import CreateService from "@/pages/services/CreateService.tsx";
-import { SendSMSMessage } from "@/pages/messages/SendSMSMessage.tsx";
+import { SendMessage } from "@/pages/messages/SendMessage.tsx";
 import { Review } from "@/pages/reviews/Review.tsx";
 import { PostNegativeReviewView } from "@/components/review/PostNegativeReviewView.tsx";
 import { SMSMessageDetails } from "@/pages/message/SMS/SMSMessageDetails.tsx";
@@ -30,6 +30,8 @@ import { EditSurvey } from "@/pages/surveys/EditSurvey.tsx";
 import { PostFeedbackView } from "@/components/review/PostFeedbackView.tsx";
 import { AnalyticSurvey } from "@/pages/surveys/AnalyticSurvey.tsx";
 import { EditClient } from "@/pages/clients/EditClient.tsx";
+import { Templates } from "@/pages/templates/Templates.tsx";
+import { CreateTemplate } from "@/pages/templates/CreateTemplate.tsx";
 
 
 const PrivateRoute = observer(() => {
@@ -83,8 +85,8 @@ export default function AppRouter() {
 
                         <Route path="company/:companyId/client/:clientId" element={<Outlet />}>
                             <Route index element={<Client />} />
-                            <Route path="send_sms" element={<SendSMSMessage messageType={"sms"} />} />
-                            <Route path="send_email" element={<SendSMSMessage messageType={"email"} />} />
+                            <Route path="send_sms" element={<SendMessage messageType={"sms"} />} />
+                            <Route path="send_email" element={<SendMessage messageType={"email"} />} />
                             <Route path="sms_message_details/:smsId" element={<SMSMessageDetails />} />
                             <Route path="edit" element={<EditClient />} />
                         </Route>
@@ -93,6 +95,12 @@ export default function AppRouter() {
                             <Route index element={<Survey />} />
                             <Route path="edit" element={<EditSurvey />} />
                             <Route path="analytics" element={<AnalyticSurvey />} />
+                        </Route>
+
+                        <Route path="company/:companyId/templates" element={<Outlet />}>
+                            <Route index element={<Templates />} />
+                            <Route path="templates" element={<Templates />} />
+                            <Route path="create" element={<CreateTemplate />} />
                         </Route>
 
 

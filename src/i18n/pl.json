@@ -272,6 +272,10 @@
     "answers_count": "Liczba odpowiedzi:",
     "filled_by": "Uzupełnione przez"
   },
+  "templates": {
+    "create_heading": "Kreator szablonów e-mail",
+    "name": "Nazwa"
+  },
   "errors": {
     "Email already exists": "Podany adres e-mail jest już zarejestrowany",
     "Invalid credentials": "Nieprawidłowy adres e-mail lub hasło",

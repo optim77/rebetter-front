@@ -47,6 +47,7 @@ export default function Sidebar() {
                             <Vote className="w-4 h-4" />
                             {t("sidebar.surveys")}
                         </NavLink>
+ 
                     </>
                 )}
             </nav>

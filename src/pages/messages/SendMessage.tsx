@@ -25,7 +25,7 @@ interface SendMessageProps {
     messageType: "sms" | "email";
 }
 
-export const SendSMSMessage = ({messageType}: SendMessageProps): JSX.Element => {
+export const SendMessage = ({messageType}: SendMessageProps): JSX.Element => {
     const { companyId, clientId } = useParams<{ companyId: string; clientId: string }>();
     const navigate = useNavigate();
 
