@@ -231,7 +231,7 @@ export const SMSMessageDetails = (): JSX.Element => {
                         {msg.service_name && msg.service_id && (
                             <Section title={t("common.service")} icon={<Globe className="w-5 h-5"/>}>
                                 <Link
-                                    to={`/dashboard/company/${companyId}/services/${msg.service_id}`}
+                                    to={`/dashboard/group/${companyId}/services/${msg.service_id}`}
                                     className="text-indigo-600 font-semibold hover:underline text-lg"
                                 >
                                     {msg.service_name}

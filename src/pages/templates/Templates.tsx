@@ -6,7 +6,7 @@ export const Templates = ():JSX.Element => {
     const { companyId } = useParams<{ companyId: string }>();
     return (
         <>
-            <Link to={`/dashboard/company/${companyId}/templates/create`}>{t("action.create")}</Link>
+            <Link to={`/dashboard/group/${companyId}/templates/create`}>{t("action.create")}</Link>
         </>
     )
 }

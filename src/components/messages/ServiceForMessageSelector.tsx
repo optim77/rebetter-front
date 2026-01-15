@@ -46,7 +46,7 @@ export const ServiceForMessageSelector = ({ onSelect, selected }: Props): JSX.El
     if (!serviceData?.items?.length) {
         return (
             <Link
-                to={`/dashboard/company/${companyId}/create_service`}
+                to={`/dashboard/group/${companyId}/create_service`}
                 className="text-blue-600 underline"
             >
                 {t("services.add_services_info")}

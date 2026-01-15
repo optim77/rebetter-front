@@ -49,7 +49,7 @@ export const Survey = (): JSX.Element => {
         },
         onSuccess: () => {
             toast.success(t("surveys.delete_surveys"));
-            navigate(`/dashboard/company/${companyId}/surveys`);
+            navigate(`/dashboard/group/${companyId}/surveys`);
         },
         onError: (err) => {
             const apiError = handleApiError(err);
@@ -109,14 +109,14 @@ export const Survey = (): JSX.Element => {
 
                             <div className="flex gap-3">
                                 <Button
-                                    onClick={() => navigate(`/dashboard/company/${companyId}/survey/${surveyId}/analytics`)}
+                                    onClick={() => navigate(`/dashboard/group/${companyId}/survey/${surveyId}/analytics`)}
                                     className="bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-md"
                                 >
                                     <ChartArea className="w-5 h-5 mr-2" />
                                     {t("surveys.analytics")}
                                 </Button>
                                 <Button
-                                    onClick={() => navigate(`/dashboard/company/${companyId}/survey/${surveyId}/edit`)}
+                                    onClick={() => navigate(`/dashboard/group/${companyId}/survey/${surveyId}/edit`)}
                                     className="bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-md"
                                 >
                                     <Edit3 className="w-5 h-5 mr-2" />

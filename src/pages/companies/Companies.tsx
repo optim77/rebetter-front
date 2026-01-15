@@ -77,7 +77,7 @@ export default function Companies() {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: index * 0.1, duration: 0.6 }}
                             >
-                                <Link to={`/dashboard/company/${company.id}`}>
+                                <Link to={`/dashboard/group/${company.id}`}>
                                     <div className="group bg-white/80 backdrop-blur-md rounded-3xl shadow-lg hover:shadow-2xl border border-white/50 overflow-hidden transition-all duration-500 hover:-translate-y-3">
                                         <div className="bg-gradient-to-r from-indigo-500 to-purple-600 p-8 text-white">
                                             <div className="w-20 h-20 mx-auto bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center shadow-xl">

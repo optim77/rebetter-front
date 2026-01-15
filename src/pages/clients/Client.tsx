@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, Mail, Phone, User, Edit3, Trash2, MessageSquareText } from "lucide-react";
 import { t } from "i18next";
-import { clientsApi } from "@/api/clientsApi.ts";
+import { clientsApi } from "@/api/ClientsApi.ts";
 import { ClientMessagesList } from "@/components/client/ClientMessagesList.tsx";
 import { motion } from "framer-motion";
 
@@ -61,7 +61,7 @@ export default function Client() {
                 className="max-w-6xl mx-auto space-y-10"
             >
                 <div className="flex items-center gap-4">
-                    <Link to={`/dashboard/company/${companyId}/clients`}>
+                    <Link to={`/dashboard/group/${companyId}/clients`}>
                         <Button variant="ghost" className="rounded-2xl hover:bg-white/70 shadow-md">
                             <ArrowLeft className="w-6 h-6 mr-2" />
                             {t("action.back")}

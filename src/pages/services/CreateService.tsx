@@ -25,7 +25,7 @@ export default function CreateService() {
             servicesApi.createService(form, companyId),
         onSuccess: () => {
             toast.success(t("services.created_successfully"));
-            navigate(`/dashboard/company/${companyId}/services`);
+            navigate(`/dashboard/group/${companyId}/services`);
         },
         onError: (error) => {
             const apiError: ApiError = handleApiError(error);

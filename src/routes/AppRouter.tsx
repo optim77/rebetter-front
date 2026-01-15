@@ -61,17 +61,17 @@ export default function AppRouter() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/registered" element={<Registered />} />
-                <Route path="/invitations/review/:companyId/:clientId/:trackingId" element={<Review />} />
+                <Route path="/invitations/review/:groupId/:clientId/:trackingId" element={<Review />} />
                 <Route path="/post_negative" element={<PostNegativeReviewView />} />
                 <Route path="/post_feedback" element={<PostFeedbackView />} />
 
                 <Route element={<PrivateRoute />}>
                     <Route path="/dashboard" element={<DashboardLayout />}>
                         <Route index element={<DashboardHome />} />
-                        <Route path="create_company" element={<CreateCompany />} />
+                        <Route path="create_group" element={<CreateCompany />} />
                         <Route path="companies" element={<Companies />} />
 
-                        <Route path="company/:companyId" element={<Outlet />}>
+                        <Route path="group/:groupId" element={<Outlet />}>
                             <Route index element={<DashboardCompany />} />
                             <Route path="create_client" element={<CreateClient />} />
                             <Route path="client" element={<Client />} />
@@ -83,7 +83,7 @@ export default function AppRouter() {
                             <Route path="surveys/create" element={<CreateSurvey />} />
                         </Route>
 
-                        <Route path="company/:companyId/client/:clientId" element={<Outlet />}>
+                        <Route path="group/:groupId/client/:clientId" element={<Outlet />}>
                             <Route index element={<Client />} />
                             <Route path="send_sms" element={<SendMessage messageType={"sms"} />} />
                             <Route path="send_email" element={<SendMessage messageType={"email"} />} />
@@ -91,13 +91,13 @@ export default function AppRouter() {
                             <Route path="edit" element={<EditClient />} />
                         </Route>
 
-                        <Route path="company/:companyId/survey/:surveyId" element={<Outlet />}>
+                        <Route path="group/:groupId/survey/:surveyId" element={<Outlet />}>
                             <Route index element={<Survey />} />
                             <Route path="edit" element={<EditSurvey />} />
                             <Route path="analytics" element={<AnalyticSurvey />} />
                         </Route>
 
-                        <Route path="company/:companyId/templates" element={<Outlet />}>
+                        <Route path="group/:groupId/templates" element={<Outlet />}>
                             <Route index element={<Templates />} />
                             <Route path="templates" element={<Templates />} />
                             <Route path="create" element={<CreateTemplate />} />

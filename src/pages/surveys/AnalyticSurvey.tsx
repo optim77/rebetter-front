@@ -93,7 +93,7 @@ export const AnalyticSurvey = (): JSX.Element => {
             >
                 {/* Nagłówek */}
                 <div className="flex items-center justify-between">
-                    <Link to={`/dashboard/company/${companyId}/surveys`}>
+                    <Link to={`/dashboard/group/${companyId}/surveys`}>
                         <Button variant="ghost" className="rounded-2xl hover:bg-white/70 shadow-md">
                             <ArrowLeft className="w-6 h-6 mr-2" />
                             {t("surveys.back_to_surveys")}
@@ -138,7 +138,7 @@ export const AnalyticSurvey = (): JSX.Element => {
                             {Object.entries(survey.users).slice(0, expandedUsers ? undefined : 8).map(([clientId, clientName]) => (
                                 <Link
                                     key={clientId}
-                                    to={`/dashboard/company/${companyId}/client/${clientId}`}
+                                    to={`/dashboard/group/${companyId}/client/${clientId}`}
                                     className="text-center p-4 bg-gray-50 rounded-2xl hover:bg-indigo-50 hover:shadow-md transition-all"
                                 >
                                     <p className="font-medium text-gray-800">{clientName}</p>
@@ -293,7 +293,7 @@ export const AnalyticSurvey = (): JSX.Element => {
                                                     {record.answers.map((ans, i) => (
                                                         <div key={i} className="flex justify-between items-center p-4 bg-gray-50 rounded-xl">
                                                             <Link
-                                                                to={`/dashboard/company/${companyId}/client/${ans.client_id}`}
+                                                                to={`/dashboard/group/${companyId}/client/${ans.client_id}`}
                                                                 className="font-medium text-indigo-600 hover:underline"
                                                             >
                                                                 {ans.client_email}
@@ -336,7 +336,7 @@ export const AnalyticSurvey = (): JSX.Element => {
                                                     {record.answers.map((ans, i) => (
                                                         <div key={i} className="flex justify-between items-center p-3 bg-gray-50 rounded-xl">
                                                             <Link
-                                                                to={`/dashboard/company/${companyId}/client/${ans.client_id}`}
+                                                                to={`/dashboard/group/${companyId}/client/${ans.client_id}`}
                                                                 className="text-indigo-600 hover:underline"
                                                             >
                                                                 {ans.client_email}
@@ -355,7 +355,7 @@ export const AnalyticSurvey = (): JSX.Element => {
                                                     <div key={i} className="p-6 bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-md border border-gray-100">
                                                         <p className="italic text-gray-800 leading-relaxed text-lg">„{ans.answer}”</p>
                                                         <Link
-                                                            to={`/dashboard/company/${companyId}/client/${ans.client_id}`}
+                                                            to={`/dashboard/group/${companyId}/client/${ans.client_id}`}
                                                             className="inline-block mt-4 text-sm text-indigo-600 hover:underline font-medium"
                                                         >
                                                             — {ans.client_email}

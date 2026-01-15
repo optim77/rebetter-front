@@ -257,7 +257,7 @@ export const CreateSurvey = (): JSX.Element => {
 
         onSuccess: (data) => {
             toast.success(t("surveys.created_survey"));
-            navigate(`/dashboard/company/${companyId}/survey/${data.id}`);
+            navigate(`/dashboard/group/${companyId}/survey/${data.id}`);
         },
 
         onError: (error) => {

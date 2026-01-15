@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { type JSX } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 
 import {
     DndContext,
@@ -194,7 +193,7 @@ export const EditSurvey = (): JSX.Element => {
 
         onSuccess: () => {
             toast.success(t("surveys.updated_successfully"));
-            navigate(`/dashboard/company/${companyId}/survey/${surveyId}`);
+            navigate(`/dashboard/group/${companyId}/survey/${surveyId}`);
         },
 
         onError: (err) => {

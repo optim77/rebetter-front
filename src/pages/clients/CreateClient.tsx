@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button";
 import { t } from "i18next";
 import { toast } from "react-hot-toast";
 import { motion } from "framer-motion";
-import { UserPlus, Mail, Phone, Briefcase, NotepadText } from "lucide-react";
-import { clientsApi } from "@/api/clientsApi";
+import { UserPlus, Mail, Phone, NotepadText } from "lucide-react";
+import { clientsApi } from "@/api/ClientsApi.ts";
 import type { ApiError } from "@/types/apiError.ts";
 import { handleApiError } from "@/utils/handleApiError.ts";
 
@@ -26,7 +26,7 @@ export default function CreateClient() {
         mutationFn: async () => clientsApi.createClient(form, companyId!),
         onSuccess: () => {
             toast.success(t("clients.created_successfully"));
-            navigate(`/dashboard/company/${companyId}/clients`);
+            navigate(`/dashboard/group/${companyId}/clients`);
         },
         onError: (error) => {
             const apiError: ApiError = handleApiError(error);

@@ -47,7 +47,7 @@ export const useCreateCompany = () => {
                     defaultValue: "Company created successfully!",
                 })
             );
-            navigate(`/dashboard/company/${data.id}`);
+            navigate(`/dashboard/group/${data.id}`);
         },
         onError: (error) => {
             const apiError: ApiError = handleApiError(error);

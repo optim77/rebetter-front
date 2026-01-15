@@ -91,7 +91,7 @@ export default function CreateCompany() {
 
                         <div className="space-y-4">
                             <label className="text-lg font-semibold text-gray-800">
-                                {t("companies.social_media", { defaultValue: "Social Media Links" })}
+                                {t("companies.social_media")}
                             </label>
                             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                                 {socialOptions.map(({ key, label, icon: Icon }) => {

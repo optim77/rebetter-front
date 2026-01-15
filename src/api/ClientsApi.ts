@@ -5,6 +5,7 @@ import type { AxiosResponse } from "axios";
 export interface Client {
     id: string;
     name: string;
+    surname: string;
     email: string;
     phone: string;
     note: string;
@@ -21,6 +22,7 @@ export interface ClientResponse {
 
 export interface CreateClient{
     name: string;
+    surname: string;
     email: string;
     phone: string;
     note: string;
@@ -31,8 +33,9 @@ export const clientsApi = {
         const res = await api.get<Client>(`/clients/${companyId}/${clientId}`);
         return res.data;
     },
-    getClients: async (companyId: string, params: PaginationParams): Promise<AxiosResponse> => {
-        return await api.get<ClientResponse>(`/clients/${companyId}`, {params});
+    getClients: async (companyId: string, params: PaginationParams): Promise<ClientResponse> => {
+        const res = await api.get<ClientResponse>(`/clients/${companyId}`, {params});
+        return res.data;
     },
     createClient: async (data: CreateClient, companyId: string | undefined) => {
         if (!companyId) throw new Error();

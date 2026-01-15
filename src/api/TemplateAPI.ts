@@ -1,5 +1,13 @@
 import api from "@/api/axios.ts";
 
+export type TemplateResponse = {
+    items: Template[];
+    total: number
+    page: number,
+    size: number,
+    pages: number
+}
+
 export type Template = {
     id: string;
     name: string;
@@ -9,8 +17,8 @@ export type Template = {
 }
 
 export const TemplateAPI = {
-    fetchPublicTemplates: async (): Promise<Template[]> => {
-        const res = await api.get<Template[]>('/templates/public/list');
+    fetchPublicTemplates: async (): Promise<TemplateResponse> => {
+        const res = await api.get<TemplateResponse>('/templates/public/list');
         return res.data;
     }
 }

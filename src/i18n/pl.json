@@ -16,7 +16,10 @@
     "choose": "Wybierz",
     "sending": "Wysyłanie",
     "update": "Edytuj",
-    "save_changes": "Zapisz zmiany"
+    "save_changes": "Zapisz zmiany",
+    "clear": "Wyczyść",
+    "next": "Następna",
+    "previous": "Poprzednia"
   },
   "common": {
     "sent_successfully": "Wysłano pomyślnie",
@@ -58,7 +61,10 @@
     "no_answer": "Brak odpowiedzi",
     "service_id": "ID usługi",
     "redirect_portal": "Cel przekierowania",
-    "characters": "znaków"
+    "characters": "znaków",
+    "showing": "Wyświetlasz",
+    "of": "z",
+    "show": "Pokaż"
   },
   "clients": {
     "clients": "Klienci",
@@ -71,19 +77,22 @@
     "note": "Notatki",
     "created_successfully": "Poprawnie utworzono klienta",
     "found_clients": "znalezionych klientów",
-    "edit_client": "Edytuj dane klienta"
+    "edit_client": "Edytuj dane klienta",
+    "no_clients_found": "Nie znaleziono klientów",
+    "try_add_first": "Dodaj pierwszego klienta",
+    "no_clients": "Brak klientów"
   },
   "companies": {
-    "companies": "Firmy",
-    "add_company": "Dodaj firmę",
-    "create_title": "Utwórz firmę",
-    "name": "Nazwa firmy",
-    "name_placeholder": "Wpisz nazwę firmy",
+    "companies": "Grupy",
+    "add_company": "Dodaj grupę",
+    "create_title": "Utwórz grupę",
+    "name": "Nazwa grupy",
+    "name_placeholder": "Wpisz nazwę grupy",
     "description": "Opis",
     "description_placeholder": "Wpisz opis (opcjonalnie)",
-    "create_button": "Utwórz firmę",
+    "create_button": "Utwórz grupę",
     "creating": "Tworzenie...",
-    "created_successfully": "Firma została utworzona pomyślnie!",
+    "created_successfully": "Grupa została utworzona pomyślnie!",
     "google_review_link": "Link opinii google",
     "enter_google_review_link": "Wprowadź link opinii Google",
     "facebook_url": "Facebook URL",
@@ -103,7 +112,8 @@
     "choose_social_platform": "Wybierz platformę by wysłać wiadomość",
     "no_socials_available": "Brak dostępnych linków do opinii",
     "no_description": "Brak opisu",
-    "found_companies": "Znalezione firmy"
+    "found_companies": "Znalezione grupy",
+    "social_media": "Media społecznościowe"
   },
   "contact": {
     "head": "Skontaktuj się z nami",
@@ -180,7 +190,14 @@
     "client_answer": "Odpowiedź klienta",
     "client_rating": "Ocena klienta",
     "send_sms_message_header": "Wyślij wiadomość SMS",
-    "send_email_message_header": "Wyślij wiadomość Email"
+    "send_email_message_header": "Wyślij wiadomość Email",
+    "template": "Szablon Email",
+    "choose_template": "Wybierz szablon",
+    "no_template": "Brak szablonu",
+    "click_to_preview": "Kliknij aby podejrzeć",
+    "use_this_template": "Użyj tego szablonu",
+    "current_template": "Wybrany szablon",
+    "no_templates_available": "Brak dostępnych szablonów"
   },
   "sms": {
     "send_message": "Wyślij wiadomość SMS",
@@ -226,7 +243,7 @@
   },
   "sidebar": {
     "dashboard": "Pulpit",
-    "companies": "Firmy",
+    "companies": "Grupy",
     "clients": "Klienci",
     "campaign": "Kampanie",
     "services": "Usługi",

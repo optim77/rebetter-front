@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 export default function Sidebar() {
     const { t } = useTranslation();
-    const { companyId } = useParams();
+    const { groupId } = useParams();
 
     const linkClasses = ({ isActive }: { isActive: boolean }) =>
         `flex items-center gap-2 p-2 rounded-md transition ${
@@ -21,33 +21,33 @@ export default function Sidebar() {
                     {t("sidebar.companies")}
                 </NavLink>
 
-                {companyId && (
+                {groupId && (
                     <>
-                        <NavLink to={`/dashboard/company/${companyId}`} className={linkClasses}>
+                        <NavLink to={`/dashboard/group/${groupId}`} className={linkClasses}>
                             <LayoutDashboard className="w-4 h-4" />
                             {t("sidebar.dashboard")}
                         </NavLink>
 
-                        <NavLink to={`/dashboard/company/${companyId}/clients`} className={linkClasses}>
+                        <NavLink to={`/dashboard/group/${groupId}/clients`} className={linkClasses}>
                             <Users className="w-4 h-4" />
                             {t("sidebar.clients")}
                         </NavLink>
 
-                        {/*<NavLink to={`/dashboard/company/${companyId}/campaign`} className={linkClasses}>*/}
+                        {/*<NavLink to={`/dashboard/group/${companyId}/campaign`} className={linkClasses}>*/}
                         {/*    <TicketsPlane className="w-4 h-4" />*/}
                         {/*    {t("sidebar.campaign")}*/}
                         {/*</NavLink>*/}
 
-                        <NavLink to={`/dashboard/company/${companyId}/services`} className={linkClasses}>
+                        <NavLink to={`/dashboard/group/${groupId}/services`} className={linkClasses}>
                             <Briefcase className="w-4 h-4" />
                             {t("sidebar.services")}
                         </NavLink>
 
-                        <NavLink to={`/dashboard/company/${companyId}/surveys`} className={linkClasses}>
+                        <NavLink to={`/dashboard/group/${groupId}/surveys`} className={linkClasses}>
                             <Vote className="w-4 h-4" />
                             {t("sidebar.surveys")}
                         </NavLink>
- 
+
                     </>
                 )}
             </nav>

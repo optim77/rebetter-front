@@ -26,7 +26,7 @@ export default function Services() {
         <div className="p-6 space-y-4">
             <div className="flex justify-between items-center">
                 <h1 className="text-2xl font-bold">{t("services.services")}</h1>
-                <Link to={`/dashboard/company/${companyId}/create_service`}>
+                <Link to={`/dashboard/group/${companyId}/create_service`}>
                     <Button>
                         <PlusCircle className="w-4 h-4 mr-2" /> {t("services.add_service")}
                     </Button>
@@ -41,7 +41,7 @@ export default function Services() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {data && data.items.map((c: Service) => (
-                    <Link to={`/dashboard/company/${companyId}/services/${c.id}`}>
+                    <Link to={`/dashboard/group/${companyId}/services/${c.id}`}>
                         <div key={c.id} className="p-4 border rounded-xl bg-white shadow-sm">
                             <h2 className="text-lg font-semibold">{c.name}</h2>
                             <p className="text-gray-500 text-sm">{c.description}</p>

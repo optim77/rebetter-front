@@ -4,8 +4,8 @@ import { t } from "i18next";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { type Client, clientsApi } from "@/api/clientsApi";
-import { MessagesAPI } from "@/api/MessagesAPI.ts";
+import { type Client, clientsApi } from "@/api/ClientsApi.ts";
+import { type CreateMessage, MessagesAPI } from "@/api/MessagesAPI.ts";
 import { toast } from "react-hot-toast";
 import { handleApiError } from "@/utils/handleApiError";
 import type { ApiError } from "@/types/apiError";
@@ -20,6 +20,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox.tsx";
 import { TooltipHelper } from "@/components/elements/TooltipHelper.tsx";
 import { motion } from "framer-motion";
+import { SMSMessageCreator } from "@/pages/messages/SMSMessageCreator.tsx";
+import { TemplateSelector } from "@/pages/messages/TemplateSelector.tsx";
+import { EmailMessageCreator } from "@/pages/messages/EmailMessageCreator.tsx";
 
 interface SendMessageProps {
     messageType: "sms" | "email";
@@ -40,12 +43,13 @@ export const SendMessage = ({messageType}: SendMessageProps): JSX.Element => {
         email: "",
         phone: "",
         service: "",
-        platform: undefined,
+        platform: undefined as string | undefined,
         type: "feedback",
         isRedirect: false,
         ratingQuestion: "",
         feedbackQuestion: "",
-        surveyId: undefined,
+        surveyId: undefined as string | undefined,
+        template: undefined as string | undefined,
     });
 
     useEffect(() => {
@@ -59,7 +63,7 @@ export const SendMessage = ({messageType}: SendMessageProps): JSX.Element => {
 
     const mutation = useMutation({
         mutationFn: async () => {
-            const payload: any = {
+            const payload: CreateMessage = {
                 ...form,
                 ...(form.type === "rating" && { ratingQuestion: form.ratingQuestion }),
                 ...(form.type === "feedback" && { feedbackQuestion: form.feedbackQuestion }),
@@ -73,7 +77,7 @@ export const SendMessage = ({messageType}: SendMessageProps): JSX.Element => {
         },
         onSuccess: () => {
             toast.success(t("common.sent_successfully"));
-            navigate(`/dashboard/company/${companyId}/clients`);
+            navigate(`/dashboard/group/${companyId}/clients`);
         },
         onError: (error) => {
             const apiError: ApiError = handleApiError(error);
@@ -166,7 +170,7 @@ export const SendMessage = ({messageType}: SendMessageProps): JSX.Element => {
 
                         <div className="space-y-6">
                             <Label className="text-lg font-semibold">{t("messages.message_type")}</Label>
-                            <RadioGroup value={form.type} onValueChange={(v) => setForm(prev => ({ ...prev, type: v as any }))}>
+                            <RadioGroup value={form.type} onValueChange={(v) => setForm(prev => ({ ...prev, type: v as string }))}>
                                 <div className="space-y-4">
                                     <div className="flex items-center gap-4 p-4 rounded-2xl hover:bg-indigo-50/50 transition">
                                         <RadioGroupItem value="feedback" id="feedback" />
@@ -235,7 +239,7 @@ export const SendMessage = ({messageType}: SendMessageProps): JSX.Element => {
                                                     </SelectContent>
                                                 </Select>
                                             )}
-                                            <Link target="_blank" to={`/dashboard/company/${companyId}/surveys`} className="text-indigo-600 hover:underline text-sm">
+                                            <Link target="_blank" to={`/dashboard/group/${companyId}/surveys`} className="text-indigo-600 hover:underline text-sm">
                                                 {t("messages.your_surveys")}
                                             </Link>
                                         </motion.div>
@@ -268,24 +272,21 @@ export const SendMessage = ({messageType}: SendMessageProps): JSX.Element => {
                             onSelect={(social) => setForm(prev => ({ ...prev, platform: social.social }))}
                         />
 
-                        <div className="space-y-3">
-                            <div className="flex items-center gap-2">
-                                <Label className="text-lg font-semibold flex items-center gap-2">
-                                    <MessageSquareText className="w-5 h-5 text-indigo-600" />
-                                    {t("sms.message")}
-                                </Label>
-                                <TooltipHelper content={t("messages.message")} />
-                            </div>
-                            <textarea
-                                name="message"
-                                value={form.message}
-                                onChange={handleChange}
-                                placeholder={t("sms.enter_message")}
-                                className="w-full h-40 px-6 py-4 rounded-2xl border border-gray-200 focus:ring-4 focus:ring-indigo-300 bg-white/70 shadow-inner resize-none"
-                                required
-                            />
-                            <p className="text-sm text-gray-500 text-right">{form.message.length}/160 {t("common.characters")}</p>
-                        </div>
+                        {messageType === "sms" ? (
+                            <SMSMessageCreator message={form.message} handleChange={handleChange} />
+                        ) : (
+                            <>
+                                <TemplateSelector
+                                    onTemplateSelect={(templateId) => {
+                                        setForm(prev => ({ ...prev, template: templateId }));
+                                    }}
+                                    currentTemplate={form.template}
+                                />
+                                <EmailMessageCreator message={form.message} handleChange={handleChange} />
+                            </>
+
+                        )}
+
 
                         <Button
                             type="submit"
@@ -294,6 +295,7 @@ export const SendMessage = ({messageType}: SendMessageProps): JSX.Element => {
                         >
                             {mutation.isPending ? t("action.sending") : t("action.send")}
                         </Button>
+
                     </form>
                 </div>
             </motion.div>

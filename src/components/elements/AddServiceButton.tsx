@@ -9,7 +9,7 @@ interface Props {
 
 export default function AddServiceButton({ companyId }: Props) {
     return (
-        <Link to={`/dashboard/company/${companyId}/create_service`}>
+        <Link to={`/dashboard/group/${companyId}/create_service`}>
             <motion.div
                 whileHover={{ scale: 1.05, y: -8 }}
                 whileTap={{ scale: 0.98 }}

@@ -4,7 +4,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import { t } from "i18next";
-import { type Client, clientsApi } from "@/api/clientsApi.ts";
+import { type Client, clientsApi } from "@/api/ClientsApi.ts";
 import { Button } from "@/components/ui/button";
 import { User, Mail, Phone, NotepadText, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -42,7 +42,7 @@ export const EditClient = (): JSX.Element => {
         },
         onSuccess: () => {
             toast.success(t("clients.updated_successfully"));
-            navigate(`/dashboard/company/${companyId}/client/${clientId}`);
+            navigate(`/dashboard/group/${companyId}/client/${clientId}`);
         },
         onError: (err) => {
             console.error("Update error:", err);
@@ -95,7 +95,7 @@ export const EditClient = (): JSX.Element => {
                 <div className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl overflow-hidden border border-white/60">
                     <div className="bg-gradient-to-r from-indigo-500 to-purple-600 p-10 text-white">
                         <div className="flex items-center justify-between">
-                            <Link to={`/dashboard/company/${companyId}/client/${clientId}`}>
+                            <Link to={`/dashboard/group/${companyId}/client/${clientId}`}>
                                 <Button variant="ghost" className="text-white hover:bg-white/20">
                                     <ArrowLeft className="w-6 h-6 mr-2" />
                                     {t("action.back")}

@@ -57,7 +57,7 @@ export const Surveys = (): JSX.Element => {
                             </p>
                         </div>
 
-                        <Link to={`/dashboard/company/${companyId}/surveys/create`}>
+                        <Link to={`/dashboard/group/${companyId}/surveys/create`}>
                             <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold py-6 px-8 rounded-2xl shadow-lg transform hover:scale-105 transition-all duration-300">
                                 <Plus className="w-6 h-6 mr-3" />
                                 {t("surveys.create_new_survey")}
@@ -76,9 +76,8 @@ export const Surveys = (): JSX.Element => {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: index * 0.1, duration: 0.6 }}
                             >
-                                <Link to={`/dashboard/company/${companyId}/survey/${survey.id}`}>
+                                <Link to={`/dashboard/group/${companyId}/survey/${survey.id}`}>
                                     <div className="group bg-white/80 backdrop-blur-md rounded-3xl shadow-lg hover:shadow-2xl border border-white/50 overflow-hidden transition-all duration-500 hover:-translate-y-3">
-                                        {/* Górny gradientowy pasek */}
                                         <div className="bg-gradient-to-r from-indigo-500 to-purple-600 p-8 text-white">
                                             <div className="w-20 h-20 mx-auto bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center shadow-xl">
                                                 <FileText className="w-12 h-12" />
@@ -117,7 +116,7 @@ export const Surveys = (): JSX.Element => {
                         <p className="text-gray-600 mb-8 max-w-md mx-auto">
                             Zacznij zbierać opinie od klientów, tworząc pierwszą ankietę.
                         </p>
-                        <Link to={`/dashboard/company/${companyId}/surveys/create`}>
+                        <Link to={`/dashboard/group/${companyId}/surveys/create`}>
                             <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-6 px-10 rounded-2xl shadow-xl transform hover:scale-105 transition-all">
                                 <Plus className="w-6 h-6 mr-3" />
                                 {t("surveys.create_new_survey")}
