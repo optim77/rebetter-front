@@ -1,14 +1,15 @@
 import { type ChangeEvent, type FormEvent, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
-import { Button } from "@/components/ui/button";
 import { t } from "i18next";
 import { toast } from "react-hot-toast";
-import { motion } from "framer-motion";
 import { UserPlus, Mail, Phone, NotepadText } from "lucide-react";
 import { clientsApi } from "@/api/ClientsApi.ts";
 import type { ApiError } from "@/types/apiError.ts";
 import { handleApiError } from "@/utils/handleApiError.ts";
+import { FormInput } from "@/components/elements/FormInput.tsx";
+import { FormTextarea } from "@/components/elements/FormTextarea.tsx";
+import { FormSubmitButton } from "@/components/elements/FormSubmitButton.tsx";
 
 export default function CreateClient() {
     const { companyId } = useParams<{ companyId: string }>();
@@ -16,6 +17,7 @@ export default function CreateClient() {
 
     const [form, setForm] = useState({
         name: "",
+        surname: "",
         email: "",
         phone: "",
         note: "",
@@ -45,110 +47,78 @@ export default function CreateClient() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 px-6 py-12 overflow-hidden relative">
-            <div className="absolute inset-0 -z-10 overflow-hidden">
-                <div className="absolute -top-40 -left-40 w-96 h-96 bg-indigo-300/30 rounded-full blur-3xl animate-pulse" />
-                <div className="absolute top-40 right-0 w-80 h-80 bg-purple-300/30 rounded-full blur-3xl animate-pulse delay-1000" />
-                <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-pink-300/30 rounded-full blur-3xl animate-pulse delay-500" />
+        <div className="container mx-auto px-4 py-8 max-w-2xl">
+            <div className="mb-8">
+                <div className="flex items-center gap-3">
+                    <UserPlus className="h-8 w-8 text-primary" />
+                    <h1 className="text-2xl font-semibold tracking-tight">
+                        {t("clients.add_client")}
+                    </h1>
+                </div>
+                <p className="mt-2 text-sm text-muted-foreground">
+                    {t("clients.add_client_description")}
+                </p>
             </div>
 
-            <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-                className="max-w-2xl mx-auto"
-            >
-                <div className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl overflow-hidden border border-white/60">
-                    <div className="bg-gradient-to-r from-indigo-500 to-purple-600 p-10 text-white">
-                        <div className="flex items-center gap-4">
-                            <div className="p-4 bg-white/20 backdrop-blur-md rounded-2xl">
-                                <UserPlus className="w-10 h-10" />
-                            </div>
-                            <h1 className="text-4xl font-extrabold">
-                                {t("clients.add_client")}
-                            </h1>
-                        </div>
-                    </div>
+            <form onSubmit={handleSubmit} className="space-y-6">
 
-                    <form onSubmit={handleSubmit} className="p-10 space-y-10">
-                        <div className="space-y-3">
-                            <label className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                                <UserPlus className="w-5 h-5 text-indigo-600" />
-                                {t("clients.name")} <span className="text-red-500">*</span>
-                            </label>
-                            <input
-                                type="text"
-                                name="name"
-                                value={form.name}
-                                onChange={handleChange}
-                                className="w-full px-6 py-4 text-lg rounded-2xl border border-gray-200 focus:outline-none focus:ring-4 focus:ring-indigo-300 focus:border-indigo-500 bg-white/70 shadow-inner transition-all"
-                                placeholder={t("clients.name_placeholder")}
-                                required
-                            />
-                        </div>
+                <FormInput
+                    icon={<UserPlus className="h-4 w-4"/>}
+                    id={"name"}
+                    type={"text"}
+                    name={"name"}
+                    value={form.name}
+                    handleChange={handleChange}
+                    placeholder={t("clients.name_placeholder")}
+                    required={false}
+                />
 
-                        <div className="space-y-3">
-                            <label className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                                <Mail className="w-5 h-5 text-indigo-600" />
-                                {t("clients.email")} <span className="text-red-500">*</span>
-                            </label>
-                            <input
-                                type="email"
-                                name="email"
-                                value={form.email}
-                                onChange={handleChange}
-                                className="w-full px-6 py-4 text-base rounded-2xl border border-gray-200 focus:outline-none focus:ring-4 focus:ring-indigo-300 focus:border-indigo-500 bg-white/70 shadow-inner transition-all"
-                                placeholder="email@domain.com"
-                                required
-                            />
-                        </div>
+                <FormInput
+                    icon={<UserPlus className="h-4 w-4"/>}
+                    id={"surname"}
+                    type={"text"}
+                    name={"surname"}
+                    value={form.surname}
+                    handleChange={handleChange}
+                    placeholder={t("clients.surname_placeholder")}
+                    required={false}
+                />
 
-                        <div className="space-y-3">
-                            <label className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                                <Phone className="w-5 h-5 text-indigo-600" />
-                                {t("clients.phone")}
-                            </label>
-                            <input
-                                type="tel"
-                                name="phone"
-                                value={form.phone}
-                                onChange={handleChange}
-                                className="w-full px-6 py-4 text-base rounded-2xl border border-gray-200 focus:outline-none focus:ring-4 focus:ring-indigo-300 focus:border-indigo-500 bg-white/70 shadow-inner transition-all"
-                                placeholder="+48 123 456 789"
-                            />
-                        </div>
+                <FormInput
+                    icon={<Mail className="h-4 w-4" />}
+                    id={"email"}
+                    type={"email"}
+                    name={"email"}
+                    value={form.email}
+                    handleChange={handleChange}
+                    placeholder={"email@domain.com"}
+                    required={true}
+                />
 
-                        <div className="space-y-3">
-                            <label className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                                <NotepadText className="w-5 h-5 text-indigo-600" />
-                                {t("clients.note")}
-                            </label>
-                            <textarea
-                                name="note"
-                                value={form.note}
-                                onChange={handleChange}
-                                rows={4}
-                                className="w-full px-6 py-4 text-base rounded-2xl border border-gray-200 focus:outline-none focus:ring-4 focus:ring-indigo-300 focus:border-indigo-500 bg-white/70 shadow-inner resize-none transition-all"
-                                placeholder={t("clients.note_placeholder", { defaultValue: "Dodatkowe informacje o kliencie..." })}
-                            />
-                        </div>
+                <FormInput
+                    icon={<Phone className="h-4 w-4"/>}
+                    id={"phone"}
+                    type={"text"}
+                    name={"phone"}
+                    value={form.phone}
+                    handleChange={handleChange}
+                    placeholder={"+48 123 456 789"}
+                    required={false}
+                />
 
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.5 }}
-                        >
-                            <Button
-                                type="submit"
-                                disabled={mutation.isPending}
-                                className="w-full py-6 text-xl font-bold text-white rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-xl transform hover:scale-105 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
-                            >
-                                {mutation.isPending ? t("action.saving") : t("action.save")}
-                            </Button>
-                        </motion.div>
-                    </form>
-                </div>
-            </motion.div>
+                <FormTextarea
+                    icon={<NotepadText className="h-4 w-4"/>}
+                    id={"note"}
+                    name={"note"}
+                    value={form.note}
+                    handleChange={handleChange}
+                    placeholder={t("clients.note_placeholder")}
+                    required={false}
+                />
+
+                <FormSubmitButton isPending={mutation.isPending} />
+
+            </form>
         </div>
     );
 }

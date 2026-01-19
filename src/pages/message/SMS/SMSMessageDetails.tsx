@@ -3,9 +3,6 @@ import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { MessagesAPI } from "@/api/MessagesAPI.ts";
 import { t } from "i18next";
-import { format } from "date-fns";
-import { pl } from "date-fns/locale";
-import { motion } from "framer-motion";
 import {
     MessageSquare,
     CheckCircle2,
@@ -17,14 +14,19 @@ import {
     Send,
     Globe,
     Hash,
-    UserCheck
+    UserCheck, ArrowLeft,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { BaseSpinner } from "@/components/elements/BaseSpinner.tsx";
+import { NoFoundMessage } from "@/components/messages/elements/NoFoundMessage.tsx";
+import { formatDate } from "@/utils/FormatData.ts";
+import { MessageDetail } from "@/components/messages/MessageDetail.tsx";
 
 export const SMSMessageDetails = (): JSX.Element => {
-    const {companyId, clientId, smsId} = useParams<{
-        companyId: string;
+    const { groupId, clientId, smsId } = useParams<{
+        groupId: string;
         clientId: string;
         smsId: string;
     }>();
@@ -33,243 +35,242 @@ export const SMSMessageDetails = (): JSX.Element => {
         data: msg,
         isLoading,
         isError,
-        error,
     } = useQuery({
-        queryKey: ["SMSMessage", companyId, clientId, smsId],
-        queryFn: async () => MessagesAPI.fetchSMSMessageDetails(companyId!, clientId!, smsId!),
-        enabled: !!companyId && !!clientId && !!smsId,
+        queryKey: ["SMSMessage", groupId, clientId, smsId],
+        queryFn: async () => MessagesAPI.fetchSMSMessageDetails(groupId!, clientId!, smsId!),
+        enabled: !!groupId && !!clientId && !!smsId,
     });
 
-    if (isLoading) {
-        return (
-            <div className="min-h-screen flex items-center justify-center">
-                <div className="text-lg text-gray-600">{t("common.loading")}...</div>
-            </div>
-        );
-    }
+    if (isLoading) return <BaseSpinner />;
 
-    if (isError || !msg) {
-        return (
-            <div className="min-h-screen flex items-center justify-center px-4">
-                <div className="text-center text-red-600 bg-red-50 py-4 px-8 rounded-2xl">
-                    {error instanceof Error ? error.message : t("common.unexpected_error")}
-                </div>
-            </div>
-        );
-    }
+    if (isError || !msg) return <NoFoundMessage groupId={groupId} clientId={clientId} />
 
-    const formatDate = (dateStr: string | null) =>
-        dateStr ? format(new Date(dateStr), "dd MMM yyyy, HH:mm", {locale: pl}) : t("common.none");
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 px-4 py-12">
-            <motion.div
-                initial={{opacity: 0, y: 20}}
-                animate={{opacity: 1, y: 0}}
-                transition={{duration: 0.7}}
-                className="max-w-5xl mx-auto"
-            >
-                <Card
-                    className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl overflow-hidden border border-white/60">
-                    <div className="bg-gradient-to-r from-indigo-500 to-purple-600 p-8 text-white">
-                        <h1 className="text-3xl font-bold flex items-center gap-3">
-                            <MessageSquare className="w-10 h-10"/>
+        <div className="container mx-auto px-4 py-8 max-w-4xl">
+
+            <div className="mb-8">
+                <div className="flex items-center gap-4">
+                    <Button variant="ghost" size="icon" asChild>
+                        <Link to={`/dashboard/group/${groupId}/client/${clientId}`}>
+                            <ArrowLeft className="h-5 w-5" />
+                        </Link>
+                    </Button>
+
+                    <div>
+                        <h1 className="text-2xl font-semibold tracking-tight flex items-center gap-3">
+                            <MessageSquare className="h-6 w-6" />
                             {t("sms.sms_message_details")}
                         </h1>
-                        <p className="mt-2 text-indigo-100">
-                            ID: <span className="font-mono text-sm">{msg.id}</span>
+                        <p className="text-sm text-muted-foreground mt-1">
+                            {t("messages.message_id")} {": "} <span className="font-mono">{msg.id}</span>
                         </p>
                     </div>
+                </div>
+            </div>
 
-                    <CardContent className="p-8 space-y-10">
-                        <Section title={t("common.basic_info")} icon={<Send className="w-5 h-5"/>}>
-                            <Detail label={t("common.message_content")} value={msg.message}/>
-                            <Detail label={t("common.message_type")}
-                                    value={<Badge variant="secondary">{msg.messageType.toUpperCase()}</Badge>}/>
-                            <Detail label={t("common.send_date")} value={formatDate(msg.send_at)} icon={<Calendar/>}/>
-                            <Detail label={t("common.tracking_id")} value={msg.tracking_id || t("common.none")}
-                                    icon={<Hash/>}/>
-                            <Detail label={t("common.redirect")} value={msg.is_redirect === true ? t("common.yes") : t("common.no") || t("common.none")} icon={<Globe />} />
-                            <Detail label={t("common.redirect_portal")} value={msg.portal || t("common.none")} icon={<Globe />}/>
+            <Card>
+                <CardHeader className="pb-4">
+                    <CardTitle className="flex items-center gap-3">
+                        <Send className="h-5 w-5" />
+                        {t("common.basic_info")}
+                    </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                    <MessageDetail label={t("common.message_content")} value={msg.message} />
 
+                    <div className="flex flex-wrap gap-4">
+                        <Badge variant="outline">{msg.messageType.toUpperCase()}</Badge>
+                        {msg.is_survey && <Badge variant="outline">{t("common.survey")}</Badge>}
+                        {msg.is_rating && <Badge variant="outline">{t("common.rating")}</Badge>}
+                        {msg.is_feedback && <Badge variant="outline">{t("common.simple_feedback")}</Badge>}
+                    </div>
 
-                        </Section>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <MessageDetail
+                            label={t("common.send_date")}
+                            value={formatDate(msg.send_at)}
+                            icon={<Calendar className="h-4 w-4" />}
+                        />
+                        <MessageDetail
+                            label={t("common.tracking_id")}
+                            value={msg.tracking_id || t("common.none")}
+                            icon={<Hash className="h-4 w-4" />}
+                        />
+                        <MessageDetail
+                            label={t("common.redirect")}
+                            value={msg.is_redirect ? t("common.yes") : t("common.no")}
+                            icon={<Globe className="h-4 w-4" />}
+                        />
+                        {msg.portal && (
+                            <MessageDetail
+                                label={t("common.redirect_portal")}
+                                value={msg.portal}
+                                icon={<Globe className="h-4 w-4" />}
+                            />
+                        )}
+                    </div>
+                </CardContent>
+            </Card>
 
-                        <Section title={t("common.client_response")} icon={<UserCheck className="w-5 h-5"/>}>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <Detail
-                                    label={t("common.clicked_at")}
-                                    value={msg.clicked_at ? formatDate(msg.clicked_at) : t("common.not_clicked")}
-                                    icon={msg.clicked_at ? <Link2 className="w-5 h-5 text-blue-600"/> :
-                                        <Clock className="w-5 h-5 text-gray-500"/>}
-                                />
-                                <Detail
-                                    label={t("common.completed")}
-                                    value={msg.completed ? t("common.yes") : t("common.no")}
-                                    icon={msg.completed ? <CheckCircle2 className="w-5 h-5 text-green-600"/> :
-                                        <Clock className="w-5 h-5 text-orange-600"/>}
-                                />
-                                {msg.completed_at && (
-                                    <Detail
-                                        label={t("common.completed_at")}
-                                        value={formatDate(msg.completed_at)}
-                                        icon={<CheckCircle2 className="w-5 h-5 text-green-600"/>}
-                                    />
+            <Card className="mt-6">
+                <CardHeader className="pb-4">
+                    <CardTitle className="flex items-center gap-3">
+                        <UserCheck className="h-5 w-5" />
+                        {t("common.client_response")}
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <MessageDetail
+                            label={t("common.clicked_at")}
+                            value={msg.clicked_at ? formatDate(msg.clicked_at) : t("common.not_clicked")}
+                            icon={
+                                msg.clicked_at ? (
+                                    <Link2 className="h-4 w-4 text-blue-600" />
+                                ) : (
+                                    <Clock className="h-4 w-4 text-muted-foreground" />
+                                )
+                            }
+                        />
+
+                        <MessageDetail
+                            label={t("common.completed")}
+                            value={msg.completed ? t("common.yes") : t("common.no")}
+                            icon={
+                                msg.completed ? (
+                                    <CheckCircle2 className="h-4 w-4 text-green-600" />
+                                ) : (
+                                    <Clock className="h-4 w-4 text-orange-600" />
+                                )
+                            }
+                        />
+
+                        {msg.completed_at && (
+                            <MessageDetail
+                                label={t("common.completed_at")}
+                                value={formatDate(msg.completed_at)}
+                                icon={<CheckCircle2 className="h-4 w-4 text-green-600" />}
+                            />
+                        )}
+                    </div>
+                </CardContent>
+            </Card>
+
+            {(msg.feedback_content || msg.rating || (msg.survey && msg.survey_answer)) && (
+                <Card className="mt-6">
+                    <CardHeader className="pb-4">
+                        <CardTitle className="flex items-center gap-3">
+                            <FileText className="h-5 w-5" />
+                            {msg.is_survey
+                                ? msg.survey?.name || t("common.survey_response")
+                                : msg.is_rating
+                                    ? t("common.rating")
+                                    : t("common.feedback")}
+                        </CardTitle>
+                        {msg.is_survey && msg.survey?.description && (
+                            <p className="text-sm text-muted-foreground mt-1">{msg.survey.description}</p>
+                        )}
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                        {msg.is_feedback && msg.feedback_content && (
+                            <div className="rounded border bg-muted/40 p-5">
+                                <p className="font-medium mb-2">{t("messages.client_opinion")}:</p>
+                                <p className="whitespace-pre-wrap">„{msg.feedback_content}”</p>
+                            </div>
+                        )}
+
+                        {msg.is_rating && msg.rating && (
+                            <div className="space-y-3">
+                                <div className="flex gap-1">
+                                    {[1, 2, 3, 4, 5].map((star) => (
+                                        <Star
+                                            key={star}
+                                            className={`h-7 w-7 ${
+                                                star <= (msg.rating || 0)
+                                                    ? "fill-amber-400 text-amber-400"
+                                                    : "text-muted"
+                                            }`}
+                                        />
+                                    ))}
+                                </div>
+                                {msg.rating_feedback && (
+                                    <p className="text-sm text-muted-foreground italic">
+                                        {msg.rating_feedback}
+                                    </p>
                                 )}
                             </div>
-                        </Section>
-
-                        {msg.is_feedback && msg.feedback_content && msg.completed && (
-                            <Section title={msg.message} icon={<FileText className="w-5 h-5"/>} subtitle={t("messages.client_answer")}>
-                                <div className="space-y-6">
-
-
-                                    <motion.div
-                                        key={msg.feedback_content}
-                                        initial={{opacity: 0, x: -20}}
-                                        animate={{opacity: 1, x: 0}}
-                                        className="bg-gradient-to-r from-gray-50 to-white rounded-2xl p-6 border border-gray-200 shadow-md"
-                                    >
-                                        <p className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                                            {msg.feedback_content}
-                                        </p>
-                                    </motion.div>
-
-                                </div>
-                            </Section>
                         )}
 
-                        {msg.is_rating && msg.rating && msg.completed && (
-                            <Section title={msg.message} icon={<FileText className="w-5 h-5"/>} subtitle={t("messages.client_rating")}>
-                                <div className="space-y-6">
+                        {msg.is_survey && msg.survey && msg.survey_answer && (
+                            <div className="space-y-5">
+                                {msg.survey.content.map((question) => {
+                                    const answer = msg.survey_answer?.[question.id];
 
-
-                                    <motion.div
-                                        key={msg.rating}
-                                        initial={{opacity: 0, x: -20}}
-                                        animate={{opacity: 1, x: 0}}
-                                        className="bg-gradient-to-r from-gray-50 to-white rounded-2xl p-6 border border-gray-200 shadow-md"
-                                    >
-                                        <p className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                                            {[1, 2, 3, 4, 5].map((star) => (
-                                                <Star
-                                                    key={star}
-                                                    className={`w-8 h-8 ${star <= (msg.rating || 0)
-                                                        ? "fill-yellow-400 text-yellow-400"
-                                                        : "text-gray-300"
-                                                    }`}
-                                                />
-                                            ))}
-                                        </p>
-
-                                        {msg.rating_feedback && (
-                                            <p className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                                                {msg.rating_feedback}
+                                    return (
+                                        <div key={question.id} className="space-y-2">
+                                            <p className="font-medium flex items-center gap-2">
+                                                {question.required && <span className="text-destructive">*</span>}
+                                                {question.label}
                                             </p>
-                                        )}
 
-                                    </motion.div>
-
-                                </div>
-                            </Section>
-                        )}
-
-
-                        {msg.is_survey && msg.survey && msg.completed && (
-                            <Section title={msg.survey.name} icon={<FileText className="w-5 h-5"/>}
-                                     subtitle={msg.survey.description}>
-                                <div className="space-y-6">
-                                    {msg.survey.content.map((question) => {
-                                        const answer = msg.survey_answer?.[question.id];
-
-                                        return (
-                                            <motion.div
-                                                key={question.id}
-                                                initial={{opacity: 0, x: -20}}
-                                                animate={{opacity: 1, x: 0}}
-                                                className="bg-gradient-to-r from-gray-50 to-white rounded-2xl p-6 border border-gray-200 shadow-md"
-                                            >
-                                                <p className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                                                    {question.required && <span className="text-red-500">*</span>}
-                                                    {question.label}
+                                            {question.type === "text" && (
+                                                <p className="text-sm bg-muted/40 p-4 rounded border">
+                                                    {answer || <span className="italic text-muted-foreground">{t("common.no_answer")}</span>}
                                                 </p>
+                                            )}
 
-                                                {question.type === "text" && (
-                                                    <p className="text-gray-700 bg-white rounded-xl p-4 border">
-                                                        {answer || <span
-                                                          className="italic text-gray-400">{t("common.no_answer")}</span>}
-                                                    </p>
-                                                )}
+                                            {question.type === "choice" && question.options && (
+                                                <Badge variant="outline" className="text-sm py-1.5 px-3">
+                                                    {answer || <span className="italic text-muted-foreground">{t("common.no_answer")}</span>}
+                                                </Badge>
+                                            )}
 
-                                                {question.type === "choice" && question.options && (
-                                                    <Badge variant="outline" className="text-base py-2 px-4">
-                                                        {answer || <span
-                                                          className="italic text-gray-400">{t("common.no_answer")}</span>}
-                                                    </Badge>
-                                                )}
-
-                                                {question.type === "rating" && (
-                                                    <div className="flex gap-2">
-                                                        {[1, 2, 3, 4, 5].map((star) => (
-                                                            <Star
-                                                                key={star}
-                                                                className={`w-8 h-8 ${star <= (answer || 0)
-                                                                    ? "fill-yellow-400 text-yellow-400"
-                                                                    : "text-gray-300"
-                                                                }`}
-                                                            />
-                                                        ))}
-                                                    </div>
-                                                )}
-                                            </motion.div>
-                                        );
-                                    })}
-                                </div>
-                            </Section>
-                        )}
-
-                        {msg.service_name && msg.service_id && (
-                            <Section title={t("common.service")} icon={<Globe className="w-5 h-5"/>}>
-                                <Link
-                                    to={`/dashboard/group/${companyId}/services/${msg.service_id}`}
-                                    className="text-indigo-600 font-semibold hover:underline text-lg"
-                                >
-                                    {msg.service_name}
-                                </Link>
-                                <Detail label={t("common.service_id")} value={msg.service_id}/>
-                            </Section>
+                                            {question.type === "rating" && (
+                                                <div className="flex gap-1">
+                                                    {[1, 2, 3, 4, 5].map((star) => (
+                                                        <Star
+                                                            key={star}
+                                                            className={`h-6 w-6 ${
+                                                                star <= (Number(answer) || 0)
+                                                                    ? "fill-amber-400 text-amber-400"
+                                                                    : "text-muted"
+                                                            }`}
+                                                        />
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    );
+                                })}
+                            </div>
                         )}
                     </CardContent>
                 </Card>
-            </motion.div>
+            )}
+
+            {/*{msg.service_name && msg.service_id && (*/}
+            {/*    <Card className="mt-6">*/}
+            {/*        <CardHeader className="pb-4">*/}
+            {/*            <CardTitle className="flex items-center gap-3">*/}
+            {/*                <Globe className="h-5 w-5" />*/}
+            {/*                {t("common.service")}*/}
+            {/*            </CardTitle>*/}
+            {/*        </CardHeader>*/}
+            {/*        <CardContent>*/}
+            {/*            <Link*/}
+            {/*                to={`/dashboard/group/${groupId}/services/${msg.service_id}`}*/}
+            {/*                className="text-primary hover:underline font-medium"*/}
+            {/*            >*/}
+            {/*                {msg.service_name}*/}
+            {/*            </Link>*/}
+            {/*            <p className="text-sm text-muted-foreground mt-1">*/}
+            {/*                ID: {msg.service_id}*/}
+            {/*            </p>*/}
+            {/*        </CardContent>*/}
+            {/*    </Card>*/}
+            {/*)}*/}
         </div>
     );
 };
 
-const Section = ({title, subtitle, icon, children}: {
-    title: string;
-    subtitle?: string | null;
-    icon: JSX.Element;
-    children: JSX.Element | JSX.Element[];
-}) => (
-    <div className="space-y-5">
-        <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-3">
-            {icon}
-            {title}
-        </h2>
-        {subtitle && <p className="text-gray-600 italic ml-8">{subtitle}</p>}
-        <div className="border-l-4 border-indigo-400 pl-6">{children}</div>
-    </div>
-);
-
-const Detail = ({label, value, icon}: { label: string; value: JSX.Element | string; icon?: JSX.Element }) => (
-    <div className="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
-        <span className="text-gray-600 font-medium flex items-center gap-2">
-            {icon}
-            {label}
-        </span>
-        <span className="text-gray-900 font-medium text-right max-w-md break-words">
-            {value}
-        </span>
-    </div>
-);

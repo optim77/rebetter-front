@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card.tsx";
 import { Star, Globe, Facebook, Instagram, Linkedin, Video } from "lucide-react";
 import { t } from "i18next";
-import type { Company } from "@/api/companiesApi.ts";
+import type { Company } from "@/api/GroupsApi.ts";
 import { ExternalLink } from "lucide-react";
 import { type JSX } from "react";
 
@@ -46,7 +46,7 @@ export default function MediaAddress({ data }: Props) {
     return (
         <Card className="h-full bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/60 overflow-hidden">
             <CardHeader className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white">
-                <CardTitle className="text-2xl font-bold">{t("companies.your_links")}</CardTitle>
+                <CardTitle className="text-2xl font-bold">{t("groups.your_links")}</CardTitle>
             </CardHeader>
 
             <CardContent className="p-8">

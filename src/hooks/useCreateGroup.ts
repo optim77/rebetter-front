@@ -1,7 +1,7 @@
 import { type FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
-import { companiesApi } from "@/api/companiesApi.ts";
+import { GroupsApi } from "@/api/GroupsApi.ts";
 import toast from "react-hot-toast";
 import { t } from "i18next";
 import type { ApiError } from "@/types/apiError.ts";
@@ -19,7 +19,7 @@ export interface CreateCompanyForm {
     booksyUrl?: string;
 }
 
-export const useCreateCompany = () => {
+export const useCreateGroup = () => {
     const [form, setForm] = useState<CreateCompanyForm>({
         name: "",
         description: "",
@@ -39,11 +39,11 @@ export const useCreateCompany = () => {
             const filtered = Object.fromEntries(
                 Object.entries(form).filter(([_, v]) => v && v.trim() !== "")
             );
-            return await companiesApi.createCompany(filtered);
+            return await GroupsApi.createGroup(filtered);
         },
         onSuccess: (data) => {
             toast.success(
-                t("companies.created_successfully", {
+                t("groups.created_successfully", {
                     defaultValue: "Company created successfully!",
                 })
             );

@@ -7,11 +7,10 @@ import Login from "@/pages/auth/Login.tsx";
 import Register from "@/pages/auth/Register.tsx";
 import Registered from "@/pages/Registered.tsx";
 
-import Navbar from "@/components/layout/Navbar.tsx";
 import Sidebar from "@/components/layout/Sidebar.tsx";
 import DashboardCompany from "@/pages/dashboard/DashboardCompany.tsx";
-import Companies from "@/pages/companies/Companies.tsx";
-import CreateCompany from "@/pages/companies/CreateCompany.tsx";
+import Groups from "@/pages/groups/Groups.tsx";
+import CreateGroup from "@/pages/groups/CreateGroup.tsx";
 import Clients from "@/pages/clients/Clients.tsx";
 import CreateClient from "@/pages/clients/CreateClient.tsx";
 import Client from "@/pages/clients/Client.tsx";
@@ -44,7 +43,7 @@ function DashboardLayout() {
         <div className="flex min-h-screen bg-gray-50 ">
             <Sidebar />
             <div className="flex flex-col flex-1">
-                <Navbar />
+
                 <main className="p-6 flex-1 overflow-y-auto min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 px-6 py-12 overflow-hidden relative">
                     <Outlet />
                 </main>
@@ -68,8 +67,8 @@ export default function AppRouter() {
                 <Route element={<PrivateRoute />}>
                     <Route path="/dashboard" element={<DashboardLayout />}>
                         <Route index element={<DashboardHome />} />
-                        <Route path="create_group" element={<CreateCompany />} />
-                        <Route path="companies" element={<Companies />} />
+                        <Route path="create_group" element={<CreateGroup />} />
+                        <Route path="companies" element={<Groups />} />
 
                         <Route path="group/:groupId" element={<Outlet />}>
                             <Route index element={<DashboardCompany />} />

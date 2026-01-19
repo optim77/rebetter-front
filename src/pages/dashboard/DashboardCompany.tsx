@@ -1,39 +1,37 @@
 import { type JSX } from "react";
-import AddServiceButton from "@/components/elements/AddServiceButton.tsx";
 import { useParams } from "react-router-dom";
-import { useCompany } from "@/hooks/useCompany.ts";
-import { motion } from "framer-motion";
+import { useGroup } from "@/hooks/useGroup.ts";
+import AddServiceButton from "@/components/elements/AddServiceButton.tsx";
+import { Card, CardContent } from "@/components/ui/card";
+import { t } from "i18next";
+import { BaseSpinner } from "@/components/elements/BaseSpinner.tsx";
 
 export default function DashboardCompany(): JSX.Element {
-    const { companyId } = useParams<{ companyId: string }>();
-    const { query } = useCompany(companyId);
+    const { groupId } = useParams<{ groupId: string }>();
+    const { query } = useGroup(groupId!);
+    const companyName = query.data?.name;
+
+    if (query.isLoading) return <BaseSpinner />
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 px-6 py-12">
-
-            <div className="absolute inset-0 -z-10 overflow-hidden">
-                <div className="absolute -top-40 -left-40 w-96 h-96 bg-indigo-300/30 rounded-full blur-3xl animate-pulse" />
-                <div className="absolute top-40 right-0 w-80 h-80 bg-purple-300/30 rounded-full blur-3xl animate-pulse delay-1000" />
-                <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-pink-300/30 rounded-full blur-3xl animate-pulse delay-500" />
+        <div className="container mx-auto px-4 py-8">
+            <div className="mb-8">
+                <h1 className="text-2xl font-semibold tracking-tight">
+                    {companyName}
+                </h1>
+                <p className="mt-1 text-sm text-muted-foreground">
+                    {t("dashboard.group_overview")}
+                </p>
             </div>
 
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-                className="max-w-7xl mx-auto"
-            >
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <Card className="h-full">
+                    <CardContent className="p-6 flex flex-col items-center justify-center min-h-[220px] text-center">
+                        <AddServiceButton groupId={groupId!} />
+                    </CardContent>
+                </Card>
 
-                <h1 className="text-4xl font-extrabold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-12">
-                    {query.data?.name || "Dashboard firmy"}
-                </h1>
-
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <AddServiceButton companyId={companyId!} />
-
-                </div>
-            </motion.div>
+            </div>
         </div>
     );
 }

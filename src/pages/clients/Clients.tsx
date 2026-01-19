@@ -1,5 +1,5 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { type ChangeEvent, useState } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { t } from "i18next";
@@ -48,7 +48,7 @@ export default function Clients() {
         setPage(1);
     };
 
-    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
         setSearch(e.target.value);
         setPage(1);
     };

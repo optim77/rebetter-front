@@ -1,30 +1,34 @@
 import { PlusCircle } from "lucide-react";
 import { t } from "i18next";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface Props {
-    companyId: string;
+    groupId: string;
 }
 
-export default function AddServiceButton({ companyId }: Props) {
+export default function AddServiceButton({ groupId }: Props) {
     return (
-        <Link to={`/dashboard/group/${companyId}/create_service`}>
-            <motion.div
-                whileHover={{ scale: 1.05, y: -8 }}
-                whileTap={{ scale: 0.98 }}
-                className="h-full"
-            >
-                <div className="h-full bg-white/80 backdrop-blur-md rounded-3xl shadow-xl border-2 border-dashed border-gray-300 hover:border-indigo-500 hover:bg-gradient-to-br hover:from-indigo-50/50 hover:to-purple-50/50 transition-all duration-500 cursor-pointer flex flex-col items-center justify-center p-10 group">
-                    <PlusCircle className="w-20 h-20 text-gray-400 group-hover:text-indigo-600 transition-colors duration-300 mb-6" />
-                    <span className="text-2xl font-bold text-gray-700 group-hover:text-indigo-700 transition-colors">
+        <Card className="h-full border-dashed border-2 transition-colors hover:border-primary/50">
+            <Link to={`/dashboard/group/${groupId}/create_service`} className="block h-full">
+                <CardContent className="h-full flex flex-col items-center justify-center p-10 text-center">
+                    <PlusCircle className="h-12 w-12 text-muted-foreground mb-6" />
+
+                    <h3 className="text-xl font-semibold mb-3">
                         {t("services.add_service")}
-                    </span>
-                    <p className="mt-4 text-gray-500 text-center max-w-xs">
-                        Dodaj nową usługę i zacznij zbierać opinie od klientów
+                    </h3>
+
+                    <p className="text-sm text-muted-foreground max-w-xs">
+                        {t("services.add_service_description")}
                     </p>
-                </div>
-            </motion.div>
-        </Link>
+
+                    <Button variant="outline" size="sm" className="mt-6 gap-2">
+                        <PlusCircle className="h-4 w-4" />
+                        {t("action.add")}
+                    </Button>
+                </CardContent>
+            </Link>
+        </Card>
     );
 }

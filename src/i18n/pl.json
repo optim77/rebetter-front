@@ -19,7 +19,9 @@
     "save_changes": "Zapisz zmiany",
     "clear": "Wyczyść",
     "next": "Następna",
-    "previous": "Poprzednia"
+    "previous": "Poprzednia",
+    "logout": "Wyloguj",
+    "add": "Dodaj"
   },
   "common": {
     "sent_successfully": "Wysłano pomyślnie",
@@ -64,26 +66,39 @@
     "characters": "znaków",
     "showing": "Wyświetlasz",
     "of": "z",
-    "show": "Pokaż"
+    "show": "Pokaż",
+    "unexpected_error": "Niespodziewany bład"
   },
   "clients": {
     "clients": "Klienci",
     "add_client": "Dodaj klienta",
-    "name": "Imię i nazwisko",
-    "name_placeholder": "Jan Kowalski",
+    "name": "Imię",
+    "surname": "Nazwisko",
+    "name_placeholder": "Jan",
+    "surname_placeholder": "Kowalski",
     "email": "Email",
     "phone": "Numer telefonu",
     "service": "Usługa",
-    "note": "Notatki",
+    "note_placeholder": "Notatki",
     "created_successfully": "Poprawnie utworzono klienta",
     "found_clients": "znalezionych klientów",
     "edit_client": "Edytuj dane klienta",
     "no_clients_found": "Nie znaleziono klientów",
     "try_add_first": "Dodaj pierwszego klienta",
-    "no_clients": "Brak klientów"
+    "no_clients": "Brak klientów",
+    "add_client_description": "Dodaj klienta by móc wysyłać mu formularze",
+    "client_info": "Informacje klienta",
+    "send_email": "Wyślij wiadomość email",
+    "send_sms": "Wyślij wiadomosć SMS",
+    "note": "Notatki",
+    "client_details": "Dane klienta oraz historia wiadomości",
+    "updated_successfully": "Zaktualizowano pomyślnie"
   },
-  "companies": {
-    "companies": "Grupy",
+  "dashboard": {
+    "group_overview": "Podsumowanie grupy"
+  },
+  "groups": {
+    "groups": "Grupy",
     "add_company": "Dodaj grupę",
     "create_title": "Utwórz grupę",
     "name": "Nazwa grupy",
@@ -112,8 +127,17 @@
     "choose_social_platform": "Wybierz platformę by wysłać wiadomość",
     "no_socials_available": "Brak dostępnych linków do opinii",
     "no_description": "Brak opisu",
-    "found_companies": "Znalezione grupy",
-    "social_media": "Media społecznościowe"
+    "found_groups": "Znalezione grupy",
+    "social_media": "Media społecznościowe",
+    "groups_found": "znalezione grupy",
+    "no_groups": "Brak grup",
+    "no_companies_found": "Nie znaleziono grup",
+    "try_add_first": "Dodaj swoją pierwszą grupę",
+    "add_group": "Dodaj grupę",
+    "group_one": "grupa",
+    "basic_info": "Informacje podstawowe",
+    "social_links": "Linki",
+    "create_description": "Utwórz nową grupę"
   },
   "contact": {
     "head": "Skontaktuj się z nami",
@@ -128,6 +152,13 @@
     "rating_value": "Twoja ocena",
     "rating_service": "Oceniana usługa",
     "no_survey": "Brak ankiety"
+  },
+  "form": {
+    "name": "Imię",
+    "surname": "Nazwisko",
+    "email": "Email",
+    "phone": "Telefon",
+    "note": "Notatka"
   },
   "invitation": {
     "head_text": "Czy pozytywnie oceniasz jakość naszych usług?",
@@ -156,6 +187,7 @@
     }
   },
   "messages": {
+    "messages_counter": "wiadomości",
     "send_sms_message": "SMS",
     "send_email_message": "E-mail",
     "send_message_description": "Wyślij wiadomość do pojedyńczego użytkownika. W karcie Wiadomosći będziesz mógł podjerzeć jej status",
@@ -197,7 +229,11 @@
     "click_to_preview": "Kliknij aby podejrzeć",
     "use_this_template": "Użyj tego szablonu",
     "current_template": "Wybrany szablon",
-    "no_templates_available": "Brak dostępnych szablonów"
+    "no_templates_available": "Brak dostępnych szablonów",
+    "message_not_found": "Nie znaleziono wiadomości",
+    "message_id": "ID wiadomości",
+    "no_messages_for_client": "Brak wiadomości dla klienta",
+    "no_messages_description": "Nie znaleziono żadnej wiadomości wysyłanej do tego klieta"
   },
   "sms": {
     "send_message": "Wyślij wiadomość SMS",
@@ -229,7 +265,6 @@
     "registration_success": "Konto zostało utworzone 🎉",
     "check_email_description": "Sprawdź swoją skrzynkę pocztową i kliknij w link aktywacyjny, aby dokończyć rejestrację.",
     "go_to_login": "Przejdź do logowania"
-
   },
   "services": {
     "services": "Usługi",
@@ -239,15 +274,17 @@
     "description": "Opis usługi",
     "created_successfully": "Pomyślnie utworzono usługę",
     "select_service": "Wybierz usługę",
-    "add_services_info": "Dodaj usługi aby móc dodawać je do wiadomości"
+    "add_services_info": "Dodaj usługi aby móc dodawać je do wiadomości",
+    "add_service_description": "Dodaj nową usługę i zacznij zbierać opinie od klientów"
   },
   "sidebar": {
     "dashboard": "Pulpit",
-    "companies": "Grupy",
+    "groups": "Grupy",
     "clients": "Klienci",
     "campaign": "Kampanie",
     "services": "Usługi",
-    "surveys": "Ankiety"
+    "surveys": "Ankiety",
+    "account": "Konto"
   },
   "surveys": {
     "surveys": "Ankiety",
@@ -304,7 +341,12 @@
     "error_fetching_invitation": "Błąd podczas pobierania formularza, spróbuj ponownie",
     "base_error": "Coś poszło nie tak",
     "error_fetching_surveys": "Błąd pobierania ankiet",
-    "error_fetching_survey": "Błąd pobierania ankiety"
+    "error_fetching_survey": "Błąd pobierania ankiety",
+    "update_failed": "Błąd aktualizacji",
+    "render_error_head": "Ups! Wystąpił błąd.",
+    "try_again": "Spróbuj ponownie",
+    "render_error_desc": "Aplikacja napotkała nieoczekiwany problem.",
+    "error_boundary_info": "Spróbuj odświeżyć stronę lub wróć do poprzedniego widoku."
   },
 
   "utils": {

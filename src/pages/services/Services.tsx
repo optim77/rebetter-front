@@ -14,7 +14,7 @@ export default function Services() {
     const { data, isLoading } = useQuery({
         queryKey: ["services", companyId],
         queryFn: async () => {
-            if (!companyId) throw new Error("Companies not found!");
+            if (!companyId) throw new Error("Groups not found!");
             return servicesApi.getServices(companyId, { search_term: search });
         },
         enabled: !!companyId,

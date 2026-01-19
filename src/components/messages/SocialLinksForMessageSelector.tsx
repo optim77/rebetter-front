@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { companiesApi } from "@/api/companiesApi";
+import { GroupsApi } from "@/api/GroupsApi.ts";
 import { useParams } from "react-router-dom";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
@@ -20,7 +20,7 @@ export const SocialLinksForMessageSelector = ({ onSelect, disabled, isRequired }
         queryKey: ["companySocials", companyId],
         queryFn: async () => {
             if (!companyId) throw new Error("Missing companyId");
-            return companiesApi.getSocials(companyId);
+            return GroupsApi.getSocials(companyId);
         },
         enabled: !!companyId,
     });
@@ -36,7 +36,7 @@ export const SocialLinksForMessageSelector = ({ onSelect, disabled, isRequired }
     const activeSocials = Object.entries(socials).filter(([, value]) => !!value);
 
     if (activeSocials.length === 0) {
-        return <p className="text-gray-500 text-sm">{t("companies.no_socials_available")}</p>;
+        return <p className="text-gray-500 text-sm">{t("groups.no_socials_available")}</p>;
     }
 
     return (
@@ -47,7 +47,7 @@ export const SocialLinksForMessageSelector = ({ onSelect, disabled, isRequired }
         `}
         >
             <h2 className="text-lg font-semibold mb-4">
-                {t("companies.choose_social_platform")}
+                {t("groups.choose_social_platform")}
             </h2>
 
             <RadioGroup

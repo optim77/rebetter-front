@@ -6,7 +6,7 @@ export interface CreateCompany {
     description?: string;
 }
 
-export interface Company {
+export interface Group {
     id: string;
     name: string;
     description?: string;
@@ -29,21 +29,21 @@ export interface Socials {
     znany_lekarz: string | null;
 }
 
-export const companiesApi = {
-    getCompanies: async (params: PaginationParams) => {
-        const res = await api.get("/companies/", { params });
+export const GroupsApi = {
+    getGroups: async (params: PaginationParams) => {
+        const res = await api.get("/groups/", { params });
         return res.data;
     },
-    getCompany: async (companyId: string): Promise<Company> => {
-        const res = await api.get<Company>(`/companies/${companyId}`);
+    getGroup: async (companyId: string): Promise<Group> => {
+        const res = await api.get<Group>(`/groups/${companyId}`);
         return res.data;
     },
-    createCompany: async (data: CreateCompany) => {
-        const res = await api.post<Company>("/companies/", data);
+    createGroup: async (data: CreateCompany) => {
+        const res = await api.post<Group>("/groups/", data);
         return res.data;
     },
     getSocials: async (companyId: string): Promise<Socials> => {
-        const res = await api.get<Socials>(`/companies/${companyId}/socials`);
+        const res = await api.get<Socials>(`/groups/${companyId}/socials`);
         return res.data;
     },
 }
