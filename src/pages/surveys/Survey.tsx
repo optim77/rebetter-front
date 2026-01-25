@@ -1,17 +1,17 @@
 import { type JSX } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { SurveysAPI } from "@/api/SurveysAPI.ts";
 import { t } from "i18next";
-import { Loader } from "@/components/elements/Loader.tsx";
-import { Button } from "@/components/ui/button.tsx";
-import { Checkbox } from "@/components/ui/checkbox.tsx";
-import { Label } from "@/components/ui/label.tsx";
-import { Badge } from "@/components/ui/badge.tsx";
-import { motion } from "framer-motion";
-import { FileText, Edit3, Trash2, Star, MessageSquare, CheckCircle2, ChartArea } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { FileText, Edit, Trash2, Star, MessageSquare, CheckCircle2, ChartNoAxesCombined } from "lucide-react";
 import { handleApiError } from "@/utils/handleApiError.ts";
 import toast from "react-hot-toast";
+import { BaseSpinner } from "@/components/elements/BaseSpinner.tsx";
 
 type QuestionType = "text" | "choice" | "rating";
 
@@ -24,10 +24,10 @@ type Question = {
 };
 
 export const Survey = (): JSX.Element => {
-    const { companyId, surveyId } = useParams<{
-        companyId: string;
+    const { groupId, surveyId } = useParams<{
+        groupId: string;
         surveyId: string;
-    }>() as { companyId: string; surveyId: string };
+    }>() as { groupId: string; surveyId: string };
 
     const navigate = useNavigate();
 
@@ -35,179 +35,180 @@ export const Survey = (): JSX.Element => {
         data: survey,
         isLoading,
         isError,
-        error
+        error,
     } = useQuery({
-        queryKey: ["survey", companyId, surveyId],
-        queryFn: () => SurveysAPI.getSurvey(companyId, surveyId),
-        enabled: !!companyId && !!surveyId
+        queryKey: ["survey", groupId, surveyId],
+        queryFn: () => SurveysAPI.getSurvey(groupId, surveyId),
+        enabled: !!groupId && !!surveyId,
     });
 
     const deleteSurvey = useMutation({
         mutationFn: async () => {
-            if (!companyId || !surveyId) throw new Error("Missing company or survey ID!");
-            await SurveysAPI.deleteSurvey(companyId, surveyId);
+            if (!groupId || !surveyId) throw new Error("Missing company or survey ID!");
+            await SurveysAPI.deleteSurvey(groupId, surveyId);
         },
         onSuccess: () => {
             toast.success(t("surveys.delete_surveys"));
-            navigate(`/dashboard/group/${companyId}/surveys`);
+            navigate(`/dashboard/group/${groupId}/surveys`);
         },
         onError: (err) => {
             const apiError = handleApiError(err);
             toast.error(t(`errors.${apiError.message}`) || apiError.message);
-        }
+        },
     });
 
-    if (isLoading) return <Loader />;
+    if (isLoading) return <BaseSpinner />;
 
     if (isError || !survey) {
         return (
-            <div className="min-h-screen flex items-center justify-center px-4">
-                <div className="text-center bg-red-50 text-red-700 py-6 px-10 rounded-3xl shadow-lg">
-                    <p className="text-xl font-semibold">{t("errors.error_fetching_survey")}</p>
-                    {error && <p className="text-sm mt-2 opacity-80">{(error as Error).message}</p>}
+            <div className="flex min-h-[60vh] items-center justify-center">
+                <div className="text-center">
+                    <p className="text-lg font-medium text-destructive">
+                        {t("errors.error_fetching_survey")}
+                    </p>
+                    {error && <p className="mt-2 text-sm text-muted-foreground">{(error as Error).message}</p>}
+                    <Button asChild variant="outline" className="mt-6">
+                        <Link to={`/dashboard/group/${groupId}/surveys`}>
+                            {t("action.back_to_list")}
+                        </Link>
+                    </Button>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 px-4 py-12 overflow-hidden relative">
+        <div className="container mx-auto px-4 py-8 max-w-5xl">
+            {/* Nagłówek + akcje */}
+            <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                    <div className="flex items-center gap-3">
+                        <FileText className="h-8 w-8 text-primary" />
+                        <h1 className="text-2xl font-semibold tracking-tight">{survey.name}</h1>
+                    </div>
+                    {survey.description && (
+                        <p className="mt-2 text-sm text-muted-foreground">{survey.description}</p>
+                    )}
+                </div>
 
-            <motion.div
-                className="absolute inset-0 -z-10"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 2 }}
-            >
-                <div className="absolute -top-40 -left-40 w-96 h-96 bg-indigo-300/30 rounded-full blur-3xl animate-pulse" />
-                <div className="absolute top-40 right-0 w-80 h-80 bg-purple-300/30 rounded-full blur-3xl animate-pulse delay-1000" />
-                <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-pink-300/30 rounded-full blur-3xl animate-pulse delay-500" />
-            </motion.div>
+                <div className="flex flex-wrap gap-3">
+                    <Button variant="outline" size="sm" asChild>
+                        <Link to={`/dashboard/group/${groupId}/survey/${surveyId}/analytics`}>
+                            <ChartNoAxesCombined className="mr-2 h-4 w-4" />
+                            {t("surveys.analytics")}
+                        </Link>
+                    </Button>
 
-            <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-                className="max-w-5xl mx-auto"
-            >
+                    <Button variant="outline" size="sm" asChild>
+                        <Link to={`/dashboard/group/${groupId}/survey/${surveyId}/edit`}>
+                            <Edit className="mr-2 h-4 w-4" />
+                            {t("action.update")}
+                        </Link>
+                    </Button>
 
-                <div className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl overflow-hidden border border-white/60">
+                    <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => {
+                            if (confirm(t("surveys.confirm_delete"))) {
+                                deleteSurvey.mutate();
+                            }
+                        }}
+                    >
+                        <Trash2 className="mr-2 h-4 w-4" />
+                        {t("action.delete")}
+                    </Button>
+                </div>
+            </div>
 
-                    <div className="bg-gradient-to-r from-indigo-500 to-purple-600 p-10 text-white">
-                        <div className="flex justify-between items-start">
-                            <div>
-                                <h1 className="text-4xl font-extrabold flex items-center gap-4">
-                                    <FileText className="w-12 h-12" />
-                                    {survey.name}
-                                </h1>
-                                {survey.description && (
-                                    <p className="mt-4 text-indigo-100 text-lg max-w-2xl">
-                                        {survey.description}
-                                    </p>
+            {/* Lista pytań */}
+            <div className="space-y-6">
+                {survey.content?.map((q: Question, index: number) => (
+                    <Card key={q.id} className="border">
+                        <CardContent className="p-6">
+                            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
+                                <div className="flex items-start gap-4 flex-1">
+                                    <div className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground font-medium">
+                                        {index + 1}
+                                    </div>
+
+                                    <div className="flex-1 min-w-0">
+                                        <h3 className="font-medium leading-tight">
+                                            {q.label}
+                                            {q.required && <span className="text-destructive ml-1.5">*</span>}
+                                        </h3>
+
+                                        <Badge variant="outline" className="mt-2 text-xs">
+                                            {q.type === "text" && (
+                                                <>
+                                                    <MessageSquare className="mr-1.5 h-3.5 w-3.5" />
+                                                    {t("surveys.question_type_text")}
+                                                </>
+                                            )}
+                                            {q.type === "choice" && (
+                                                <>
+                                                    <CheckCircle2 className="mr-1.5 h-3.5 w-3.5" />
+                                                    {t("surveys.question_type_choice")}
+                                                </>
+                                            )}
+                                            {q.type === "rating" && (
+                                                <>
+                                                    <Star className="mr-1.5 h-3.5 w-3.5" />
+                                                    {t("surveys.question_type_rating")}
+                                                </>
+                                            )}
+                                        </Badge>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Podgląd odpowiedzi */}
+                            <div className="mt-4">
+                                {q.type === "text" && (
+                                    <div className="rounded border bg-muted/40 p-4 text-sm text-muted-foreground italic">
+                                        {t("surveys.text_response_example")}
+                                    </div>
+                                )}
+
+                                {q.type === "choice" && q.options && (
+                                    <div className="space-y-3">
+                                        {q.options.map((opt, i) => (
+                                            <div
+                                                key={i}
+                                                className="flex items-center gap-3 rounded border bg-background px-4 py-2.5 text-sm"
+                                            >
+                                                <div className="h-4 w-4 rounded-full border border-muted-foreground" />
+                                                <span>{opt}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+
+                                {q.type === "rating" && (
+                                    <div className="flex gap-2">
+                                        {[1, 2, 3, 4, 5].map((value) => (
+                                            <div
+                                                key={value}
+                                                className="flex h-10 w-10 items-center justify-center rounded border text-lg text-muted-foreground"
+                                            >
+                                                ★
+                                            </div>
+                                        ))}
+                                    </div>
                                 )}
                             </div>
 
-                            <div className="flex gap-3">
-                                <Button
-                                    onClick={() => navigate(`/dashboard/group/${companyId}/survey/${surveyId}/analytics`)}
-                                    className="bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-md"
-                                >
-                                    <ChartArea className="w-5 h-5 mr-2" />
-                                    {t("surveys.analytics")}
-                                </Button>
-                                <Button
-                                    onClick={() => navigate(`/dashboard/group/${companyId}/survey/${surveyId}/edit`)}
-                                    className="bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-md"
-                                >
-                                    <Edit3 className="w-5 h-5 mr-2" />
-                                    {t("action.update")}
-                                </Button>
-                                <Button
-                                    onClick={() => {
-                                        if (confirm(t("surveys.confirm_delete"))) {
-                                            deleteSurvey.mutate();
-                                        }
-                                    }}
-                                    variant="destructive"
-                                    className="bg-red-600/80 hover:bg-red-700"
-                                >
-                                    <Trash2 className="w-5 h-5 mr-2" />
-                                    {t("action.delete")}
-                                </Button>
+                            {/* Wymagane */}
+                            <div className="mt-6 flex items-center gap-2 pt-4 border-t">
+                                <Checkbox checked={q.required} disabled id={`required-${q.id}`} />
+                                <Label htmlFor={`required-${q.id}`} className="text-sm text-muted-foreground">
+                                    {t("surveys.required")}
+                                </Label>
                             </div>
-                        </div>
-                    </div>
-
-                    <div className="p-10 space-y-8">
-                        {survey.content?.map((q: Question, index: number) => (
-                            <motion.div
-                                key={q.id}
-                                initial={{ opacity: 0, x: -30 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: index * 0.1 }}
-                                className="bg-gradient-to-r from-gray-50 to-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-xl transition-shadow"
-                            >
-                                <div className="flex justify-between items-start mb-6">
-                                    <h3 className="text-xl font-semibold text-gray-800 flex items-center gap-3">
-                                        <span className="text-indigo-600 font-bold">{index + 1}.</span>
-                                        {q.label}
-                                        {q.required && <span className="text-red-500 ml-2">*</span>}
-                                    </h3>
-
-                                    <Badge variant="outline" className="capitalize">
-                                        {q.type === "text" && <MessageSquare className="w-4 h-4 mr-1" />}
-                                        {q.type === "choice" && <CheckCircle2 className="w-4 h-4 mr-1" />}
-                                        {q.type === "rating" && <Star className="w-4 h-4 mr-1" />}
-                                        {q.type}
-                                    </Badge>
-                                </div>
-
-                                <div className="mt-6">
-                                    {q.type === "text" && (
-                                        <div className="w-full bg-white/70 border border-gray-200 rounded-2xl p-5 text-gray-600 italic">
-                                            {t("surveys.text_response_example")}
-                                        </div>
-                                    )}
-
-                                    {q.type === "choice" && q.options && (
-                                        <div className="space-y-3">
-                                            {q.options.map((opt, i) => (
-                                                <label
-                                                    key={i}
-                                                    className="flex items-center gap-4 p-4 rounded-xl border border-gray-200 bg-white/60 cursor-pointer hover:border-indigo-300 hover:bg-indigo-50 transition-all"
-                                                >
-                                                    <input type="radio" disabled className="w-5 h-5" />
-                                                    <span className="font-medium text-gray-700">{opt}</span>
-                                                </label>
-                                            ))}
-                                        </div>
-                                    )}
-
-                                    {q.type === "rating" && (
-                                        <div className="flex justify-center gap-4 py-6">
-                                            {[1, 2, 3, 4, 5].map((value) => (
-                                                <div
-                                                    key={value}
-                                                    className="text-5xl text-gray-300 hover:text-gray-400 transition-all duration-300"
-                                                >
-                                                    ★
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className="flex items-center gap-3 mt-6 pt-4 border-t border-gray-200">
-                                    <Checkbox checked={q.required} disabled />
-                                    <Label className="text-gray-600 font-medium">
-                                        {t("surveys.required")}
-                                    </Label>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-            </motion.div>
+                        </CardContent>
+                    </Card>
+                ))}
+            </div>
         </div>
     );
 };

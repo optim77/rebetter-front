@@ -1,4 +1,5 @@
 import api from "@/api/axios.ts";
+import type { PaginationParams } from "@/api/Types.ts";
 
 export type Surveys = {
     items: Survey[];
@@ -20,13 +21,8 @@ export type CreateSurveyResponse = {
 }
 
 export const SurveysAPI = {
-    fetchSurveys: async (companyId: string, page: number, pageSize: number) => {
-        const res = await api.get<Surveys>(`/surveys/${companyId}/list`, {
-            params: {
-                page,
-                page_size: pageSize,
-            },
-        });
+    fetchSurveys: async (companyId: string, params: PaginationParams) => {
+        const res = await api.get<Surveys>(`/surveys/${companyId}/list`, {params});
         return res.data;
     },
 
