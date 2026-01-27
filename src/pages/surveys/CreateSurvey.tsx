@@ -17,14 +17,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Plus, Trash, GripVertical, ArrowLeft, ArrowRight, FileText } from "lucide-react";
+import { Plus, ArrowLeft, ArrowRight, FileText } from "lucide-react";
 import { t } from "i18next";
 import { Textarea } from "@/components/ui/textarea";
 import { useNavigate, useParams } from "react-router-dom";
 import { SurveysAPI } from "@/api/SurveysAPI.ts";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
     Select,
     SelectContent,
@@ -40,14 +39,38 @@ import { SurveyProgressBar } from "@/pages/surveys/preview/SurveyProgressBar.tsx
 import { TextQuestion } from "@/pages/surveys/preview/TextQuestion.tsx";
 import { SmileScaleQuestion } from "@/pages/surveys/preview/SmileScaleQuestion.tsx";
 import { DropdownListChoice } from "@/pages/surveys/preview/DropdownListChoice.tsx";
+import { DateChoice } from "@/pages/surveys/preview/DateChoice.tsx";
+import { ContactQuestion } from "@/pages/surveys/preview/ContactQuestion.tsx";
+import { ChooseAnswerBuilder } from "@/pages/surveys/question/ChooseAnswerBuilder.tsx";
+import { RatingAnswerBuilder } from "@/pages/surveys/question/RatingAnswerBuilder.tsx";
+import { NPSAnswerBuilder } from "@/pages/surveys/question/NPSAnswerBuilder.tsx";
+import { NPSQuestion } from "@/pages/surveys/preview/NPSQuestion.tsx";
+import { ContactAnswerBuilder } from "@/pages/surveys/question/ContactAnswerBuilder.tsx";
+import { BaseAnswerBuilder } from "@/pages/surveys/question/BaseAnswerBuilder.tsx";
 
 /**
  * TODO LIST:
  *  - randomize options
+ *  - implement rating question
+ *  - implement matrix question
+ *  - implement logic
+ *  - saving questions
  *  */
 
 
-type QuestionType = "text" | "single_answer_choice" | "multiple_answer_choice" | "rating" | "smile_scale" | "nps" | "dropdown_list" | "matrix" | "contact_form" | "rating_answers" | "date" | "display_info";
+type QuestionType =
+    "text"
+    | "single_answer_choice"
+    | "multiple_answer_choice"
+    | "rating"
+    | "smile_scale"
+    | "nps"
+    | "dropdown_list"
+    | "matrix"
+    | "contact_form"
+    | "rating_answers"
+    | "date"
+    | "display_info";
 
 const QuestionType: string[] = [
     "text",
@@ -64,16 +87,12 @@ const QuestionType: string[] = [
     "display_info",
 ]
 
-interface ContactField {
+export interface ContactField {
     id: string;
     label: string;
     type: "text" | "email" | "phone" | "textarea";
     required?: boolean;
 }
-
-type RatingAnswersResponse = {
-    orderedOptionIds: string[];
-};
 
 export interface Question {
     id: string;
@@ -103,7 +122,9 @@ const SortableQuestion = ({
                               addContactField,
                               updateContactFieldLabel,
                               updateContactFieldType,
-                              removeContactField
+                              removeContactField,
+                              duplicateQuestion,
+                              saveQuestionTemplate
                           }: {
     question: Question;
     onLabelChange: (id: string, label: string) => void;
@@ -118,77 +139,118 @@ const SortableQuestion = ({
     updateContactFieldLabel: (questionId: string, fieldId: string, value: string) => void;
     updateContactFieldType: (questionId: string, fieldId: string, type: ContactField["type"]) => void;
     removeContactField: (questionId: string, fieldId: string) => void;
+    duplicateQuestion: (id: string) => void;
+    saveQuestionTemplate: (question: Question) => void;
 }) => {
-    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: question.id });
+    const {attributes, listeners, setNodeRef, transform, transition} = useSortable({id: question.id});
 
     const style = {
         transform: CSS.Transform.toString(transform),
         transition,
     };
 
+
+    if (["single_answer_choice", "multiple_answer_choice", "dropdown_list"].includes(question.type)) {
+        return (
+            <ChooseAnswerBuilder
+                setNodeRef={setNodeRef}
+                style={style}
+                question={question}
+                attributes={attributes}
+                listeners={listeners}
+                removeQuestion={removeQuestion}
+                duplicateQuestion={duplicateQuestion}
+                onLabelChange={onLabelChange}
+                toggleRequired={toggleRequired}
+                onOptionChange={onOptionChange}
+                addOption={addOption}
+            />
+        );
+    } else if (question.type == "rating") {
+        return (
+            <RatingAnswerBuilder
+                setNodeRef={setNodeRef}
+                style={style}
+                question={question}
+                attributes={attributes}
+                listeners={listeners}
+                removeQuestion={removeQuestion}
+                duplicateQuestion={duplicateQuestion}
+                onLabelChange={onLabelChange}
+                toggleRequired={toggleRequired}
+                updateQuestion={updateQuestion}
+            />
+        );
+    } else if (question.type == "nps") {
+        return (
+            <NPSAnswerBuilder
+                setNodeRef={setNodeRef}
+                style={style}
+                question={question}
+                attributes={attributes}
+                listeners={listeners}
+                removeQuestion={removeQuestion}
+                duplicateQuestion={duplicateQuestion}
+                onLabelChange={onLabelChange}
+                toggleRequired={toggleRequired}
+            />
+        );
+    } else if (question.type == "contact_form") {
+        return (
+            <ContactAnswerBuilder
+                setNodeRef={setNodeRef}
+                style={style}
+                question={question} attributes={attributes}
+                listeners={listeners}
+                removeQuestion={removeQuestion}
+                duplicateQuestion={duplicateQuestion}
+                onLabelChange={onLabelChange}
+                toggleRequired={toggleRequired}
+                updateContactFieldLabel={updateContactFieldLabel}
+                updateContactFieldType={updateContactFieldType}
+                removeContactField={removeContactField}
+                addContactField={addContactField}
+            />
+        );
+    } else if (question.type == "text") {
+        return (
+            <BaseAnswerBuilder
+                setNodeRef={setNodeRef}
+                style={style}
+                question={question}
+                attributes={attributes}
+                listeners={listeners}
+                removeQuestion={removeQuestion}
+                duplicateQuestion={duplicateQuestion}
+                onLabelChange={onLabelChange}
+                toggleRequired={toggleRequired}
+                isDate={false}
+            />
+            )
+
+    } else if (question.type == "date") {
+        return (
+            <BaseAnswerBuilder
+                setNodeRef={setNodeRef}
+                style={style}
+                question={question}
+                attributes={attributes}
+                listeners={listeners}
+                removeQuestion={removeQuestion}
+                duplicateQuestion={duplicateQuestion}
+                onLabelChange={onLabelChange}
+                toggleRequired={toggleRequired}
+                isDate={true}
+            />
+        )
+    }
+
     return (
         <Card ref={setNodeRef} style={style} className="mb-4 border shadow-sm">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <div className="flex items-center gap-2">
-                    <GripVertical className="h-5 w-5 text-gray-400 cursor-grab" {...attributes} {...listeners} />
-                    <span className="text-sm font-semibold">{t(`surveys.${question.type}`)}</span>
-                </div>
-
-                <Button variant="destructive" size="icon" onClick={() => removeQuestion(question.id)}>
-                    <Trash className="h-4 w-4" />
-                </Button>
-            </CardHeader>
 
             <CardContent className="space-y-4">
-                <div className="space-y-2">
-                    <Label className="text-sm">{t("surveys.field_label")}</Label>
-                    <Input
-                        placeholder={t("common.content")}
-                        value={question.label}
-                        onChange={(e) => onLabelChange(question.id, e.target.value)}
-                    />
-                </div>
 
-                <div className="flex items-center gap-2">
-                    <Checkbox checked={question.required} onCheckedChange={() => toggleRequired(question.id)} />
-                    <Label>{t("surveys.required")}</Label>
-                </div>
 
-                {["single_answer_choice", "multiple_answer_choice", "dropdown_list"].includes(question.type) && (
-                    <div className="space-y-3">
-                        <Label>{t("surveys.options")}</Label>
-                        {question.options?.map((opt, i) => (
-                            <Input
-                                key={i}
-                                value={opt}
-                                onChange={(e) => onOptionChange(question.id, i, e.target.value)}
-                                placeholder={`${t("surveys.option")} ${i + 1}`}
-                            />
-                        ))}
-                        <Button size="sm" variant="outline" onClick={() => addOption(question.id)}>
-                            <Plus className="h-4 w-4 mr-1" /> {t("surveys.add_option")}
-                        </Button>
-                    </div>
-                )}
-
-                {["rating", "nps"].includes(question.type) && (
-                    <div className="space-y-2">
-                        <Label>{t("surveys.scale")}</Label>
-                        <Input
-                            type="number"
-                            min={2}
-                            max={10}
-                            value={question.scale ?? 5}
-                            onChange={(e) =>
-                                updateQuestion(
-                                    question.id,
-                                    "scale",
-                                    Number(e.target.value)
-                                )
-                            }
-                        />
-                    </div>
-                )}
                 {question.type === "matrix" && (
                     <div className="space-y-4">
                         <Label>{t("surveys.rows")}</Label>
@@ -221,63 +283,6 @@ const SortableQuestion = ({
                     </div>
                 )}
 
-                {question.type === "contact_form" && (
-                    <div className="space-y-4">
-                        <Label>{t("surveys.contact_fields")}</Label>
-
-                        {question.contactFields?.map((field) => (
-                            <div key={field.id} className="flex items-center gap-3">
-                                <Input
-                                    value={field.label}
-                                    placeholder={t("surveys.field_label")}
-                                    onChange={(e) =>
-                                        updateContactFieldLabel(
-                                            question.id,
-                                            field.id,
-                                            e.target.value
-                                        )
-                                    }
-                                />
-
-                                <Select
-                                    value={field.type}
-                                    onValueChange={(v) =>
-                                        updateContactFieldType(question.id, field.id, v as any)
-                                    }
-                                >
-                                    <SelectTrigger className="w-32">
-                                        <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="text">{t("surveys.text")}</SelectItem>
-                                        <SelectItem value="email">{t("surveys.email")}</SelectItem>
-                                        <SelectItem value="phone">{t("surveys.phone")}</SelectItem>
-                                        <SelectItem value="textarea">{t("surveys.textarea")}</SelectItem>
-                                    </SelectContent>
-                                </Select>
-
-                                <Button
-                                    size="icon"
-                                    variant="ghost"
-                                    onClick={() =>
-                                        removeContactField(question.id, field.id)
-                                    }
-                                >
-                                    ✕
-                                </Button>
-                            </div>
-                        ))}
-
-                        <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => addContactField(question.id)}
-                        >
-                            <Plus className="h-4 w-4 mr-1" />
-                            {t("surveys.add_field")}
-                        </Button>
-                    </div>
-                )}
 
                 {question.type == "rating_answers" && (
                     <div className="space-y-3">
@@ -295,37 +300,17 @@ const SortableQuestion = ({
                         </Button>
                     </div>
                 )}
-
-                {question.type == "date" && (
-                    <></>
-                )}
-
-                {question.type === "display_info" && (
-                    <Textarea
-                        placeholder={t("surveys.info_text")}
-                        value={question.infoText}
-                        onChange={(e) =>
-                            setQuestions(q =>
-                                q.map(item =>
-                                    item.id === question.id
-                                        ? {...item, infoText: e.target.value}
-                                        : item
-                                )
-                            )
-                        }
-                    />
-                )}
             </CardContent>
         </Card>
     );
 };
 
 export const CreateSurvey = (): JSX.Element => {
-    const { t } = useTranslation();
+    const {t} = useTranslation();
     const [questions, setQuestions] = useState<Question[]>([]);
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
-    const { companyId } = useParams<{ companyId: string }>();
+    const {companyId} = useParams<{ companyId: string }>();
     const navigate = useNavigate();
 
     const [slideOrientation, setSlideOrientation] = useState<"vertical" | "horizontal">("vertical");
@@ -347,16 +332,16 @@ export const CreateSurvey = (): JSX.Element => {
 
         const withDefaults: Record<QuestionType, Partial<Question>> = {
             text: {},
-            single_answer_choice: { options: [""] },
-            multiple_answer_choice: { options: [""] },
-            dropdown_list: { options: [""] },
+            single_answer_choice: {options: [""]},
+            multiple_answer_choice: {options: [""]},
+            dropdown_list: {options: [""]},
 
-            rating: { scale: 5 },
-            rating_answers: { scale: 5 },
-            smile_scale: { scale: 5 },
-            nps: { scale: 10 },
+            rating: {scale: 5},
+            rating_answers: {scale: 5},
+            smile_scale: {scale: 5},
+            nps: {scale: 10},
 
-            matrix: { rows: [""], columns: [""] },
+            matrix: {rows: [""], columns: [""]},
 
             contact_form: {
                 contactFields: [
@@ -373,21 +358,53 @@ export const CreateSurvey = (): JSX.Element => {
                 ],
             },
             date: {},
-            display_info: { infoText: "" },
+            display_info: {infoText: ""},
         };
 
-        setQuestions(q => [...q, { ...base, ...withDefaults[type] }]);
+        setQuestions(q => [...q, {...base, ...withDefaults[type]}]);
         setPreviewIndex(questions.length);
     };
 
     const onLabelChange = (id: string, label: string) => {
-        setQuestions((q) => q.map((item) => (item.id === id ? { ...item, label } : item)));
+        setQuestions((q) => q.map((item) => (item.id === id ? {...item, label} : item)));
     };
 
     const toggleRequired = (id: string) => {
         setQuestions((q) =>
-            q.map((item) => (item.id === id ? { ...item, required: !item.required } : item))
+            q.map((item) => (item.id === id ? {...item, required: !item.required} : item))
         );
+    };
+
+    const duplicateQuestion = (id: string) => {
+        setQuestions(q => {
+            const index = q.findIndex(item => item.id === id);
+            if (index === -1) return q;
+
+            const copy = {
+                ...q[index],
+                id: crypto.randomUUID(),
+            };
+
+            const newQuestions = [...q];
+            newQuestions.splice(index + 1, 0, copy);
+
+            return newQuestions;
+        });
+    };
+
+    const saveQuestionTemplate = (question: Question) => {
+        const templates = JSON.parse(
+            localStorage.getItem("questionTemplates") || "[]"
+        );
+
+        templates.push({
+            ...question,
+            id: crypto.randomUUID(),
+            savedAt: new Date().toISOString(),
+        });
+
+        localStorage.setItem("questionTemplates", JSON.stringify(templates));
+        toast.success(t("surveys.field_saved"));
     };
 
     const updateMatrixRow = (questionId: string, index: number, value: string) => {
@@ -447,7 +464,7 @@ export const CreateSurvey = (): JSX.Element => {
                     ? {
                         ...item,
                         contactFields: item.contactFields?.map(f =>
-                            f.id === fieldId ? { ...f, label: value } : f
+                            f.id === fieldId ? {...f, label: value} : f
                         ),
                     }
                     : item
@@ -466,7 +483,7 @@ export const CreateSurvey = (): JSX.Element => {
                     ? {
                         ...item,
                         contactFields: item.contactFields?.map(f =>
-                            f.id === fieldId ? { ...f, type } : f
+                            f.id === fieldId ? {...f, type} : f
                         ),
                     }
                     : item
@@ -494,7 +511,7 @@ export const CreateSurvey = (): JSX.Element => {
     ) => {
         setQuestions(q =>
             q.map(item =>
-                item.id === id ? { ...item, [key]: value } : item
+                item.id === id ? {...item, [key]: value} : item
             )
         );
     };
@@ -515,7 +532,7 @@ export const CreateSurvey = (): JSX.Element => {
         setQuestions((q) =>
             q.map((item) =>
                 item.id === qid && item.options
-                    ? { ...item, options: [...item.options, ""] }
+                    ? {...item, options: [...item.options, ""]}
                     : item
             )
         );
@@ -529,7 +546,7 @@ export const CreateSurvey = (): JSX.Element => {
     };
 
     const onDragEnd = (event: any) => {
-        const { active, over } = event;
+        const {active, over} = event;
         if (!over || active.id === over.id) return;
 
         const oldIndex = questions.findIndex((q) => q.id === active.id);
@@ -588,8 +605,9 @@ export const CreateSurvey = (): JSX.Element => {
                     </div>
 
                     {questions.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center py-32 text-center text-muted-foreground">
-                            <FileText className="h-16 w-16 mb-6 opacity-40" />
+                        <div
+                            className="flex flex-col items-center justify-center py-32 text-center text-muted-foreground">
+                            <FileText className="h-16 w-16 mb-6 opacity-40"/>
                             <h3 className="text-xl font-medium">{t("surveys.no_questions_preview")}</h3>
                             <p className="mt-2 max-w-md">
                                 {t("surveys.add_first_question")}
@@ -598,86 +616,41 @@ export const CreateSurvey = (): JSX.Element => {
                     ) : (
                         <Card className="shadow-lg border-0">
                             <CardContent className="p-8 lg:p-12 space-y-8">
-                                {showProgress && <SurveyProgressBar previewIndex={previewIndex} questions={questions} />}
+                                {showProgress && <SurveyProgressBar previewIndex={previewIndex} questions={questions}/>}
 
                                 {currentQuestion && (
                                     <div className="space-y-6">
                                         <h3 className="text-2xl font-medium">
                                             {currentQuestion.label || t("surveys.enter_question_here")}
-                                            {currentQuestion.required && <span className="text-destructive ml-1">*</span>}
+                                            {currentQuestion.required &&
+                                              <span className="text-destructive ml-1">*</span>}
                                         </h3>
 
                                         {currentQuestion.type === "text" && (
-                                            <TextQuestion />
+                                            <TextQuestion/>
                                         )}
 
                                         {currentQuestion.type === "rating" && (
-                                            <RatingQuestion currentQuestion={currentQuestion} />
+                                            <RatingQuestion currentQuestion={currentQuestion}/>
                                         )}
                                         {currentQuestion.type === "single_answer_choice" &&
-                                            <SingleAnswerChoice currentQuestion={currentQuestion} />
+                                          <SingleAnswerChoice currentQuestion={currentQuestion}/>
                                         }
 
                                         {currentQuestion.type === "multiple_answer_choice" &&
-                                            <MultipleAnswerChoices currentQuestion={currentQuestion} />
+                                          <MultipleAnswerChoices currentQuestion={currentQuestion}/>
                                         }
 
                                         {currentQuestion.type === "smile_scale" && (
-                                            <SmileScaleQuestion />
+                                            <SmileScaleQuestion/>
                                         )}
 
-                                        {currentQuestion.type === "nps" && (
-                                            <div className="flex flex-wrap gap-3">
-                                                {Array.from({ length: 10 }, (_, i) => {
-                                                    const value = i + 1;
-
-                                                    return (
-                                                        <div
-                                                            key={value}
-                                                            className="h-12 w-12 flex items-center justify-center rounded-lg border border-muted-foreground text-xl font-medium"
-                                                        >
-                                                            {value}
-                                                        </div>
-                                                    );
-                                                })}
-
-                                            </div>
-                                        )}
-
-                                        {currentQuestion.type === "dropdown_list" && (
-                                            <DropdownListChoice currentQuestion={currentQuestion} />
-                                        )}
-
-
-                                        {currentQuestion.type === "contact_form" && (
-                                            <div className="space-y-4">
-                                                {currentQuestion.contactFields?.map(field => {
-                                                    if (field.type === "textarea") {
-                                                        return (
-                                                            <>
-                                                                <Label htmlFor={field.id}>{field.label}</Label>
-                                                                <Textarea
-                                                                    id={field.id}
-                                                                    key={field.id}
-                                                                />
-                                                            </>
-
-                                                        );
-                                                    }
-
-                                                    return (
-                                                        <>
-                                                            <Label htmlFor={field.id}>{field.label}</Label>
-                                                            <Input
-                                                                key={field.id}
-                                                                type={field.type}
-                                                            />
-                                                        </>
-
-                                                    );
-                                                })}
-                                            </div>
-                                        )}
+                                        {currentQuestion.type === "nps" && <NPSQuestion/>}
+                                        {currentQuestion.type === "dropdown_list" &&
+                                          <DropdownListChoice currentQuestion={currentQuestion}/>}
+                                        {currentQuestion.type === "contact_form" &&
+                                          <ContactQuestion currentQuestion={currentQuestion}/>}
+                                        {currentQuestion.type === "date" && <DateChoice/>}
 
                                     </div>
                                 )}
@@ -699,7 +672,7 @@ export const CreateSurvey = (): JSX.Element => {
                                             onClick={() => setPreviewIndex((prev) => prev + 1)}
                                         >
                                             {previewIndex === questions.length - 1 ? t("action.submit") : t("action.next")}
-                                            <ArrowRight className="h-4 w-4 ml-2" />
+                                            <ArrowRight className="h-4 w-4 ml-2"/>
                                         </Button>
                                     </div>
                                 )}
@@ -738,9 +711,10 @@ export const CreateSurvey = (): JSX.Element => {
                         <CardContent className="space-y-4">
                             <div className="flex items-center justify-between">
                                 <Label>{t("surveys.slide_orientation")}</Label>
-                                <Select value={slideOrientation} onValueChange={(v: "vertical" | "horizontal") => setSlideOrientation(v)}>
+                                <Select value={slideOrientation}
+                                        onValueChange={(v: "vertical" | "horizontal") => setSlideOrientation(v)}>
                                     <SelectTrigger className="w-36">
-                                        <SelectValue />
+                                        <SelectValue/>
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="vertical">{t("surveys.vertical")}</SelectItem>
@@ -751,24 +725,24 @@ export const CreateSurvey = (): JSX.Element => {
 
                             <div className="flex items-center justify-between">
                                 <Label>{t("surveys.allow_back")}</Label>
-                                <Switch checked={allowBack} onCheckedChange={setAllowBack} />
+                                <Switch checked={allowBack} onCheckedChange={setAllowBack}/>
                             </div>
 
                             <div className="flex items-center justify-between">
                                 <Label>{t("surveys.allow_edit_answers")}</Label>
-                                <Switch checked={allowEditAnswers} onCheckedChange={setAllowEditAnswers} />
+                                <Switch checked={allowEditAnswers} onCheckedChange={setAllowEditAnswers}/>
                             </div>
 
                             <div className="flex items-center justify-between">
                                 <Label>{t("surveys.show_progress")}</Label>
-                                <Switch checked={showProgress} onCheckedChange={setShowProgress} />
+                                <Switch checked={showProgress} onCheckedChange={setShowProgress}/>
                             </div>
                         </CardContent>
                     </Card>
 
                     <Select onValueChange={(value) => addQuestion(value)}>
                         <SelectTrigger className="w-full">
-                            <SelectValue placeholder={t("surveys.add_question")} />
+                            <SelectValue placeholder={t("surveys.add_question")}/>
                         </SelectTrigger>
                         <SelectContent>
                             {QuestionType.map((type) => (
@@ -798,6 +772,8 @@ export const CreateSurvey = (): JSX.Element => {
                                         updateContactFieldLabel={updateContactFieldLabel}
                                         updateContactFieldType={updateContactFieldType}
                                         removeContactField={removeContactField}
+                                        duplicateQuestion={duplicateQuestion}
+                                        saveQuestionTemplate={saveQuestionTemplate}
                                     />
                                 ))}
                             </SortableContext>

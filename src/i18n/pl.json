@@ -22,7 +22,9 @@
     "previous": "Poprzednia",
     "logout": "Wyloguj",
     "add": "Dodaj",
-    "submit": "Wyślij"
+    "submit": "Wyślij",
+    "duplicate": "Duplikuj",
+    "save_field": "Zapisz pole"
   },
   "common": {
     "sent_successfully": "Wysłano pomyślnie",
@@ -357,7 +359,7 @@
     "contact_form": "Formularz kontaktowy",
     "rating_answers": "Ranking odpowiedzi",
     "date": "Data",
-    "display_info": "Informacja",
+    "display_info": "Ekran informacyjny",
     "add_question": "Dodaj pytanie",
     "scale": "Skala ocen",
     "rows": "Wiersze",
@@ -366,7 +368,8 @@
     "email": "Pole email",
     "phone": "Pole numeru telefonu",
     "textarea": "Pole tekstu",
-    "open_question": "Pytanie otwarte"
+    "open_question": "Pytanie otwarte",
+    "nps_template": "Jak bardzo prawdopodobne jest, że polecisz nasz produkt znajomemu lub współpracownikowi?"
   },
   "templates": {
     "create_heading": "Kreator szablonów e-mail",
