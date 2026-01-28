@@ -369,7 +369,12 @@
     "phone": "Pole numeru telefonu",
     "textarea": "Pole tekstu",
     "open_question": "Pytanie otwarte",
-    "nps_template": "Jak bardzo prawdopodobne jest, że polecisz nasz produkt znajomemu lub współpracownikowi?"
+    "nps_template": "Jak bardzo prawdopodobne jest, że polecisz nasz produkt znajomemu lub współpracownikowi?",
+    "row": "Wiersz",
+    "column": "Kolumna",
+    "matrix_size_hint": "Wiersze i kolumny posiadają taką samą długość",
+    "matrix_size": "Wielkość macierzy",
+    "matrix_not_configured": "Macierz nie została skonfigurowana"
   },
   "templates": {
     "create_heading": "Kreator szablonów e-mail",

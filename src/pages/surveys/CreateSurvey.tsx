@@ -47,6 +47,8 @@ import { NPSAnswerBuilder } from "@/pages/surveys/question/NPSAnswerBuilder.tsx"
 import { NPSQuestion } from "@/pages/surveys/preview/NPSQuestion.tsx";
 import { ContactAnswerBuilder } from "@/pages/surveys/question/ContactAnswerBuilder.tsx";
 import { BaseAnswerBuilder } from "@/pages/surveys/question/BaseAnswerBuilder.tsx";
+import { MatrixAnswerBuilder } from "@/pages/surveys/question/MatrixAnswerBuilder.tsx";
+import { MatrixQuestion } from "@/pages/surveys/preview/MatrixQuestion.tsx";
 
 /**
  * TODO LIST:
@@ -124,7 +126,8 @@ const SortableQuestion = ({
                               updateContactFieldType,
                               removeContactField,
                               duplicateQuestion,
-                              saveQuestionTemplate
+                              saveQuestionTemplate,
+                              updateMatrixSize
                           }: {
     question: Question;
     onLabelChange: (id: string, label: string) => void;
@@ -141,6 +144,7 @@ const SortableQuestion = ({
     removeContactField: (questionId: string, fieldId: string) => void;
     duplicateQuestion: (id: string) => void;
     saveQuestionTemplate: (question: Question) => void;
+    updateMatrixSize: (questionId: string, size: number) => void;
 }) => {
     const {attributes, listeners, setNodeRef, transform, transition} = useSortable({id: question.id});
 
@@ -243,46 +247,29 @@ const SortableQuestion = ({
                 isDate={true}
             />
         )
+    } else if (question.type == "matrix") {
+        return (
+            <MatrixAnswerBuilder
+                setNodeRef={setNodeRef}
+                style={style}
+                question={question}
+                attributes={attributes}
+                listeners={listeners}
+                removeQuestion={removeQuestion}
+                duplicateQuestion={duplicateQuestion}
+                onLabelChange={onLabelChange}
+                toggleRequired={toggleRequired}
+                updateMatrixSize={updateMatrixSize}
+                updateMatrixRow={updateMatrixRow}
+                updateMatrixColumn={updateMatrixColumn}
+            />
+        );
     }
 
     return (
         <Card ref={setNodeRef} style={style} className="mb-4 border shadow-sm">
 
             <CardContent className="space-y-4">
-
-
-                {question.type === "matrix" && (
-                    <div className="space-y-4">
-                        <Label>{t("surveys.rows")}</Label>
-
-                        {question.rows?.map((r, i) => (
-                            <Input
-                                type="number"
-                                key={`row-${i}`}
-                                value={r}
-                                placeholder={`${t("surveys.row")} ${i + 1}`}
-                                onChange={(e) =>
-                                    updateMatrixRow(question.id, i, e.target.value)
-                                }
-                            />
-                        ))}
-
-                        <Label>{t("surveys.columns")}</Label>
-
-                        {question.columns?.map((c, i) => (
-                            <Input
-                                type="number"
-                                key={`col-${i}`}
-                                value={c}
-                                placeholder={`${t("surveys.column")} ${i + 1}`}
-                                onChange={(e) =>
-                                    updateMatrixColumn(question.id, i, e.target.value)
-                                }
-                            />
-                        ))}
-                    </div>
-                )}
-
 
                 {question.type == "rating_answers" && (
                     <div className="space-y-3">
@@ -562,6 +549,24 @@ export const CreateSurvey = (): JSX.Element => {
         setQuestions((prev) => arrayMove(prev, oldIndex, newIndex));
     };
 
+    const updateMatrixSize = (questionId: string, size: number) => {
+        setQuestions(q =>
+            q.map(item => {
+                if (item.id !== questionId) return item;
+
+                const prevRows = item.rows ?? [];
+                const prevCols = item.columns ?? [];
+
+                return {
+                    ...item,
+                    rows: Array.from({ length: size }, (_, i) => prevRows[i] ?? ""),
+                    columns: Array.from({ length: size }, (_, i) => prevCols[i] ?? ""),
+                };
+            })
+        );
+    };
+
+
     const saveSurvey = () => {
         if (!name.trim()) {
             toast.error(t("surveys.survey_name_is_required"));
@@ -646,10 +651,15 @@ export const CreateSurvey = (): JSX.Element => {
                                         )}
 
                                         {currentQuestion.type === "nps" && <NPSQuestion/>}
+
                                         {currentQuestion.type === "dropdown_list" &&
                                           <DropdownListChoice currentQuestion={currentQuestion}/>}
+
+                                        {currentQuestion.type === "matrix" && <MatrixQuestion currentQuestion={currentQuestion} /> }
+
                                         {currentQuestion.type === "contact_form" &&
                                           <ContactQuestion currentQuestion={currentQuestion}/>}
+
                                         {currentQuestion.type === "date" && <DateChoice/>}
 
                                     </div>
@@ -657,7 +667,7 @@ export const CreateSurvey = (): JSX.Element => {
 
                                 {questions.length > 0 && (
                                     <div className="flex items-center justify-between pt-8 border-t">
-                                        <Button
+                                    <Button
                                             variant="outline"
                                             disabled={previewIndex === 0 || !allowBack}
                                             onClick={() => setPreviewIndex((prev) => prev - 1)}
@@ -774,6 +784,7 @@ export const CreateSurvey = (): JSX.Element => {
                                         removeContactField={removeContactField}
                                         duplicateQuestion={duplicateQuestion}
                                         saveQuestionTemplate={saveQuestionTemplate}
+                                        updateMatrixSize={updateMatrixSize}
                                     />
                                 ))}
                             </SortableContext>
