@@ -1,4 +1,4 @@
-import { type JSX, useState } from "react";
+import { type JSX, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
     DndContext,
@@ -49,6 +49,8 @@ import { ContactAnswerBuilder } from "@/pages/surveys/question/ContactAnswerBuil
 import { BaseAnswerBuilder } from "@/pages/surveys/question/BaseAnswerBuilder.tsx";
 import { MatrixAnswerBuilder } from "@/pages/surveys/question/MatrixAnswerBuilder.tsx";
 import { MatrixQuestion } from "@/pages/surveys/preview/MatrixQuestion.tsx";
+import { RatingAnswersQuestion } from "@/pages/surveys/preview/RatingAnswersQuestion.tsx";
+import { SequenceRatingAnswerBuilder } from "@/pages/surveys/question/SequenceRatingAnswerBuilder.tsx";
 
 /**
  * TODO LIST:
@@ -264,32 +266,24 @@ const SortableQuestion = ({
                 updateMatrixColumn={updateMatrixColumn}
             />
         );
+    } else if (question.type == "rating_answers") {
+        return (
+            <SequenceRatingAnswerBuilder
+                setNodeRef={setNodeRef}
+                style={style}
+                question={question}
+                attributes={attributes}
+                listeners={listeners}
+                removeQuestion={removeQuestion}
+                duplicateQuestion={duplicateQuestion}
+                onLabelChange={onLabelChange}
+                toggleRequired={toggleRequired}
+                updateQuestion={updateQuestion}
+                onOptionChange={onOptionChange}
+                addOption={addOption}
+            />
+        )
     }
-
-    return (
-        <Card ref={setNodeRef} style={style} className="mb-4 border shadow-sm">
-
-            <CardContent className="space-y-4">
-
-                {question.type == "rating_answers" && (
-                    <div className="space-y-3">
-                        <Label>{t("surveys.options")}</Label>
-                        {question.options?.map((opt, i) => (
-                            <Input
-                                key={i}
-                                value={opt}
-                                onChange={(e) => onOptionChange(question.id, i, e.target.value)}
-                                placeholder={`${t("surveys.option")} ${i + 1}`}
-                            />
-                        ))}
-                        <Button size="sm" variant="outline" onClick={() => addOption(question.id)}>
-                            <Plus className="h-4 w-4 mr-1"/> {t("surveys.add_option")}
-                        </Button>
-                    </div>
-                )}
-            </CardContent>
-        </Card>
-    );
 };
 
 export const CreateSurvey = (): JSX.Element => {
@@ -304,6 +298,7 @@ export const CreateSurvey = (): JSX.Element => {
     const [allowBack, setAllowBack] = useState(true);
     const [allowEditAnswers, setAllowEditAnswers] = useState(true);
     const [showProgress, setShowProgress] = useState(true);
+    const [answers, setAnswers] = useState<Record<string, string[]>>({});
 
     const [previewIndex, setPreviewIndex] = useState(0);
 
@@ -324,7 +319,7 @@ export const CreateSurvey = (): JSX.Element => {
             dropdown_list: {options: [""]},
 
             rating: {scale: 5},
-            rating_answers: {scale: 5},
+            rating_answers: {options: [""]},
             smile_scale: {scale: 5},
             nps: {scale: 10},
 
@@ -599,7 +594,18 @@ export const CreateSurvey = (): JSX.Element => {
     });
 
     const currentQuestion = questions[previewIndex];
-
+    useEffect(() => {
+        if (
+            currentQuestion?.type === "rating_answers" &&
+            currentQuestion.options &&
+            !answers[currentQuestion.id]
+        ) {
+            setAnswers(prev => ({
+                ...prev,
+                [currentQuestion.id]: [...currentQuestion.options],
+            }));
+        }
+    }, [answers, currentQuestion]);
     return (
         <div className="h-[calc(100vh-4rem)] flex flex-col lg:flex-row overflow-hidden">
             <div className="flex-1 bg-gradient-to-br from-gray-50 to-white overflow-y-auto p-6 lg:p-12">
@@ -662,6 +668,8 @@ export const CreateSurvey = (): JSX.Element => {
 
                                         {currentQuestion.type === "date" && <DateChoice/>}
 
+                                        {currentQuestion.type === "rating_answers" && <RatingAnswersQuestion question={currentQuestion} />}
+
                                     </div>
                                 )}
 
@@ -691,8 +699,7 @@ export const CreateSurvey = (): JSX.Element => {
                     )}
                 </div>
             </div>
-
-            {/* Prawa strona – edycja pytań i ustawienia */}
+            
             <div className="w-full lg:w-96 bg-muted/40 border-l overflow-y-auto p-6 space-y-8">
                 <div className="space-y-6">
                     <div className="space-y-4">
@@ -712,8 +719,7 @@ export const CreateSurvey = (): JSX.Element => {
                             onChange={(e) => setDescription(e.target.value)}
                         />
                     </div>
-
-                    {/* Ustawienia prezentacji */}
+                    
                     <Card>
                         <CardHeader className="pb-3">
                             <h2 className="text-lg font-medium">{t("surveys.presentation_settings")}</h2>
