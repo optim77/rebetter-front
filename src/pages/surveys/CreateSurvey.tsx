@@ -15,10 +15,9 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Plus, ArrowLeft, ArrowRight, FileText } from "lucide-react";
-import { t } from "i18next";
+import { ArrowLeft, ArrowRight, FileText } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { useNavigate, useParams } from "react-router-dom";
 import { SurveysAPI } from "@/api/SurveysAPI.ts";
@@ -31,7 +30,6 @@ import {
     SelectTrigger,
     SelectValue
 } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
 import { MultipleAnswerChoices } from "@/pages/surveys/preview/MultipleAnswerChoice.tsx";
 import { SingleAnswerChoice } from "@/pages/surveys/preview/SingleAnswerChoice.tsx";
 import { RatingQuestion } from "@/pages/surveys/preview/RatingQuestion.tsx";
@@ -51,6 +49,8 @@ import { MatrixAnswerBuilder } from "@/pages/surveys/question/MatrixAnswerBuilde
 import { MatrixQuestion } from "@/pages/surveys/preview/MatrixQuestion.tsx";
 import { RatingAnswersQuestion } from "@/pages/surveys/preview/RatingAnswersQuestion.tsx";
 import { SequenceRatingAnswerBuilder } from "@/pages/surveys/question/SequenceRatingAnswerBuilder.tsx";
+import { FormConfiguration } from "@/pages/surveys/elements/FormConfiguration.tsx";
+import { SurveyLogicGraph } from "@/pages/surveys/graph/SurveyLogicGraph.tsx";
 
 /**
  * TODO LIST:
@@ -59,24 +59,11 @@ import { SequenceRatingAnswerBuilder } from "@/pages/surveys/question/SequenceRa
  *  - implement matrix question
  *  - implement logic
  *  - saving questions
+ *  - onClick on builder, move preview
  *  */
 
 
-type QuestionType =
-    "text"
-    | "single_answer_choice"
-    | "multiple_answer_choice"
-    | "rating"
-    | "smile_scale"
-    | "nps"
-    | "dropdown_list"
-    | "matrix"
-    | "contact_form"
-    | "rating_answers"
-    | "date"
-    | "display_info";
-
-const QuestionType: string[] = [
+const QUESTION_TYPES = [
     "text",
     "single_answer_choice",
     "multiple_answer_choice",
@@ -89,7 +76,30 @@ const QuestionType: string[] = [
     "rating_answers",
     "date",
     "display_info",
-]
+] as const;
+
+type QuestionType = typeof QUESTION_TYPES[number];
+
+type LogicOperator = "is" | "is_not" | "has_any_value";
+
+type LogicCapableQuestionType =
+    | "single_answer_choice"
+    | "multiple_answer_choice"
+    | "dropdown_list";
+
+interface LogicCondition {
+    sourceQuestionId: string;
+    operator: LogicOperator;
+    value?: string | string[];
+}
+
+export interface LogicRule {
+    if: LogicCondition[];
+    then: {
+        goToQuestionId?: string;
+        skipToEnd?: boolean;
+    };
+}
 
 export interface ContactField {
     id: string;
@@ -103,6 +113,7 @@ export interface Question {
     type: QuestionType;
     label: string;
     required: boolean;
+    shuffle: boolean;
     options?: string[];
     scale?: number;
     minDate?: string;
@@ -111,7 +122,45 @@ export interface Question {
     columns?: string[];
     infoText?: string;
     contactFields?: ContactField[];
+    logic?: LogicRule[];
 }
+
+type AnswersMap = Record<string, string[]>;
+
+export const evaluateLogic = (
+    question: Question,
+    answers: AnswersMap
+): string | null => {
+    if (!question.logic) return null;
+
+    for (const rule of question.logic) {
+        const isMatch = rule.if.every(condition => {
+            const answer = answers[condition.sourceQuestionId];
+
+            if (!answer) return false;
+
+            switch (condition.operator) {
+                case "has_any_value":
+                    return answer.length > 0;
+
+                case "is":
+                    return answer.includes(condition.value as string);
+
+                case "is_not":
+                    return !answer.includes(condition.value as string);
+
+                default:
+                    return false;
+            }
+        });
+
+        if (isMatch) {
+            return rule.then.goToQuestionId ?? null;
+        }
+    }
+
+    return null;
+};
 
 const SortableQuestion = ({
                               question,
@@ -129,7 +178,8 @@ const SortableQuestion = ({
                               removeContactField,
                               duplicateQuestion,
                               saveQuestionTemplate,
-                              updateMatrixSize
+                              updateMatrixSize,
+                              toggleShuffle
                           }: {
     question: Question;
     onLabelChange: (id: string, label: string) => void;
@@ -137,7 +187,7 @@ const SortableQuestion = ({
     addOption: (qid: string) => void;
     removeQuestion: (id: string) => void;
     toggleRequired: (id: string) => void;
-    updateQuestion: (q: string, target: string, values: string | number) => void;
+    updateQuestion: <K extends keyof Question>(id: string, key: K, value: Question[K]) => void;
     updateMatrixRow: (questionId: string, index: number, value: string) => void;
     updateMatrixColumn: (questionId: string, index: number, value: string) => void;
     addContactField: (questionId: string) => void;
@@ -147,6 +197,7 @@ const SortableQuestion = ({
     duplicateQuestion: (id: string) => void;
     saveQuestionTemplate: (question: Question) => void;
     updateMatrixSize: (questionId: string, size: number) => void;
+    toggleShuffle: (id: string) => void;
 }) => {
     const {attributes, listeners, setNodeRef, transform, transition} = useSortable({id: question.id});
 
@@ -170,6 +221,7 @@ const SortableQuestion = ({
                 toggleRequired={toggleRequired}
                 onOptionChange={onOptionChange}
                 addOption={addOption}
+                toggleShuffle={toggleShuffle}
             />
         );
     } else if (question.type == "rating") {
@@ -218,7 +270,7 @@ const SortableQuestion = ({
                 addContactField={addContactField}
             />
         );
-    } else if (question.type == "text") {
+    } else if (question.type == "text" || question.type == "smile_scale" || question.type == "display_info") {
         return (
             <BaseAnswerBuilder
                 setNodeRef={setNodeRef}
@@ -232,7 +284,7 @@ const SortableQuestion = ({
                 toggleRequired={toggleRequired}
                 isDate={false}
             />
-            )
+        )
 
     } else if (question.type == "date") {
         return (
@@ -294,8 +346,8 @@ export const CreateSurvey = (): JSX.Element => {
     const {companyId} = useParams<{ companyId: string }>();
     const navigate = useNavigate();
 
-    const [slideOrientation, setSlideOrientation] = useState<"vertical" | "horizontal">("vertical");
     const [allowBack, setAllowBack] = useState(true);
+    const [allowSkip, setAllowSkip] = useState(false);
     const [allowEditAnswers, setAllowEditAnswers] = useState(true);
     const [showProgress, setShowProgress] = useState(true);
     const [answers, setAnswers] = useState<Record<string, string[]>>({});
@@ -310,6 +362,7 @@ export const CreateSurvey = (): JSX.Element => {
             type,
             label: "",
             required: false,
+            shuffle: false,
         };
 
         const withDefaults: Record<QuestionType, Partial<Question>> = {
@@ -356,6 +409,11 @@ export const CreateSurvey = (): JSX.Element => {
             q.map((item) => (item.id === id ? {...item, required: !item.required} : item))
         );
     };
+
+    const toggleShuffle = (id: string) => {
+        setQuestions((q) =>
+            q.map((item) => item.id === id ? {...item, shuffle: !item.shuffle} : item))
+    }
 
     const duplicateQuestion = (id: string) => {
         setQuestions(q => {
@@ -554,8 +612,8 @@ export const CreateSurvey = (): JSX.Element => {
 
                 return {
                     ...item,
-                    rows: Array.from({ length: size }, (_, i) => prevRows[i] ?? ""),
-                    columns: Array.from({ length: size }, (_, i) => prevCols[i] ?? ""),
+                    rows: Array.from({length: size}, (_, i) => prevRows[i] ?? ""),
+                    columns: Array.from({length: size}, (_, i) => prevCols[i] ?? ""),
                 };
             })
         );
@@ -572,13 +630,13 @@ export const CreateSurvey = (): JSX.Element => {
             name,
             description,
             content: questions,
-            slideOrientation,
             allowBack,
             allowEditAnswers,
+            allowSkip,
             showProgress,
         };
-
-        createSurveyMutation.mutate(payload);
+        console.error(payload);
+        // createSurveyMutation.mutate(payload);
     };
 
     const createSurveyMutation = useMutation({
@@ -592,7 +650,9 @@ export const CreateSurvey = (): JSX.Element => {
             toast.error(t("errors.save_failed"));
         },
     });
-
+    const isQuestionType = (value: string): value is QuestionType => {
+        return QUESTION_TYPES.includes(value as QuestionType);
+    };
     const currentQuestion = questions[previewIndex];
     useEffect(() => {
         if (
@@ -625,81 +685,99 @@ export const CreateSurvey = (): JSX.Element => {
                             </p>
                         </div>
                     ) : (
-                        <Card className="shadow-lg border-0">
-                            <CardContent className="p-8 lg:p-12 space-y-8">
-                                {showProgress && <SurveyProgressBar previewIndex={previewIndex} questions={questions}/>}
+                        <>
+                            <Card className="shadow-lg border-0">
+                                <CardContent className="p-8 lg:p-12 space-y-8">
+                                    {showProgress &&
+                                      <SurveyProgressBar previewIndex={previewIndex} questions={questions}/>}
 
-                                {currentQuestion && (
-                                    <div className="space-y-6">
-                                        <h3 className="text-2xl font-medium">
-                                            {currentQuestion.label || t("surveys.enter_question_here")}
-                                            {currentQuestion.required &&
-                                              <span className="text-destructive ml-1">*</span>}
-                                        </h3>
+                                    {currentQuestion && (
+                                        <div className="space-y-6">
+                                            <h3 className="text-2xl font-medium">
+                                                {currentQuestion.label || t("surveys.enter_question_here")}
+                                                {currentQuestion.required &&
+                                                  <span className="text-destructive ml-1">*</span>}
+                                            </h3>
 
-                                        {currentQuestion.type === "text" && (
-                                            <TextQuestion/>
-                                        )}
+                                            {currentQuestion.type === "text" && (
+                                                <TextQuestion/>
+                                            )}
 
-                                        {currentQuestion.type === "rating" && (
-                                            <RatingQuestion currentQuestion={currentQuestion}/>
-                                        )}
-                                        {currentQuestion.type === "single_answer_choice" &&
-                                          <SingleAnswerChoice currentQuestion={currentQuestion}/>
-                                        }
+                                            {currentQuestion.type === "rating" && (
+                                                <RatingQuestion currentQuestion={currentQuestion}/>
+                                            )}
+                                            {currentQuestion.type === "single_answer_choice" &&
+                                              <SingleAnswerChoice currentQuestion={currentQuestion}/>
+                                            }
 
-                                        {currentQuestion.type === "multiple_answer_choice" &&
-                                          <MultipleAnswerChoices currentQuestion={currentQuestion}/>
-                                        }
+                                            {currentQuestion.type === "multiple_answer_choice" &&
+                                              <MultipleAnswerChoices currentQuestion={currentQuestion}/>
+                                            }
 
-                                        {currentQuestion.type === "smile_scale" && (
-                                            <SmileScaleQuestion/>
-                                        )}
+                                            {currentQuestion.type === "smile_scale" && (
+                                                <SmileScaleQuestion/>
+                                            )}
 
-                                        {currentQuestion.type === "nps" && <NPSQuestion/>}
+                                            {currentQuestion.type === "nps" && <NPSQuestion/>}
 
-                                        {currentQuestion.type === "dropdown_list" &&
-                                          <DropdownListChoice currentQuestion={currentQuestion}/>}
+                                            {currentQuestion.type === "dropdown_list" &&
+                                              <DropdownListChoice currentQuestion={currentQuestion}/>}
 
-                                        {currentQuestion.type === "matrix" && <MatrixQuestion currentQuestion={currentQuestion} /> }
+                                            {currentQuestion.type === "matrix" &&
+                                              <MatrixQuestion currentQuestion={currentQuestion}/>}
 
-                                        {currentQuestion.type === "contact_form" &&
-                                          <ContactQuestion currentQuestion={currentQuestion}/>}
+                                            {currentQuestion.type === "contact_form" &&
+                                              <ContactQuestion currentQuestion={currentQuestion}/>}
 
-                                        {currentQuestion.type === "date" && <DateChoice/>}
+                                            {currentQuestion.type === "date" && <DateChoice/>}
 
-                                        {currentQuestion.type === "rating_answers" && <RatingAnswersQuestion question={currentQuestion} />}
+                                            {currentQuestion.type === "rating_answers" &&
+                                              <RatingAnswersQuestion question={currentQuestion}/>}
 
-                                    </div>
-                                )}
+                                        </div>
+                                    )}
 
-                                {questions.length > 0 && (
-                                    <div className="flex items-center justify-between pt-8 border-t">
-                                    <Button
-                                            variant="outline"
-                                            disabled={previewIndex === 0 || !allowBack}
-                                            onClick={() => setPreviewIndex((prev) => prev - 1)}
-                                        >
-                                            <ArrowLeft className="h-4 w-4 mr-2"/>
-                                            {t("action.back")}
-                                        </Button>
+                                    {questions.length > 0 && (
+                                        <div className="flex items-center justify-between pt-8 border-t">
+                                            <Button
+                                                variant="outline"
+                                                disabled={previewIndex === 0 || !allowBack}
+                                                onClick={() => setPreviewIndex((prev) => prev - 1)}
+                                            >
+                                                <ArrowLeft className="h-4 w-4 mr-2"/>
+                                                {t("action.back")}
+                                            </Button>
 
-                                        <Button
-                                            variant="default"
-                                            disabled={previewIndex === questions.length - 1}
-                                            onClick={() => setPreviewIndex((prev) => prev + 1)}
-                                        >
-                                            {previewIndex === questions.length - 1 ? t("action.submit") : t("action.next")}
-                                            <ArrowRight className="h-4 w-4 ml-2"/>
-                                        </Button>
-                                    </div>
-                                )}
-                            </CardContent>
-                        </Card>
+                                            <Button
+                                                variant="default"
+                                                disabled={previewIndex === questions.length - 1}
+                                                onClick={() => setPreviewIndex((prev) => prev + 1)}
+                                            >
+                                                {previewIndex === questions.length - 1 ? t("action.submit") : t("action.next")}
+                                                <ArrowRight className="h-4 w-4 ml-2"/>
+                                            </Button>
+                                        </div>
+                                    )}
+
+
+                                </CardContent>
+                            </Card>
+                            {questions.length > 1 && (
+                                <Card className="shadow-lg border-0">
+                                    <CardHeader>
+                                        <CardTitle>{t("surveys.logic")}</CardTitle>
+                                    </CardHeader>
+                                    <CardContent>
+                                        <SurveyLogicGraph questions={questions} />
+                                    </CardContent>
+                                </Card>
+                            )}
+
+                        </>
                     )}
                 </div>
             </div>
-            
+
             <div className="w-full lg:w-96 bg-muted/40 border-l overflow-y-auto p-6 space-y-8">
                 <div className="space-y-6">
                     <div className="space-y-4">
@@ -719,49 +797,30 @@ export const CreateSurvey = (): JSX.Element => {
                             onChange={(e) => setDescription(e.target.value)}
                         />
                     </div>
-                    
-                    <Card>
-                        <CardHeader className="pb-3">
-                            <h2 className="text-lg font-medium">{t("surveys.presentation_settings")}</h2>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                            <div className="flex items-center justify-between">
-                                <Label>{t("surveys.slide_orientation")}</Label>
-                                <Select value={slideOrientation}
-                                        onValueChange={(v: "vertical" | "horizontal") => setSlideOrientation(v)}>
-                                    <SelectTrigger className="w-36">
-                                        <SelectValue/>
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="vertical">{t("surveys.vertical")}</SelectItem>
-                                        <SelectItem value="horizontal">{t("surveys.horizontal")}</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
 
-                            <div className="flex items-center justify-between">
-                                <Label>{t("surveys.allow_back")}</Label>
-                                <Switch checked={allowBack} onCheckedChange={setAllowBack}/>
-                            </div>
+                    <FormConfiguration
+                        allowBack={allowBack}
+                        setAllowBack={setAllowBack}
+                        allowSkip={allowSkip}
+                        setAllowSkip={setAllowSkip}
+                        allowEditAnswers={allowEditAnswers}
+                        setAllowEditAnswers={setAllowEditAnswers}
+                        showProgress={showProgress}
+                        setShowProgress={setShowProgress}
+                    />
 
-                            <div className="flex items-center justify-between">
-                                <Label>{t("surveys.allow_edit_answers")}</Label>
-                                <Switch checked={allowEditAnswers} onCheckedChange={setAllowEditAnswers}/>
-                            </div>
-
-                            <div className="flex items-center justify-between">
-                                <Label>{t("surveys.show_progress")}</Label>
-                                <Switch checked={showProgress} onCheckedChange={setShowProgress}/>
-                            </div>
-                        </CardContent>
-                    </Card>
-
-                    <Select onValueChange={(value) => addQuestion(value)}>
+                    <Select
+                        onValueChange={(value) => {
+                            if (isQuestionType(value)) {
+                                addQuestion(value);
+                            }
+                        }}
+                    >
                         <SelectTrigger className="w-full">
                             <SelectValue placeholder={t("surveys.add_question")}/>
                         </SelectTrigger>
                         <SelectContent>
-                            {QuestionType.map((type) => (
+                            {QUESTION_TYPES.map((type) => (
                                 <SelectItem key={type} value={type}>
                                     {t(`surveys.${type}`)}
                                 </SelectItem>
@@ -791,6 +850,7 @@ export const CreateSurvey = (): JSX.Element => {
                                         duplicateQuestion={duplicateQuestion}
                                         saveQuestionTemplate={saveQuestionTemplate}
                                         updateMatrixSize={updateMatrixSize}
+                                        toggleShuffle={toggleShuffle}
                                     />
                                 ))}
                             </SortableContext>

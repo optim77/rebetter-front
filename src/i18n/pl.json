@@ -374,7 +374,11 @@
     "column": "Kolumna",
     "matrix_size_hint": "Wiersze i kolumny posiadają taką samą długość",
     "matrix_size": "Wielkość macierzy",
-    "matrix_not_configured": "Macierz nie została skonfigurowana"
+    "matrix_not_configured": "Macierz nie została skonfigurowana",
+    "allow_skip": "Pozwól pomijać",
+    "shuffle": "Tasuj odpowiedzi",
+    "select_option": "Wybierz odpowiedź",
+    "logic": "Logika"
   },
   "templates": {
     "create_heading": "Kreator szablonów e-mail",

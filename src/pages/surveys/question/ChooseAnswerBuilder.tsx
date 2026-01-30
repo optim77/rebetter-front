@@ -27,22 +27,24 @@ type BaseAnswer = {
     toggleRequired: (id: string) => void;
     onOptionChange: (qid: string, index: number, value: string) => void;
     addOption: (qid: string) => void;
+    toggleShuffle: (id: string) => void;
 }
 
 export const ChooseAnswerBuilder = ({
-                                       setNodeRef,
-                                       style,
-                                       question,
-                                       attributes,
-                                       listeners,
-                                       removeQuestion,
-                                       duplicateQuestion,
-                                       // saveQuestionTemplate,
-                                       onLabelChange,
-                                       toggleRequired,
-                                       onOptionChange,
-                                       addOption
-                                   }: BaseAnswer): JSX.Element => {
+                                        setNodeRef,
+                                        style,
+                                        question,
+                                        attributes,
+                                        listeners,
+                                        removeQuestion,
+                                        duplicateQuestion,
+                                        // saveQuestionTemplate,
+                                        onLabelChange,
+                                        toggleRequired,
+                                        onOptionChange,
+                                        addOption,
+                                        toggleShuffle
+                                    }: BaseAnswer): JSX.Element => {
     return (
         <Card ref={setNodeRef} style={style} className="mb-4 border shadow-sm">
             <QuestionHeader attributes={attributes} listeners={listeners} question={question}
@@ -60,6 +62,10 @@ export const ChooseAnswerBuilder = ({
                 <div className="flex items-center gap-2">
                     <Checkbox checked={question.required} onCheckedChange={() => toggleRequired(question.id)}/>
                     <Label>{t("surveys.required")}</Label>
+                </div>
+                <div className="flex items-center gap-2">
+                    <Checkbox checked={question.shuffle} onCheckedChange={() => toggleShuffle(question.id)}/>
+                    <Label>{t("surveys.shuffle")}</Label>
                 </div>
                 <div className="space-y-3">
                     <Label>{t("surveys.options")}</Label>

@@ -23,7 +23,7 @@ type BaseAnswer = {
     saveQuestionTemplate?: (question: Question) => void;
     onLabelChange: (id: string, label: string) => void;
     toggleRequired: (id: string) => void;
-    updateQuestion: (q: string, target: string, values: string | number) => void;
+    updateQuestion: <K extends keyof Question>(id: string, key: K, value: Question[K]) => void;
 }
 
 export const RatingAnswerBuilder = ({

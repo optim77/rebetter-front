@@ -53,11 +53,13 @@ export const BaseAnswerBuilder = ({
                         onChange={(e) => onLabelChange(question.id, e.target.value)}
                     />
                 </div>
+                {question.type != "display_info" && (
+                    <div className="flex items-center gap-2">
+                        <Checkbox checked={question.required} onCheckedChange={() => toggleRequired(question.id)}/>
+                        <Label>{t("surveys.required")}</Label>
+                    </div>
+                )}
 
-                <div className="flex items-center gap-2">
-                    <Checkbox checked={question.required} onCheckedChange={() => toggleRequired(question.id)}/>
-                    <Label>{t("surveys.required")}</Label>
-                </div>
 
             </CardContent>
         </Card>
