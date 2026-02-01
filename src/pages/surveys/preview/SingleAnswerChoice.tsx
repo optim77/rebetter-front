@@ -13,14 +13,13 @@ export const SingleAnswerChoice = ({currentQuestion}:Props):JSX.Element => {
     return (
         <div className="space-y-4">
             <RadioGroup className="space-y-3">
-                {currentQuestion.options?.map((opt, i) => {
-                    const id = `single-${currentQuestion.id}-${i}`;
+                {currentQuestion.options?.map((opt) => {
 
                     return (
-                        <div key={id} className="flex items-center gap-3">
-                            <RadioGroupItem value={opt || `option-${i}`} id={id}/>
-                            <Label htmlFor={id}>
-                                {opt || t("surveys.option_placeholder")}
+                        <div key={opt.id} className="flex items-center gap-3">
+                            <RadioGroupItem value={opt.id} id={opt.id}/>
+                            <Label htmlFor={opt.id}>
+                                {opt.option || t("surveys.option_placeholder")}
                             </Label>
                         </div>
                     );

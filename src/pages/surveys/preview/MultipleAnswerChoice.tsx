@@ -11,13 +11,12 @@ interface Props {
 export const MultipleAnswerChoices = ({currentQuestion}: Props):JSX.Element => {
     return (
         <div className="space-y-4">
-            {currentQuestion.options?.map((opt, i) => {
-                const id = `multiple-${currentQuestion.id}-${i}`;
+            {currentQuestion.options?.map((opt) => {
                 return (
-                    <div key={id} className="flex items-center gap-3">
+                    <div key={opt.id} className="flex items-center gap-3">
                         <Checkbox/>
-                        <Label htmlFor={id}>
-                            {opt || t("surveys.option_placeholder")}
+                        <Label htmlFor={opt.id}>
+                            {opt.option || t("surveys.option_placeholder")}
                         </Label>
                     </div>
                 );

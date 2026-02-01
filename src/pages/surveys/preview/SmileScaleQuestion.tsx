@@ -5,7 +5,7 @@ export const SmileScaleQuestion = ():JSX.Element => {
         <div className="flex justify-center gap-4">
             {["😡", "🙁", "😐", "🙂", "😄"].map((emoji, i) => (
                 <div
-                    key={i}
+                    key={i + 1}
                     className="h-14 w-14 flex items-center justify-center
                                                         rounded-full border border-muted-foreground
                                                         text-3xl cursor-pointer transition-all duration-200 ease-out

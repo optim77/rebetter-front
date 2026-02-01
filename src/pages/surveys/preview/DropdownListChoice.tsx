@@ -16,9 +16,9 @@ export const DropdownListChoice = ({currentQuestion}: Props):JSX.Element => {
                 </SelectTrigger>
 
                 <SelectContent>
-                    {currentQuestion.options?.map((opt, i) => (
-                        <SelectItem key={i} value={opt || `option-${i}`}>
-                            {opt || t("surveys.option_placeholder")}
+                    {currentQuestion.options?.map((opt) => (
+                        <SelectItem key={opt.id} value={opt.id}>
+                            {opt.option || t("surveys.option_placeholder")}
                         </SelectItem>
                     ))}
                 </SelectContent>

@@ -1,4 +1,4 @@
-import { Background, Controls, type Edge, MiniMap, type Node, ReactFlow } from "reactflow";
+import { Background, Controls, type Edge, type Node, ReactFlow } from "reactflow";
 import type { Question } from "@/pages/surveys/CreateSurvey.tsx";
 import '@xyflow/react/dist/style.css';
 import { t } from "i18next";
@@ -13,24 +13,26 @@ const buildNodes = (questions: Question[]): Node[] =>
         },
 
     }));
+const buildDefaultEdges = (questions: Question[]): Edge[] =>
+    questions.slice(0, -1).map((q, i) => ({
+        id: `default-${q.id}`,
+        source: q.id,
+        target: questions[i + 1].id,
+        style: { strokeDasharray: "4 2" },
+        label: t("surveys.default_flow"),
+    }));
 
-const buildEdges = (questions: Question[]): Edge[] =>
+
+const buildLogicEdges = (questions: Question[]): Edge[] =>
     questions.flatMap(q =>
         q.logic
             ?.filter(rule => rule.then.goToQuestionId)
             .map((rule, i) => ({
-                id: `${q.id}-${i}`,
+                id: `logic-${q.id}-${i}`,
                 source: q.id,
                 target: rule.then.goToQuestionId!,
-                label: rule.if
-                    .map(c => {
-                        if (c.operator === "has_any_value") return "has any value";
-                        return `${c.operator} ${
-                            Array.isArray(c.value) ? c.value.join(", ") : c.value
-                        }`;
-                    })
-                    .join(" AND "),
                 animated: true,
+                label: rule.if.map(c => c.operator).join(" AND "),
             })) ?? []
     );
 
@@ -38,8 +40,10 @@ const buildEdges = (questions: Question[]): Edge[] =>
 
 export const SurveyLogicGraph = ({ questions }: { questions: Question[] }) => {
     const nodes = buildNodes(questions);
-    const edges = buildEdges(questions);
-
+    const edges = [
+        ...buildDefaultEdges(questions),
+        ...buildLogicEdges(questions),
+    ];
     return (
         <div className="h-[500px] border rounded-lg bg-white">
             <ReactFlow
@@ -47,7 +51,7 @@ export const SurveyLogicGraph = ({ questions }: { questions: Question[] }) => {
                 edges={edges}
                 fitView
             >
-                <MiniMap  />
+                {/*<MiniMap  />*/}
                 <Controls />
                 <Background gap={12} />
             </ReactFlow>

@@ -60,6 +60,7 @@ import { SurveyLogicGraph } from "@/pages/surveys/graph/SurveyLogicGraph.tsx";
  *  - implement logic
  *  - saving questions
  *  - onClick on builder, move preview
+ *  - change scrolls styles
  *  */
 
 
@@ -80,7 +81,7 @@ const QUESTION_TYPES = [
 
 type QuestionType = typeof QUESTION_TYPES[number];
 
-type LogicOperator = "is" | "is_not" | "has_any_value";
+export type LogicOperator = "is" | "is_not" | "has_any_value" | "contains" | "greater_than" | "lower_than" | "includes";
 
 type LogicCapableQuestionType =
     | "single_answer_choice"
@@ -90,7 +91,7 @@ type LogicCapableQuestionType =
 interface LogicCondition {
     sourceQuestionId: string;
     operator: LogicOperator;
-    value?: string | string[];
+    value?: string | string[] | number;
 }
 
 export interface LogicRule {
@@ -108,13 +109,18 @@ export interface ContactField {
     required?: boolean;
 }
 
+export interface OptionChooseField {
+    id: string;
+    option: string;
+}
+
 export interface Question {
     id: string;
     type: QuestionType;
     label: string;
     required: boolean;
     shuffle: boolean;
-    options?: string[];
+    options?: OptionChooseField[];
     scale?: number;
     minDate?: string;
     maxDate?: string;
@@ -125,42 +131,7 @@ export interface Question {
     logic?: LogicRule[];
 }
 
-type AnswersMap = Record<string, string[]>;
 
-export const evaluateLogic = (
-    question: Question,
-    answers: AnswersMap
-): string | null => {
-    if (!question.logic) return null;
-
-    for (const rule of question.logic) {
-        const isMatch = rule.if.every(condition => {
-            const answer = answers[condition.sourceQuestionId];
-
-            if (!answer) return false;
-
-            switch (condition.operator) {
-                case "has_any_value":
-                    return answer.length > 0;
-
-                case "is":
-                    return answer.includes(condition.value as string);
-
-                case "is_not":
-                    return !answer.includes(condition.value as string);
-
-                default:
-                    return false;
-            }
-        });
-
-        if (isMatch) {
-            return rule.then.goToQuestionId ?? null;
-        }
-    }
-
-    return null;
-};
 
 const SortableQuestion = ({
                               question,
@@ -179,11 +150,16 @@ const SortableQuestion = ({
                               duplicateQuestion,
                               saveQuestionTemplate,
                               updateMatrixSize,
-                              toggleShuffle
+                              toggleShuffle,
+                              questions,
+                              addLogicRule,
+                              updateLogicRule,
+                              removeLogicRule,
+                              removeOption
                           }: {
     question: Question;
     onLabelChange: (id: string, label: string) => void;
-    onOptionChange: (qid: string, index: number, value: string) => void;
+    onOptionChange: (qid: string, optionId: string, value: string) => void;
     addOption: (qid: string) => void;
     removeQuestion: (id: string) => void;
     toggleRequired: (id: string) => void;
@@ -198,6 +174,11 @@ const SortableQuestion = ({
     saveQuestionTemplate: (question: Question) => void;
     updateMatrixSize: (questionId: string, size: number) => void;
     toggleShuffle: (id: string) => void;
+    questions: Question[];
+    addLogicRule: (questionId: string) => void;
+    updateLogicRule: (questionId: string, ruleIndex: number, rule: LogicRule) => void;
+    removeLogicRule: (questionId: string, ruleIndex: number) => void;
+    removeOption: (qid: string, optionId: string) => void;
 }) => {
     const {attributes, listeners, setNodeRef, transform, transition} = useSortable({id: question.id});
 
@@ -222,6 +203,11 @@ const SortableQuestion = ({
                 onOptionChange={onOptionChange}
                 addOption={addOption}
                 toggleShuffle={toggleShuffle}
+                questions={questions}
+                addLogicRule={addLogicRule}
+                updateLogicRule={updateLogicRule}
+                removeLogicRule={removeLogicRule}
+                removeOption={removeOption}
             />
         );
     } else if (question.type == "rating") {
@@ -237,6 +223,10 @@ const SortableQuestion = ({
                 onLabelChange={onLabelChange}
                 toggleRequired={toggleRequired}
                 updateQuestion={updateQuestion}
+                questions={questions}
+                addLogicRule={addLogicRule}
+                updateLogicRule={updateLogicRule}
+                removeLogicRule={removeLogicRule}
             />
         );
     } else if (question.type == "nps") {
@@ -251,6 +241,10 @@ const SortableQuestion = ({
                 duplicateQuestion={duplicateQuestion}
                 onLabelChange={onLabelChange}
                 toggleRequired={toggleRequired}
+                questions={questions}
+                addLogicRule={addLogicRule}
+                updateLogicRule={updateLogicRule}
+                removeLogicRule={removeLogicRule}
             />
         );
     } else if (question.type == "contact_form") {
@@ -283,6 +277,10 @@ const SortableQuestion = ({
                 onLabelChange={onLabelChange}
                 toggleRequired={toggleRequired}
                 isDate={false}
+                questions={questions}
+                addLogicRule={addLogicRule}
+                updateLogicRule={updateLogicRule}
+                removeLogicRule={removeLogicRule}
             />
         )
 
@@ -299,6 +297,10 @@ const SortableQuestion = ({
                 onLabelChange={onLabelChange}
                 toggleRequired={toggleRequired}
                 isDate={true}
+                questions={questions}
+                addLogicRule={addLogicRule}
+                updateLogicRule={updateLogicRule}
+                removeLogicRule={removeLogicRule}
             />
         )
     } else if (question.type == "matrix") {
@@ -333,6 +335,7 @@ const SortableQuestion = ({
                 updateQuestion={updateQuestion}
                 onOptionChange={onOptionChange}
                 addOption={addOption}
+                removeOption={removeOption}
             />
         )
     }
@@ -351,6 +354,7 @@ export const CreateSurvey = (): JSX.Element => {
     const [allowEditAnswers, setAllowEditAnswers] = useState(true);
     const [showProgress, setShowProgress] = useState(true);
     const [answers, setAnswers] = useState<Record<string, string[]>>({});
+    const [showLogic, setShowLogic] = useState<boolean>(false);
 
     const [previewIndex, setPreviewIndex] = useState(0);
 
@@ -367,13 +371,13 @@ export const CreateSurvey = (): JSX.Element => {
 
         const withDefaults: Record<QuestionType, Partial<Question>> = {
             text: {},
-            single_answer_choice: {options: [""]},
-            multiple_answer_choice: {options: [""]},
-            dropdown_list: {options: [""]},
+            single_answer_choice: {options: [{id: crypto.randomUUID(), option: ""}]},
+            multiple_answer_choice: {options: [{id: crypto.randomUUID(), option: ""}]},
+            dropdown_list: {options: [{id: crypto.randomUUID(), option: ""}]},
 
             rating: {scale: 5},
-            rating_answers: {options: [""]},
-            smile_scale: {scale: 5},
+            rating_answers: {options: [{id: crypto.randomUUID(), option: ""}]},
+            smile_scale: {scale: 5, options: [{id: crypto.randomUUID(), option: ""}]},
             nps: {scale: 10},
 
             matrix: {rows: [""], columns: [""]},
@@ -555,15 +559,72 @@ export const CreateSurvey = (): JSX.Element => {
             )
         );
     };
-    const onOptionChange = (qid: string, index: number, value: string) => {
-        setQuestions((q) =>
-            q.map((item) =>
-                item.id === qid && item.options
+
+    const addLogicRule = (questionId: string) => {
+        setQuestions(q =>
+            q.map(item =>
+                item.id === questionId
                     ? {
                         ...item,
-                        options: item.options.map((opt, i) => (i === index ? value : opt)),
+                        logic: [
+                            ...(item.logic ?? []),
+                            {
+                                if: [],
+                                then: {},
+                            },
+                        ],
                     }
                     : item
+            )
+        );
+    };
+
+    const updateLogicRule = (
+        questionId: string,
+        ruleIndex: number,
+        rule: LogicRule
+    ) => {
+        setQuestions(q =>
+            q.map(item =>
+                item.id === questionId
+                    ? {
+                        ...item,
+                        logic: item.logic?.map((r, i) =>
+                            i === ruleIndex ? rule : r
+                        ),
+                    }
+                    : item
+            )
+        );
+    };
+
+
+    const removeLogicRule = (questionId: string, ruleIndex: number) => {
+        setQuestions(q =>
+            q.map(item =>
+                item.id === questionId
+                    ? {
+                        ...item,
+                        logic: item.logic?.filter((_, i) => i !== ruleIndex),
+                    }
+                    : item
+            )
+        );
+    };
+
+    const onOptionChange = (qid: string, optionId: string, value: string) => {
+        setQuestions((questions) =>
+            questions.map((question) =>
+                question.id === qid && question.options
+                    ? {
+                        ...question,
+                        options: question.options.map((opt) =>
+                            opt.id === optionId
+                                ? { ...opt, option: value }
+                                : opt
+                        ),
+                    }
+                    : question
             )
         );
     };
@@ -572,8 +633,23 @@ export const CreateSurvey = (): JSX.Element => {
         setQuestions((q) =>
             q.map((item) =>
                 item.id === qid && item.options
-                    ? {...item, options: [...item.options, ""]}
+                    ? {...item, options: [...item.options, {id: crypto.randomUUID(), option: ""}]}
                     : item
+            )
+        );
+    };
+
+    const removeOption = (qid: string, optionId: string) => {
+        setQuestions((questions) =>
+            questions.map((question) =>
+                question.id === qid && question.options
+                    ? {
+                        ...question,
+                        options: question.options.filter(
+                            (opt) => opt.id !== optionId
+                        ),
+                    }
+                    : question
             )
         );
     };
@@ -763,6 +839,9 @@ export const CreateSurvey = (): JSX.Element => {
                                 </CardContent>
                             </Card>
                             {questions.length > 1 && (
+                                <Button onClick={() => setShowLogic((prevState) => !prevState)}>{t("surveys.show_logic")}</Button>
+                            )}
+                            {showLogic && (
                                 <Card className="shadow-lg border-0">
                                     <CardHeader>
                                         <CardTitle>{t("surveys.logic")}</CardTitle>
@@ -851,6 +930,11 @@ export const CreateSurvey = (): JSX.Element => {
                                         saveQuestionTemplate={saveQuestionTemplate}
                                         updateMatrixSize={updateMatrixSize}
                                         toggleShuffle={toggleShuffle}
+                                        questions={questions}
+                                        addLogicRule={addLogicRule}
+                                        updateLogicRule={updateLogicRule}
+                                        removeLogicRule={removeLogicRule}
+                                        removeOption={removeOption}
                                     />
                                 ))}
                             </SortableContext>

@@ -25,8 +25,9 @@ type BaseAnswer = {
     onLabelChange: (id: string, label: string) => void;
     toggleRequired: (id: string) => void;
     updateQuestion: <K extends keyof Question>(id: string, key: K, value: Question[K]) => void;
-    onOptionChange: (qid: string, index: number, value: string) => void;
+    onOptionChange: (qid: string, optionId: string, value: string) => void;
     addOption: (qid: string) => void;
+    removeOption: (qid: string, optionId: string) => void;
 }
 
 export const SequenceRatingAnswerBuilder = ({
@@ -61,8 +62,8 @@ export const SequenceRatingAnswerBuilder = ({
                     {question.options?.map((opt, i) => (
                         <Input
                             key={i}
-                            value={opt}
-                            onChange={(e) => onOptionChange(question.id, i, e.target.value)}
+                            value={opt.id}
+                            onChange={(e) => onOptionChange(question.id, opt.id, e.target.value)}
                             placeholder={`${t("surveys.option")} ${i + 1}`}
                         />
                     ))}
