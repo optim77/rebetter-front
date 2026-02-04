@@ -51,6 +51,7 @@ import { RatingAnswersQuestion } from "@/pages/surveys/preview/RatingAnswersQues
 import { SequenceRatingAnswerBuilder } from "@/pages/surveys/question/SequenceRatingAnswerBuilder.tsx";
 import { FormConfiguration } from "@/pages/surveys/elements/FormConfiguration.tsx";
 import { SurveyLogicGraph } from "@/pages/surveys/graph/SurveyLogicGraph.tsx";
+import { EmojiAnswerBuilder } from "@/pages/surveys/question/EmojiAnswerBuilder.tsx";
 
 /**
  * TODO LIST:
@@ -61,6 +62,8 @@ import { SurveyLogicGraph } from "@/pages/surveys/graph/SurveyLogicGraph.tsx";
  *  - saving questions
  *  - onClick on builder, move preview
  *  - change scrolls styles
+ *  - implement CSAT
+ *  - implement CES
  *  */
 
 
@@ -247,7 +250,26 @@ const SortableQuestion = ({
                 removeLogicRule={removeLogicRule}
             />
         );
-    } else if (question.type == "contact_form") {
+    } else if (question.type === "smile_scale") {
+        return (
+            <EmojiAnswerBuilder
+                setNodeRef={setNodeRef}
+                style={style}
+                question={question}
+                attributes={attributes}
+                listeners={listeners}
+                removeQuestion={removeQuestion}
+                duplicateQuestion={duplicateQuestion}
+                onLabelChange={onLabelChange}
+                toggleRequired={toggleRequired}
+                isDate={false}
+                questions={questions}
+                addLogicRule={addLogicRule}
+                updateLogicRule={updateLogicRule}
+                removeLogicRule={removeLogicRule}
+            />
+        )
+    }else if (question.type == "contact_form") {
         return (
             <ContactAnswerBuilder
                 setNodeRef={setNodeRef}
@@ -264,7 +286,7 @@ const SortableQuestion = ({
                 addContactField={addContactField}
             />
         );
-    } else if (question.type == "text" || question.type == "smile_scale" || question.type == "display_info") {
+    } else if (question.type == "text" || question.type == "display_info") {
         return (
             <BaseAnswerBuilder
                 setNodeRef={setNodeRef}
